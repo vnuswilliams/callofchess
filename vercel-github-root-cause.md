@@ -31,3 +31,8 @@ La route directe `/profil` répond correctement sur `https://lionchess-oa2uafbx5
 ## Publication du parcours
 
 Le commit `a415fb6` contenant la page `/parcours`, le catalogue des 18 niveaux et ses tests est poussé sur `github/main`. Lors du contrôle Vercel, l’historique affiche encore `1bfc96d` comme dernier déploiement et le bandeau GitHub Outage est toujours visible ; `a415fb6` n’a pas encore été indexé. Le déploiement précédent reste Ready et continue de servir la version documentée précédente.
+
+
+## Contrôle après publication du parcours
+
+À 15:31, le dashboard Vercel affiche toujours `1bfc96d` comme dernier déploiement Production Ready. Le commit `a415fb6` est bien poussé sur GitHub mais n’apparaît pas encore dans l’historique Vercel. Le bandeau « GitHub Outage — Automatic deployments from GitHub are temporarily unavailable » reste visible. La création manuelle doit être relancée lorsque le formulaire accepte la référence ; le précédent déploiement reste stable.
