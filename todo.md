@@ -97,7 +97,11 @@ Le sous-domaine est maintenant associé à la production avec une configuration 
 
 - [x] Intégrer Stockfish côté navigateur dans un Web Worker.
 - [x] Ajouter l’interface d’analyse avec profondeur, évaluation et meilleur coup.
-- [ ] Tester l’analyse, la fluidité et le déploiement Vercel.
+- [x] Tester l’analyse, la fluidité et le déploiement Vercel.
+- [x] Ouvrir la leçon après le déploiement 770179d et vérifier Stockfish en production.
+- [x] Contrôler explicitement l’état « Analyse en cours » et l’absence de blocage visible du plateau en production.
 
-The Stockfish 17.1 lite single-threaded engine returns depth 12, a centipawn evaluation and a principal variation in the local browser test. Vitest covers score formatting, mate formatting and UCI info parsing; all 3 tests and TypeScript checks pass.
+The Stockfish 17.1 lite single-threaded engine returns depth 12, a centipawn evaluation and a principal variation in the local browser test. Vitest covers score formatting, mate formatting and UCI info parsing; all 3 tests and TypeScript checks pass. Desktop and mobile screenshots remain readable. Production verification at `https://lionchess.vercel.app/lecon/1` returns `+0.40`, depth `12`, best move `e2e4`, and a principal variation. A fresh runtime check confirmed the visible loading state, stop control, and unchanged board geometry during analysis.
 
+
+Production runtime check: `https://lionchess.vercel.app/lecon/1` loads the Stockfish panel and its analysis button. A direct click returns `+0.40`, depth `12`, best move `e2e4`, and the principal variation `e2e4 · d7d5 · e4d5 · d8d5 · g1f3 · c8g4 · b1c3 · d5e6`. During a fresh production run, the button changed to `Analyse en cours`, became disabled, the `Arrêter` button appeared, and the board square remained present with the same geometry before and after the run, demonstrating a non-blocking visible UI.
