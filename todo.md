@@ -208,3 +208,11 @@ Constat final du diagnostic autonome : l’incident officiel GitHub du 17 août 
 - [x] Retirer les mentions Supabase Auth, récupération par email et bêta Passkeys de l’interface utilisateur.
 - [x] Remplacer ces mentions par des formulations neutres, compréhensibles et bilingues.
 - [x] Vérifier que les messages d’erreur ne révèlent pas de détail technique ou de fournisseur.
+
+
+## Publication de la version finale du compte
+
+- [x] Valider les derniers changements de la page de compte avec TypeScript, tests et build.
+- [ ] Pousser la version finale sur GitHub `main`.
+- [ ] Redéployer cette version sur Vercel.
+- [ ] Vérifier la page `/compte` et les nouveaux libellés sur `callofchess.vercel.app`.
