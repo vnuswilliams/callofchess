@@ -226,3 +226,27 @@ Constat final du diagnostic autonome : l’incident officiel GitHub du 17 août 
 - [x] Prévoir les états non connecté, chargement, erreur et historique vide.
 - [x] Ajouter les libellés français et anglais et vérifier le rendu responsive.
 - [x] Ajouter ou mettre à jour les tests, puis sauvegarder la version livrable.
+
+
+## Trois améliorations du profil
+
+- [ ] Persister les parties réellement jouées avec leur leçon, résultat, nombre de coups et date.
+- [x] Enrichir les statistiques avec taux de complétion, étapes moyennes et activité récente.
+- [x] Ajouter une visualisation de progression basée uniquement sur les données utilisateur réelles.
+- [x] Ajouter les tests et vérifier les états bilingues et responsive.
+
+
+## Publication des trois améliorations du profil
+
+- [ ] Valider les statistiques enrichies et la visualisation de progression.
+- [ ] Pousser les changements du profil sur GitHub `main`.
+- [ ] Tenter le redéploiement Vercel depuis le commit final.
+- [ ] Vérifier et documenter le statut de production Vercel.
+
+
+## Graphique de progression et partage social
+
+- [x] Remplacer les barres simples par un graphique de progression éditorial plus attrayant, basé sur les données réelles.
+- [x] Ajouter une carte de partage social avec aperçu joli, texte bilingue et actions Web Share/copie de lien.
+- [x] Mettre à jour les métadonnées de partage sans exposer l’email ni les statistiques privées.
+- [x] Corriger les tests du profil et vérifier le rendu desktop/mobile et les états de partage.
