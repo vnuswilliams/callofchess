@@ -1,0 +1,82 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  unit:
+    name: TypeScript, unit tests and build
+    runs-on: ubuntu-latest
+    env:
+      # The unit suite only needs a syntactically valid browser configuration.
+      # The real Supabase endpoint is exercised by the integration job below.
+      VITE_SUPABASE_URL: https://ci.invalid.supabase.co
+      VITE_SUPABASE_ANON_KEY: ci-public-test-key
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Enable pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.4.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: TypeScript check
+        run: pnpm check
+
+      - name: Unit tests
+        run: pnpm exec vitest run --exclude src/lib/supabaseHealth.test.ts
+
+      - name: Production build
+        run: pnpm build
+
+  integration:
+    name: Supabase integration test
+    runs-on: ubuntu-latest
+    env:
+      VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+      VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Enable pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.4.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check integration configuration
+        run: |
+          test -n "$VITE_SUPABASE_URL" || { echo "Missing GitHub Actions secret: VITE_SUPABASE_URL"; exit 1; }
+          test -n "$VITE_SUPABASE_ANON_KEY" || { echo "Missing GitHub Actions secret: VITE_SUPABASE_ANON_KEY"; exit 1; }
+
+      - name: Supabase integration test
+        run: pnpm exec vitest run src/lib/supabaseHealth.test.ts

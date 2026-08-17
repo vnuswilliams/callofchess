@@ -12,6 +12,10 @@ https://github.com/vnuswilliams/echequier.git
 
 Le remote `origin` peut être injecté par l’environnement WebDev et pointer vers un artefact interne. Il ne doit pas être utilisé pour publier le code sur GitHub.
 
+## Vérification GitHub Actions
+
+Le workflow `.github/workflows/ci.yml` s’exécute sur chaque push vers `main` et chaque pull request vers `main`. Il sépare les contrôles unitaires, la vérification TypeScript et le build de production du test d’intégration Supabase. Le job d’intégration nécessite les secrets GitHub `VITE_SUPABASE_URL` et `VITE_SUPABASE_ANON_KEY`; il échoue explicitement si l’un des deux secrets est absent au lieu de masquer une intégration non testée.
+
 ## Déploiement automatique GitHub → Vercel
 
 Dans **Project Settings → Git**, le projet `lionchess` doit rester relié à `vnuswilliams/echequier`, avec `main` comme branche de production. Les déploiements GitHub doivent être activés pour les pushes sur cette branche ; aucun Deploy Hook permanent n’est nécessaire. Après chaque push, Vercel doit créer une nouvelle entrée liée au SHA exact de `main`, et non un simple redeploy d’un ancien snapshot.
