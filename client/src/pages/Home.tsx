@@ -1,42 +1,16 @@
 /* Design reminder — L’Atelier de l’Ouverture: une landing éditoriale, chaleureuse et asymétrique; le safran ne signale que l’action ou le progrès. */
 import { useState } from "react";
 import { ArrowDown, ArrowUpRight, Check, ChevronRight, Menu, Moon, Sparkles, Sun, X } from "lucide-react";
+import LandingChessboard from "@/components/LandingChessboard";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useLanguage } from "@/contexts/LanguageContext";
-
-const boardRows = [
-  ["♜", "♞", "♝", "♛", "♚", "♝", "", "♜"],
-  ["♟", "♟", "♟", "", "", "♟", "♟", "♟"],
-  ["", "", "", "", "", "♞", "", ""],
-  ["", "", "", "♟", "", "", "", ""],
-  ["", "", "", "♙", "", "", "", ""],
-  ["", "", "♘", "", "", "♘", "", ""],
-  ["♙", "♙", "♙", "", "", "♙", "♙", "♙"],
-  ["♖", "", "♗", "♕", "♔", "♗", "", "♖"],
-];
 
 function Mark() {
   return <img className="h-10 w-10 object-contain" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663890875436/WMeJhgIGICmYOuIM.png" alt="Symbole Échiquier" />;
 }
 
 function MiniBoard() {
-  return (
-    <div className="hero-board relative mx-auto w-[min(80vw,440px)] shrink-0 rotate-[-2.5deg] bg-[#153d36] p-2 shadow-[20px_24px_0_rgba(31,32,22,.16),0_20px_45px_rgba(24,42,35,.22)] sm:p-3">
-      <div className="grid grid-cols-8 overflow-hidden border border-[#fff6e5]/50">
-        {boardRows.flatMap((row, rowIndex) => row.map((piece, columnIndex) => {
-          const isDark = (rowIndex + columnIndex) % 2 === 1;
-          const focus = (rowIndex === 3 && columnIndex === 3) || (rowIndex === 4 && columnIndex === 3);
-          return (
-            <div key={`${rowIndex}-${columnIndex}`} className={`relative flex aspect-square items-center justify-center ${isDark ? "bg-[#3a6658]" : "bg-[#f4e5c2]"} ${focus ? "after:absolute after:inset-[12%] after:border-2 after:border-[#d69024]" : ""}`}>
-              {piece && <span className={`relative z-10 font-serif text-[clamp(1.2rem,4vw,2.8rem)] leading-none ${rowIndex < 4 ? "text-[#182d28]" : "text-[#fffaf0] [text-shadow:0_1px_0_#4b3c29]"}`}>{piece}</span>}
-            </div>
-          );
-        }))}
-      </div>
-      <div className="absolute -right-3 top-[35%] flex h-12 w-12 items-center justify-center rounded-full border-4 border-[#fbf6e9] bg-[#d69024] text-lg font-extrabold text-[#173e37] shadow-lg">e4</div>
-      <div className="absolute -bottom-7 left-8 flex items-center gap-2 bg-[#fbf6e9] px-4 py-3 text-xs font-extrabold uppercase tracking-[.12em] text-[#173e37] shadow-lg"><span className="h-2 w-2 rounded-full bg-[#d69024]" /> Coup à jouer</div>
-    </div>
-  );
+  return <LandingChessboard />;
 }
 
 function LanguageToggle() {

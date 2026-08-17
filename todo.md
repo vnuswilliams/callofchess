@@ -307,3 +307,5 @@ Constat final du diagnostic autonome : l’incident officiel GitHub du 17 août 
 - [x] Documenter le contrôle du SHA GitHub contre le commit réellement déployé par Vercel.
 - [x] Confirmer dans Vercel que le projet `lionchess` reste relié à `vnuswilliams/echequier`, branche `main`, et que les pushes déclenchent automatiquement un nouveau déploiement : le commit `633392f` a été créé automatiquement après le push.
 - [x] Vérifier en production que le dernier SHA GitHub est le SHA servi par `callofchess.vercel.app` : le déploiement Vercel `633392f` est Ready et le domaine canonique répond correctement.
+
+- [x] Passe interface, profil, responsive, métadonnées et partage — 2026-08-17

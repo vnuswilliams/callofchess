@@ -15,6 +15,7 @@ import Account from "./pages/Account";
 import Profile from "./pages/Profile";
 import Path from "./pages/Path";
 import Leaderboard from "./pages/Leaderboard";
+import PageMeta from "./components/PageMeta";
 
 
 // Routes are intentionally kept in one place so Vercel SPA rewrites and
@@ -32,7 +33,9 @@ function LegacyLessonRedirect() {
 
 function Router() {
   return (
-    <Switch>
+    <>
+      <PageMeta />
+      <Switch>
       <Route path={"/"} component={Home} />
       <Route path={"/lesson/:id"} component={Lesson} />
       <Route path={"/account"} component={Account} />
@@ -47,7 +50,8 @@ function Router() {
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
-    </Switch>
+      </Switch>
+    </>
   );
 }
 
