@@ -177,8 +177,8 @@ Un déplacement volontaire `e2–e3` affiche « Diagnostic personnalisé · erre
 
 ## Publication du correctif Supabase
 
-- [ ] Committer les changements Supabase, progression et suppression de l’ancienne API d’authentification.
-- [ ] Pousser le commit sur GitHub `main`.
+- [x] Committer les changements Supabase, progression et suppression de l’ancienne API d’authentification.
+- [x] Pousser le commit sur GitHub `main`.
 - [ ] Vérifier que Vercel déploie ce commit sur `callofchess.vercel.app`.
 - [ ] Vérifier que le bundle public contient bien Supabase Auth et corriger l’inscription si nécessaire.
 
