@@ -10,5 +10,5 @@ Le 17 août 2026, le sélecteur de thème a été testé dans la navigation desk
 
 - [x] Vérifier les accès GitHub et Vercel disponibles pour cette tâche.
 - [x] Ajouter la configuration de production Vercel et la documentation de déploiement.
-- [ ] Créer le dépôt GitHub privé et y publier la branche principale.
+- [x] Créer le dépôt GitHub privé et y publier la branche principale.
 - [ ] Déployer le projet sur Vercel et vérifier l’URL de production.
