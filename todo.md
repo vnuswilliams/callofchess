@@ -298,3 +298,12 @@ Constat final du diagnostic autonome : l’incident officiel GitHub du 17 août 
 - [x] Ajouter une redirection de compatibilité depuis `/classement` vers `/ranking` si nécessaire.
 - [x] Tester les routes anglaises, les liens internes, TypeScript, Vitest et le build.
 - [ ] Pousser la version harmonisée sur GitHub et tenter le redéploiement Vercel.
+
+## Déploiement automatique GitHub–Vercel — 17 août 2026
+
+- [x] Déplacer la configuration `pnpm` hors de `package.json` vers `pnpm-workspace.yaml` pour supprimer le warning de pnpm 10.
+- [x] Supprimer le script Umami non configuré qui provoquait des warnings Vite ; conserver Vercel Analytics et Speed Insights déjà intégrés.
+- [x] Mettre à jour les métadonnées canoniques vers `callofchess.vercel.app`.
+- [x] Documenter le contrôle du SHA GitHub contre le commit réellement déployé par Vercel.
+- [ ] Confirmer dans Vercel que le projet `lionchess` reste relié à `vnuswilliams/echequier`, branche `main`, et que les pushes déclenchent automatiquement un nouveau déploiement.
+- [ ] Vérifier en production que le dernier SHA GitHub est le SHA servi par `callofchess.vercel.app`.

@@ -12,6 +12,19 @@ https://github.com/vnuswilliams/echequier.git
 
 Le remote `origin` peut être injecté par l’environnement WebDev et pointer vers un artefact interne. Il ne doit pas être utilisé pour publier le code sur GitHub.
 
+## Déploiement automatique GitHub → Vercel
+
+Dans **Project Settings → Git**, le projet `lionchess` doit rester relié à `vnuswilliams/echequier`, avec `main` comme branche de production. Les déploiements GitHub doivent être activés pour les pushes sur cette branche ; aucun Deploy Hook permanent n’est nécessaire. Après chaque push, Vercel doit créer une nouvelle entrée liée au SHA exact de `main`, et non un simple redeploy d’un ancien snapshot.
+
+Le contrôle opérationnel est :
+
+```bash
+git fetch github main
+git rev-parse github/main
+```
+
+Puis, dans Vercel, comparer ce SHA à la colonne **Commit** du dernier déploiement Production. Si les SHAs diffèrent, ne pas considérer la production comme à jour : vérifier l’état GitHub/Vercel et utiliser la création manuelle du déploiement uniquement comme mesure de reprise d’incident.
+
 ## Publication contrôlée
 
 Avant de pousser, vérifiez la branche et le commit :
