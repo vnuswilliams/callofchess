@@ -51,3 +51,8 @@ Le lien Create Deployment fourni par Vercel a ouvert un ancien déploiement `Hwp
 ## Classement public — prérequis de sécurité
 
 La création de `leaderboard_profiles` et de la fonction `get_public_leaderboard` a été tentée avec RLS et opt-in obligatoire, mais le canal SQL Supabase a renvoyé une erreur de connexion sans appliquer la migration. Aucune donnée de classement n’est donc affichée ou inventée. L’interface devra rester en état vide tant que cette migration n’est pas confirmée.
+
+
+## Classement et badge — publication
+
+Le commit `3c58716` est maintenant présent sur `github/main`, mais l’historique Vercel reste sur `1bfc96d` et affiche toujours l’incident GitHub. Le formulaire Create Deployment s’ouvre, mais aucune référence `3c58716` n’est encore détectée ; la production canonique n’inclut donc pas encore `/classement` ni la notification de badge.
