@@ -200,7 +200,7 @@ Constat final du diagnostic autonome : l’incident officiel GitHub du 17 août 
 - [x] Ajouter une animation de chargement visible pendant l’inscription et la connexion.
 - [x] Afficher des messages d’erreur clairs et bilingues selon le contexte Supabase.
 - [x] Ajouter un état de succès et une validation accessible pour le formulaire.
-- [ ] Couvrir les états visuels et les messages par des tests, puis vérifier le rendu responsive. (Rendu responsive et build vérifiés ; test dédié des messages encore à ajouter.)
+- [x] Couvrir les états visuels et les messages par des tests, puis vérifier le rendu responsive. (Tests bilingues des messages, rendu responsive et build vérifiés.)
 
 
 ## Confidentialité des libellés du compte

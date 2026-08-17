@@ -4,6 +4,19 @@ import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/lib/supabase";
 
+export function genericAuthError(fr: boolean) {
+  return fr ? "L’opération n’a pas pu aboutir. Vérifiez vos informations et réessayez." : "The operation could not be completed. Check your details and try again.";
+}
+
+export function friendlyAuthError(error: unknown, fr: boolean) {
+  const text = error instanceof Error ? error.message.toLowerCase() : "";
+  if (text.includes("already registered") || text.includes("already exists")) return fr ? "Cette adresse est déjà utilisée. Essayez de vous connecter." : "This email is already in use. Try signing in instead.";
+  if (text.includes("invalid email") || text.includes("email")) return fr ? "Saisissez une adresse email valide." : "Enter a valid email address.";
+  if (text.includes("password") && (text.includes("short") || text.includes("weak"))) return fr ? "Choisissez un mot de passe d’au moins 8 caractères." : "Choose a password with at least 8 characters.";
+  if (text.includes("invalid login") || text.includes("invalid credentials")) return fr ? "Email ou mot de passe incorrect." : "Incorrect email or password.";
+  return genericAuthError(fr);
+}
+
 export default function Account() {
   const { language, toggleLanguage } = useLanguage();
   const fr = language === "fr";
@@ -23,17 +36,6 @@ export default function Account() {
     });
     return () => { active = false; listener.subscription.unsubscribe(); };
   }, []);
-
-  function genericError() { return fr ? "L’opération n’a pas pu aboutir. Vérifiez vos informations et réessayez." : "The operation could not be completed. Check your details and try again."; }
-
-  function friendlyError(error: unknown) {
-    const text = error instanceof Error ? error.message.toLowerCase() : "";
-    if (text.includes("already registered") || text.includes("already exists")) return fr ? "Cette adresse est déjà utilisée. Essayez de vous connecter." : "This email is already in use. Try signing in instead.";
-    if (text.includes("invalid email") || text.includes("email")) return fr ? "Saisissez une adresse email valide." : "Enter a valid email address.";
-    if (text.includes("password") && (text.includes("short") || text.includes("weak"))) return fr ? "Choisissez un mot de passe d’au moins 8 caractères." : "Choose a password with at least 8 characters.";
-    if (text.includes("invalid login") || text.includes("invalid credentials")) return fr ? "Email ou mot de passe incorrect." : "Incorrect email or password.";
-    return genericError();
-  }
 
   async function submit(event: React.FormEvent) {
     event.preventDefault(); setBusy(true); setMessage("");
@@ -59,7 +61,7 @@ export default function Account() {
         setUser(data.user ? { id: data.user.id, email: data.user.email } : null);
         setPassword(""); setMessage(fr ? "Votre session est ouverte." : "Your session is active.");
       }
-    } catch (error) { setMessage(friendlyError(error)); } finally { setBusy(false); }
+    } catch (error) { setMessage(friendlyAuthError(error, fr)); } finally { setBusy(false); }
   }
 
   async function passkeyLogin() {
