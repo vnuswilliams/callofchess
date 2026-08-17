@@ -92,3 +92,12 @@ La gestion des domaines Vercel permet d’associer un domaine à l’environneme
 Le sous-domaine `lionchess.vercel.app` a été renseigné et l’environnement Production a été sélectionné dans le formulaire de domaine Vercel.
 
 Le sous-domaine est maintenant associé à la production avec une configuration valide. `https://lionchess.vercel.app` sert correctement la landing page Échiquier.
+
+## Analyse Stockfish
+
+- [x] Intégrer Stockfish côté navigateur dans un Web Worker.
+- [x] Ajouter l’interface d’analyse avec profondeur, évaluation et meilleur coup.
+- [ ] Tester l’analyse, la fluidité et le déploiement Vercel.
+
+The Stockfish 17.1 lite single-threaded engine returns depth 12, a centipawn evaluation and a principal variation in the local browser test. Vitest covers score formatting, mate formatting and UCI info parsing; all 3 tests and TypeScript checks pass.
+

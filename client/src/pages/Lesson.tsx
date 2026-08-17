@@ -2,7 +2,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { Chess, type Square } from "chess.js";
 import { Chessboard } from "react-chessboard";
-import { ArrowLeft, Check, ChevronRight, CircleHelp, Lightbulb, RotateCcw, Sparkles, Trophy } from "lucide-react";
+import { ArrowLeft, Check, ChevronRight, CircleHelp, Cpu, Lightbulb, Loader2, RotateCcw, Sparkles, SquareArrowOutUpRight, Trophy } from "lucide-react";
+import { useStockfish } from "@/hooks/useStockfish";
 import { Button } from "@/components/ui/button";
 
 const lessonSteps = [
@@ -36,6 +37,8 @@ export default function Lesson() {
   const [showHint, setShowHint] = useState(false);
   const [feedback, setFeedback] = useState<"idle" | "wrong" | "correct" | "complete">("idle");
   const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
+  const [showAnalysis, setShowAnalysis] = useState(false);
+  const { isReady: engineReady, isAnalyzing, analysis, error: engineError, analyze, stop } = useStockfish();
 
   const completed = currentStep >= lessonSteps.length;
   const activeStep = lessonSteps[Math.min(currentStep, lessonSteps.length - 1)];
@@ -46,11 +49,18 @@ export default function Lesson() {
   }, []);
 
   const resetLesson = () => {
+    stop();
     setPosition(new Chess().fen());
     setCurrentStep(0);
     setShowHint(false);
     setFeedback("idle");
     setSelectedSquare(null);
+    setShowAnalysis(false);
+  };
+
+  const handleAnalyze = () => {
+    setShowAnalysis(true);
+    analyze(position, 12);
   };
 
   const handlePieceDrop = (sourceSquare: string, targetSquare: string | null) => {
@@ -137,6 +147,24 @@ export default function Lesson() {
             </section>
 
             <section className={`lesson-feedback border p-5 ${feedback === "wrong" ? "border-[#c96442] bg-[#fff0e7]" : feedback === "complete" ? "border-[#6f977c] bg-[#e9f0e6]" : feedback === "correct" ? "border-[#90a98d] bg-[#f2f4e9]" : "border-[#cbbd99] bg-[#f5ecd8]"}`}><div className="flex gap-3"><div className={`mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full ${feedback === "wrong" ? "bg-[#c96442] text-white" : "bg-[#d69024] text-[#173e37]"}`}>{feedback === "wrong" ? <CircleHelp size={15} /> : <Check size={16} strokeWidth={3} />}</div><div><p className="text-[.65rem] font-extrabold uppercase tracking-[.13em] text-[#736954]">{feedback === "wrong" ? "Essayez encore" : feedback === "idle" ? "Un conseil" : feedback === "complete" ? "Séquence terminée" : "Coup validé"}</p><p className="mt-2 text-sm leading-6 text-[#4e5146]">{feedback === "wrong" ? "Ce coup n’est pas l’objectif de cette étape. Utilisez l’indice si vous souhaitez revoir les cases à relier." : feedback === "complete" ? "Retenez ce rythme : centre, développement, puis sécurité du roi." : feedback === "correct" ? "La réponse noire est jouée. Continuez avec le prochain principe." : "Un bon coup d’ouverture aide vos pièces à respirer et contrôle les cases importantes."}</p></div></div></section>
+
+            <section className="lesson-analysis border border-[#cbbd99] bg-[#173e37] p-5 text-[#fffaf0]">
+              <div className="flex items-start justify-between gap-4">
+                <div><p className="eyebrow text-[#e7ba61]">Analyse locale</p><h2 className="display-font mt-2 text-3xl leading-none">Le regard du moteur</h2></div>
+                <div className="grid h-10 w-10 shrink-0 place-items-center border border-[#66857c] text-[#e7ba61]"><Cpu size={18} /></div>
+              </div>
+              <p className="mt-3 text-sm leading-6 text-[#d9e0d6]">Stockfish analyse cette position directement dans votre navigateur, sans envoyer votre partie à un serveur.</p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <Button onClick={handleAnalyze} disabled={!engineReady || isAnalyzing} className="rounded-none bg-[#d69024] text-[.66rem] font-extrabold uppercase tracking-[.1em] text-[#173e37] hover:bg-[#e7ba61] disabled:opacity-50"><Cpu size={14} /> {isAnalyzing ? "Analyse en cours" : engineReady ? "Analyser la position" : "Chargement du moteur"}</Button>
+                {isAnalyzing && <Button variant="outline" onClick={stop} className="rounded-none border-[#66857c] bg-transparent text-[.66rem] font-extrabold uppercase tracking-[.1em] text-[#fffaf0] hover:bg-[#284d43] hover:text-[#fffaf0]">Arrêter</Button>}
+              </div>
+              {showAnalysis && <div className="mt-5 border-t border-[#496d61] pt-4" aria-live="polite">
+                {engineError && <p className="text-sm text-[#f1b3a0]">{engineError}</p>}
+                {!engineError && !analysis && <p className="flex items-center gap-2 text-sm text-[#d9e0d6]"><Loader2 size={15} className="animate-spin" /> Préparation de l’analyse…</p>}
+                {analysis && <div className="grid grid-cols-2 gap-3 text-sm"><div><span className="block text-[.6rem] font-extrabold uppercase tracking-[.12em] text-[#9cb4a9]">Évaluation</span><strong className="mt-1 block font-mono text-2xl text-[#e7ba61]">{analysis.scoreLabel}</strong></div><div><span className="block text-[.6rem] font-extrabold uppercase tracking-[.12em] text-[#9cb4a9]">Profondeur</span><strong className="mt-1 block font-mono text-2xl text-[#fffaf0]">{analysis.depth || "—"}</strong></div><div className="col-span-2"><span className="block text-[.6rem] font-extrabold uppercase tracking-[.12em] text-[#9cb4a9]">Meilleur coup</span><strong className="mt-1 block font-mono text-lg text-[#fffaf0]">{analysis.bestMove ?? "Recherche…"}</strong></div><div className="col-span-2"><span className="block text-[.6rem] font-extrabold uppercase tracking-[.12em] text-[#9cb4a9]">Ligne principale</span><p className="mt-1 font-mono text-xs leading-6 text-[#d9e0d6]">{analysis.principalVariation.length ? analysis.principalVariation.join(" · ") : "Recherche en cours…"}</p></div></div>}
+              </div>}
+              <p className="mt-4 flex items-center gap-2 text-[.65rem] uppercase tracking-[.1em] text-[#9cb4a9]"><SquareArrowOutUpRight size={13} /> Moteur Stockfish 17.1 · profondeur pédagogique 12</p>
+            </section>
 
             <section className="lesson-history border border-[#cbbd99] bg-[#ece0c1] p-5"><p className="eyebrow">Feuille de partie</p><div className="mt-4 min-h-13 border-l border-[#bfae83] pl-4 font-mono text-sm font-bold leading-7 text-[#28483f]">{history.length ? history.map((move) => <div key={move}>{move}</div>) : <span className="text-[#867c64]">En attente du premier coup…</span>}</div>{completed && <div className="mt-4 flex items-center gap-2 border-t border-[#c7b48a] pt-4 text-[.65rem] font-extrabold uppercase tracking-[.12em] text-[#6c725c]"><Check size={14} className="text-[#467a5d]" /> Objectif rempli <ChevronRight size={14} /></div>}</section>
           </aside>
