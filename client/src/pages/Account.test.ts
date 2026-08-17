@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { friendlyAuthError, genericAuthError } from "@/lib/authErrors";
 
 describe("account authentication messages", () => {
