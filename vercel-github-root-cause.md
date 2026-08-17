@@ -46,3 +46,8 @@ Le domaine canonique `https://callofchess.vercel.app/parcours` renvoie actuellem
 ## Tentative de création manuelle
 
 Le lien Create Deployment fourni par Vercel a ouvert un ancien déploiement `Hwp4fzHSp` basé sur `6e1be0e`, marqué Ready mais Stale, et non le commit demandé `a415fb6`. Cela confirme que la panne GitHub empêche Vercel de résoudre la révision actuelle ; la production canonique reste sur une version antérieure et `/parcours` renvoie 404.
+
+
+## Classement public — prérequis de sécurité
+
+La création de `leaderboard_profiles` et de la fonction `get_public_leaderboard` a été tentée avec RLS et opt-in obligatoire, mais le canal SQL Supabase a renvoyé une erreur de connexion sans appliquer la migration. Aucune donnée de classement n’est donc affichée ou inventée. L’interface devra rester en état vide tant que cette migration n’est pas confirmée.

@@ -118,11 +118,13 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  .badge-pop-in { animation: badge-pop-in .32s cubic-bezier(.23,1,.32,1) both; }
   .rise-in { animation: rise-in .72s cubic-bezier(.23,1,.32,1) both; }
   .rise-in-delay { animation: rise-in .72s .12s cubic-bezier(.23,1,.32,1) both; }
   .hero-board { animation: board-float 8s ease-in-out infinite; }
 }
 
+@keyframes badge-pop-in { from { opacity: 0; transform: translateY(-14px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes rise-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes board-float { 0%, 100% { transform: rotate(-2.5deg) translateY(0); } 50% { transform: rotate(-2.5deg) translateY(-10px); } }
 
