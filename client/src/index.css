@@ -164,3 +164,28 @@ html.dark .echequier-puzzle .border-\[\#bba980\] { border-color: #789585; }
 html.dark .echequier-cta { background: #102520; }
 html.dark .echequier-cta .bg-\[\#173e37\] { background: #1b3b33; }
 html.dark .echequier-footer { background: #0c1d19; border-color: #46645b; }
+
+/* Interactive lesson — the board remains the focal physical object; dark mode reduces luminance without weakening piece or copy contrast. */
+.lesson-board-card { background-image: radial-gradient(rgba(255,255,255,.04) .6px, transparent .6px); background-size: 6px 6px; }
+.lesson-board-wrap { box-shadow: 0 0 0 1px rgba(255,250,240,.25), 0 16px 32px rgba(0,0,0,.22); }
+.lesson-progress > div > div { transition: width 340ms cubic-bezier(.23,1,.32,1); }
+html.dark .lesson-shell { background: #102520; color: #f7efdd; }
+html.dark .lesson-header { background-color: #152e29; border-color: #46645b; color: #f7efdd; }
+html.dark .lesson-header .text-\[\#766d57\], html.dark .lesson-header .text-\[\#59655e\] { color: #bdc9bc; }
+html.dark .lesson-shell h1, html.dark .lesson-shell h2, html.dark .lesson-shell h3, html.dark .lesson-shell .display-font { color: #f7efdd; }
+html.dark .lesson-shell .lesson-progress { border-color: #557267; }
+html.dark .lesson-shell .lesson-progress .text-\[\#776e58\] { color: #bdc9bc; }
+html.dark .lesson-shell .lesson-progress .bg-\[\#ddd1b2\] { background: #315147; }
+html.dark .lesson-paper { background: #1d3b33; border-color: #567468; }
+html.dark .lesson-paper p, html.dark .lesson-paper .text-\[\#5f5b4e\] { color: #d2ddcf; }
+html.dark .lesson-paper .border-\[\#bcae88\] { border-color: #628074; color: #f7efdd; }
+html.dark .lesson-paper .border-\[\#bcae88\]:hover { background: #294d43; }
+html.dark .lesson-feedback { border-color: #58766a; background: #213f36; }
+html.dark .lesson-feedback .text-\[\#4e5146\], html.dark .lesson-feedback .text-\[\#736954\] { color: #d2ddcf; }
+html.dark .lesson-history { border-color: #557267; background: #18342d; }
+html.dark .lesson-history .text-\[\#28483f\] { color: #e2ebdf; }
+html.dark .lesson-history .border-\[\#bfae83\], html.dark .lesson-history .border-t { border-color: #547468; }
+html.dark .lesson-history .text-\[\#867c64\], html.dark .lesson-history .text-\[\#6c725c\] { color: #bdc9bc; }
+html.dark .lesson-notes { border-color: #557267; background: #557267; }
+html.dark .lesson-notes > div { background: #1d3b33; }
+html.dark .lesson-notes p, html.dark .lesson-notes .text-\[\#615d50\] { color: #d2ddcf; }
