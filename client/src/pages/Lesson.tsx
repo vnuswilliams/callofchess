@@ -6,6 +6,7 @@ import { ArrowLeft, Check, ChevronRight, CircleHelp, Cpu, Lightbulb, Loader2, Ro
 import { useStockfish } from "@/hooks/useStockfish";
 import { classifyMistake, enrichMistakeWithEngine, explainEngineForBeginner, formatEngineMove, formatPrincipalVariation, formatUciAsSan, type PedagogicalMistake } from "@/lib/pedagogicalFeedback";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { useParams } from "wouter";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/lib/supabase";
@@ -254,7 +255,7 @@ export default function Lesson() {
             {mistake && <CoachingPanel mistake={mistake} />}
 
 
-            <section className="lesson-analysis border border-[#cbbd99] bg-[#173e37] p-5 text-[#fffaf0]">
+            <Card className="lesson-analysis rounded-xl border-[#cbbd99] bg-[#173e37] p-5 text-[#fffaf0] shadow-sm">
               <div className="flex items-start justify-between gap-4">
                 <div><p className="eyebrow text-[#e7ba61]">{t("localAnalysis")}</p><h2 className="display-font mt-2 text-3xl leading-none">{t("engineView")}</h2></div>
                 <div className="grid h-10 w-10 shrink-0 place-items-center border border-[#66857c] text-[#e7ba61]"><Cpu size={18} /></div>
@@ -270,9 +271,9 @@ export default function Lesson() {
                 {analysis && <div className="space-y-4 text-sm"><div className="rounded-[.65rem] border border-[#66857c] bg-[#21473e] p-4"><p className="text-[.62rem] font-extrabold uppercase tracking-[.12em] text-[#e7ba61]">{beginnerExplanation?.label}</p><p className="mt-2 text-base font-semibold leading-6 text-[#fffaf0]">{beginnerExplanation?.summary}</p><div className="mt-3 border-t border-[#496d61] pt-3"><p className="text-[.62rem] font-extrabold uppercase tracking-[.12em] text-[#9cb4a9]">{t("inline_0783232574")}</p><p className="mt-1 leading-6 text-[#d9e0d6]">{beginnerExplanation?.why}</p></div><div className="mt-3 border-t border-[#496d61] pt-3"><p className="text-[.62rem] font-extrabold uppercase tracking-[.12em] text-[#e7ba61]">{t("inline_f34bd17b24")}</p><p className="mt-1 font-semibold leading-6 text-[#fffaf0]">{beginnerExplanation?.nextQuestion}</p></div></div><details className="rounded-[.65rem] border border-[#496d61] p-3"><summary className="cursor-pointer text-xs font-extrabold uppercase tracking-[.1em] text-[#cbd8cc]">{t("inline_27373621d4")}</summary><div className="mt-3 grid grid-cols-2 gap-3"><div><span className="block text-[.6rem] font-extrabold uppercase tracking-[.12em] text-[#9cb4a9]">{t("evaluation")}</span><strong className="mt-1 block font-mono text-xl text-[#e7ba61]">{analysis.scoreLabel}</strong></div><div><span className="block text-[.6rem] font-extrabold uppercase tracking-[.12em] text-[#9cb4a9]">{t("depth")}</span><strong className="mt-1 block font-mono text-xl text-[#fffaf0]">{analysis.depth || "—"}</strong></div><div className="col-span-2"><span className="block text-[.6rem] font-extrabold uppercase tracking-[.12em] text-[#9cb4a9]">{t("bestMove")}</span><strong className="mt-1 block font-mono text-lg text-[#fffaf0]">{analysis.bestMove ? formatUciAsSan(position, analysis.bestMove) : t("waitingAnalysis")}</strong></div><div className="col-span-2"><span className="block text-[.6rem] font-extrabold uppercase tracking-[.12em] text-[#9cb4a9]">{t("mainLine")}</span><p className="mt-1 font-mono text-xs leading-6 text-[#d9e0d6]">{analysis.principalVariation.length ? formatPrincipalVariation(position, analysis.principalVariation).join(" · ") : t("waitingAnalysis")}</p></div></div></details></div>}
               </div>}
               <p className="mt-4 flex items-center gap-2 text-[.65rem] uppercase tracking-[.1em] text-[#9cb4a9]"><SquareArrowOutUpRight size={13} /> {t("engineFooter")}</p>
-            </section>
+            </Card>
 
-            <section className="lesson-history border border-[#cbbd99] bg-[#ece0c1] p-5"><p className="eyebrow">{t("moveSheet")}</p><div className="mt-4 min-h-13 border-l border-[#bfae83] pl-4 font-mono text-sm font-bold leading-7 text-[#28483f]">{history.length ? history.map((move) => <div key={move}>{move}</div>) : <span className="text-[#867c64]">{t("waitingMove")}</span>}</div>{completed && <div className="mt-4 flex items-center gap-2 border-t border-[#c7b48a] pt-4 text-[.65rem] font-extrabold uppercase tracking-[.12em] text-[#6c725c]"><Check size={14} className="text-[#467a5d]" /> {t("objectiveFilled")} <ChevronRight size={14} /></div>}</section>
+            <Card className="lesson-history rounded-xl border-[#cbbd99] bg-[#ece0c1] p-5"><p className="eyebrow">{t("moveSheet")}</p><div className="mt-4 min-h-13 border-l border-[#bfae83] pl-4 font-mono text-sm font-bold leading-7 text-[#28483f]">{history.length ? history.map((move) => <div key={move}>{move}</div>) : <span className="text-[#867c64]">{t("waitingMove")}</span>}</div>{completed && <div className="mt-4 flex items-center gap-2 border-t border-[#c7b48a] pt-4 text-[.65rem] font-extrabold uppercase tracking-[.12em] text-[#6c725c]"><Check size={14} className="text-[#467a5d]" /> {t("objectiveFilled")} <ChevronRight size={14} /></div>}</Card>
           </aside>
         </div>
 

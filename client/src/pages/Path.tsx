@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, ArrowUpRight, BookOpen, CheckCircle2, ChevronRight, LockKeyhole, Target, Trophy } from "lucide-react";
 import { Link } from "wouter";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/lib/supabase";
 import { isLevelUnlocked, learningPath, type PathLevel } from "@/lib/learningPath";
@@ -27,8 +29,8 @@ function LevelCard({ level, language, completedLessons, t }: { level: PathLevel;
   const lessonLink = level.id === 1 ? "/lesson/1" : level.id === 2 ? "/lesson/2" : level.id === 3 ? "/lesson/3" : null;
 
   return (
-    <article className={`relative overflow-hidden border p-6 transition-all sm:p-8 ${unlocked ? "border-[#cbbd99] bg-[#fffaf0] hover:-translate-y-1 hover:border-[#d69024]" : "border-[#d7ccb0] bg-[#eee8d8]/70"}`}>
-      <div className="flex items-start justify-between gap-4">
+    <Card className={`relative overflow-hidden rounded-xl p-0 transition-all ${unlocked ? "border-[#cbbd99] bg-[#fffaf0] hover:-translate-y-1 hover:border-[#d69024]" : "border-[#d7ccb0] bg-[#eee8d8]/70"}`}>
+      <CardHeader className="flex items-start justify-between gap-4 p-6 sm:p-8">
         <div>
           <span className={`font-mono text-xs font-bold ${unlocked ? "text-[#d69024]" : "text-[#8d846f]"}`}>{String(level.id).padStart(2, "0")} / 17</span>
           <h2 className={`display-font mt-5 text-3xl leading-none sm:text-4xl ${unlocked ? "text-[#173e37]" : "text-[#756c58]"}`}>{copy.title}</h2>
@@ -36,16 +38,17 @@ function LevelCard({ level, language, completedLessons, t }: { level: PathLevel;
         <span className={`grid h-11 w-11 shrink-0 place-items-center rounded-full ${unlocked ? "bg-[#f0dfb9] text-[#a87416]" : "bg-[#ddd4bc] text-[#8d846f]"}`} aria-hidden="true">
           {unlocked ? <Target size={19} /> : <LockKeyhole size={18} />}
         </span>
-      </div>
-      <p className="mt-5 min-h-14 max-w-xl text-sm leading-6 text-[#625d50]">{copy.summary}</p>
+      </CardHeader>
+      <CardContent className="px-6 pb-6 sm:px-8 sm:pb-8"><p className="min-h-14 max-w-xl text-sm leading-6 text-[#625d50]">{copy.summary}</p>
       <div className="mt-6 flex flex-wrap gap-3 text-[.62rem] font-extrabold uppercase tracking-[.11em] text-[#756d58]"><span>{level.estimatedLessons} {t("inline_0267eca77d")}</span><span>·</span><span>{level.exercises.length} {t("inline_98db2654a4")}</span></div>
-      <div className="mt-5"><div className="flex justify-between text-xs font-semibold text-[#756d58]"><span>{unlocked ? (t("inline_6bf5cf2ca7")) : (t("inline_bc79ae712e"))}</span><span>{completed}/{level.exercises.length}</span></div><div className="mt-2 h-2 bg-[#e5ddc8]"><div className={`h-full transition-all duration-500 ${unlocked ? "bg-[#d69024]" : "bg-[#a89d83]"}`} style={{ width: `${unlocked ? progress : 0}%` }} /></div></div>
+      <div className="mt-5"><div className="flex justify-between text-xs font-semibold text-[#756d58]"><span>{unlocked ? (t("inline_6bf5cf2ca7")) : (t("inline_bc79ae712e"))}</span><span>{completed}/{level.exercises.length}</span></div><Progress value={unlocked ? progress : 0} className="mt-2 h-2 bg-[#e5ddc8] [&>div]:bg-[#d69024]" /></div>
       <div className="mt-6 border-l-2 border-[#d69024] pl-4"><p className="text-[.62rem] font-extrabold uppercase tracking-[.12em] text-[#9a6b18]">{t("inline_da93e527c1")}</p><p className="mt-1 text-sm font-semibold leading-5 text-[#3c4c43]">{copy.milestone}</p></div>
       <div className="mt-7 space-y-2">
         {level.exercises.map((item) => { const itemCopy = item[language]; const playableHref = playableLessonForExercise[item.id]; return <div key={item.id} className="flex items-start justify-between gap-3 border-t border-[#e2d8be] pt-3"><div className="flex min-w-0 items-start gap-3"><span className="mt-0.5 shrink-0 text-[#a87416]"><ChevronRight size={15} /></span><div><p className="text-sm font-bold text-[#173e37]">{itemCopy.title}</p><p className="mt-1 text-xs leading-5 text-[#756c58]">{itemCopy.goal}</p></div></div>{playableHref && unlocked ? <Link href={playableHref} className="shrink-0 text-[.62rem] font-extrabold uppercase tracking-[.1em] text-[#987019] underline decoration-[#d69024] underline-offset-4">{t("inline_b6adb83e63")}</Link> : null}</div>; })}
       </div>
       {lessonLink && unlocked ? <Link href={lessonLink} className="button-ink mt-7 inline-flex !min-h-10 !px-4">{t("inline_2f76b760cc")}<ArrowUpRight size={15} /></Link> : !unlocked ? <p className="mt-7 flex items-center gap-2 text-xs font-bold text-[#8d846f]"><LockKeyhole size={14} />{language === "fr" ? `Terminez le niveau ${level.prerequisite} pour continuer.` : `Complete level ${level.prerequisite} to continue.`}</p> : null}
-    </article>
+      </CardContent>
+    </Card>
   );
 }
 
