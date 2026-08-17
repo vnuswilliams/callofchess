@@ -49,7 +49,7 @@ Les tests Vitest couvrent notamment le parsing Stockfish, le feedback pédagogiq
 
 ## Déploiement Vercel
 
-Le projet Vercel attendu est `lionchess`, connecté au dépôt GitHub `vnuswilliams/echequier` et à la branche `main`. `vercel.json` configure l’installation pnpm, `pnpm build`, le dossier `dist/public` et la réécriture SPA nécessaire aux routes comme `/lecon/1` et `/profil`.
+Le projet Vercel attendu est `lionchess`, connecté au dépôt GitHub `vnuswilliams/echequier` et à la branche `main`. `vercel.json` configure l’installation pnpm, `pnpm build`, le dossier `dist/public` et la réécriture SPA nécessaire aux routes comme `/lesson/1`, `/profile`, `/path` et `/ranking`. Les anciens chemins français redirigent vers leurs équivalents anglais.
 
 Pour publier une version :
 

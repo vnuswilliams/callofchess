@@ -46,7 +46,7 @@ Les deux SHA doivent être identiques avant d’attendre Vercel.
 
 Dans **Project Settings → Git**, le dépôt doit être `vnuswilliams/echequier`. Dans **Deployments**, cherchez le SHA exact du commit poussé. Une ligne « Redeploy of … » peut simplement republier un ancien snapshot ; elle ne prouve pas que le dernier commit GitHub a été compilé.
 
-Pour une route SPA, vérifiez à la fois `/` et une route profonde comme `/lecon/1` ou `/profil`. Le fichier `vercel.json` doit conserver la réécriture vers `/` lorsque `cleanUrls` est activé.
+Pour une route SPA, vérifiez à la fois `/` et une route profonde comme `/lesson/1`, `/profile` ou `/ranking`. Les anciens chemins français (`/lecon`, `/compte`, `/profil`, `/parcours`, `/classement`) restent des alias de compatibilité et redirigent vers les routes anglaises. Le fichier `vercel.json` doit conserver la réécriture vers `/` lorsque `cleanUrls` est activé.
 
 ## Incident `089958c`
 

@@ -289,3 +289,12 @@ Constat final du diagnostic autonome : l’incident officiel GitHub du 17 août 
 - [x] Annoter les zones clés du code avec des commentaires utiles et non redondants.
 - [x] Ajouter une documentation de développement, de déploiement, de Supabase et de dépannage Vercel.
 - [x] Tester, pousser les corrections sur GitHub et tenter le redéploiement Vercel.
+
+
+## Routes publiques en anglais
+
+- [x] Remplacer la route publique `/classement` par `/ranking`.
+- [x] Mettre à jour tous les liens internes, boutons, routes directes et références de documentation vers les noms anglais.
+- [x] Ajouter une redirection de compatibilité depuis `/classement` vers `/ranking` si nécessaire.
+- [x] Tester les routes anglaises, les liens internes, TypeScript, Vitest et le build.
+- [ ] Pousser la version harmonisée sur GitHub et tenter le redéploiement Vercel.

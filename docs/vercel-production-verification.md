@@ -1,5 +1,5 @@
 # Vérification production — 17 août 2026
 
-La route `https://callofchess.vercel.app/parcours` renvoie encore une page Vercel `404 Page Not Found`, ce qui confirme que le déploiement public n’a pas encore intégré la route Parcours du commit récent.
+La route canonique `https://callofchess.vercel.app/path` doit servir le parcours ; l’ancien chemin `/parcours` est désormais un alias de compatibilité qui redirige vers `/path`. Le déploiement public historique observé renvoyait une page Vercel `404 Page Not Found` sur l’ancien chemin, avant cette harmonisation.
 
-La route `https://callofchess.vercel.app/profil` répond correctement avec le titre `Mon parcours Échiquier — Échiquier`, le contenu du profil et l’état non connecté. La production est donc partiellement à jour : les routes profil sont disponibles, mais `/parcours` reste absente du bundle public observé.
+La route canonique `https://callofchess.vercel.app/profile` sert le profil avec le titre `Mon parcours Échiquier — Échiquier`, son contenu et l’état non connecté. Les routes canoniques anglaises à vérifier après publication sont `/lesson/1`, `/account`, `/profile`, `/path` et `/ranking`.
