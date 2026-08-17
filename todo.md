@@ -50,6 +50,10 @@ La page Vercel Speed Insights est active pour l’environnement Production. Elle
 
 Les vérifications TypeScript et la construction de production sont réussies. Les rendus desktop et mobile confirment l’intégrité de la landing page et de la première leçon interactive avant publication.
 
+Le déploiement de production Vercel associé au commit `4ecd6e5` est prêt. La publication publique sous `lionchess.vercel.app` est contrôlée à l’étape finale.
+
+Le contrôle de la route directe `/lecon/1` renvoie encore une erreur 404, tant sur le sous-domaine de production que sur l’URL de déploiement. La réécriture SPA Vercel est corrigée avant la validation finale en utilisant `/` comme destination, conformément au comportement `cleanUrls`.
+
 Un test d’interaction par pointeur a été envoyé sur le mouvement attendu `e2–e4`. La leçon propose désormais également une sélection par clic de la pièce puis de sa destination, afin de couvrir les usages tactiles et souris. Les clics sur les cases `e2` puis `e4` ont été déclenchés pour valider ce second parcours de jeu; la séquence complète est vérifiée lors du contrôle suivant.
 
 Après la validation de `e4`, le second coup `Cf3` a été déclenché par sélection des cases `g1` puis `f3`; l’état final de réussite est contrôlé ensuite.
