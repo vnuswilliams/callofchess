@@ -15,7 +15,7 @@ const boardRows = [
 ];
 
 function Mark() {
-  return <img className="h-10 w-10 object-contain" src="/manus-storage/echequier-mark_3a95e07c.png" alt="Symbole Échiquier" />;
+  return <img className="h-10 w-10 object-contain" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663890875436/WMeJhgIGICmYOuIM.png" alt="Symbole Échiquier" />;
 }
 
 function MiniBoard() {
@@ -97,7 +97,7 @@ export default function Home() {
               <span className="pointer-events-none absolute right-[4%] top-[7%] select-none font-mono text-[clamp(4.6rem,11vw,10rem)] font-bold leading-none text-[#173e37]/[.055]">e4</span>
               <div className="absolute bottom-0 right-[1%] hidden h-[82%] w-[82%] border border-[#c5b587] lg:block" />
               <MiniBoard />
-              <img src="/manus-storage/echequier-hero-board_e62a83d6.png" alt="Position d’ouverture sur un échiquier en bois" className="absolute -right-10 bottom-3 -z-10 hidden h-[62%] w-[68%] object-cover opacity-65 mix-blend-multiply lg:block" />
+              <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663890875436/XFOFssOQLDvPiBrr.png" alt="Position d’ouverture sur un échiquier en bois" className="absolute -right-10 bottom-3 -z-10 hidden h-[62%] w-[68%] object-cover opacity-65 mix-blend-multiply lg:block" />
             </div>
           </div>
           <div className="checker-line h-3" />
@@ -125,7 +125,7 @@ export default function Home() {
 
         <section id="puzzle" className="echequier-puzzle relative bg-[#e9dcc0] py-24 sm:py-32">
           <div className="mx-auto grid max-w-[1440px] items-center gap-14 px-5 sm:px-8 lg:grid-cols-[1.06fr_.94fr] lg:px-12">
-            <div className="relative min-h-[360px] overflow-hidden border border-[#bba980] bg-[#f8f0df] sm:min-h-[510px]"><img src="/manus-storage/echequier-puzzle-still-life_3fbe2461.png" alt="Cavalier et échiquier sur un carnet de travail" className="absolute inset-0 h-full w-full object-cover" /><div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#163d36] via-[#163d36]/70 to-transparent p-7 pt-24 text-[#fffaf0] sm:p-10"><p className="eyebrow !text-[#e6b95e]">Position d’entraînement</p><p className="display-font mt-3 text-3xl leading-tight">Les blancs jouent.<br />Quel est votre plan ?</p></div></div>
+            <div className="relative min-h-[360px] overflow-hidden border border-[#bba980] bg-[#f8f0df] sm:min-h-[510px]"><img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663890875436/VzXMIXHeEnedAtWF.png" alt="Cavalier et échiquier sur un carnet de travail" className="absolute inset-0 h-full w-full object-cover" /><div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#163d36] via-[#163d36]/70 to-transparent p-7 pt-24 text-[#fffaf0] sm:p-10"><p className="eyebrow !text-[#e6b95e]">Position d’entraînement</p><p className="display-font mt-3 text-3xl leading-tight">Les blancs jouent.<br />Quel est votre plan ?</p></div></div>
             <div className="lg:pl-8"><div className="flex items-center gap-3"><Sparkles size={16} className="text-[#a87416]" /><span className="eyebrow">Le puzzle du jour</span></div><h2 className="display-font mt-5 max-w-[8ch] text-5xl leading-[.93] tracking-[-.045em] text-[#173e37] sm:text-6xl">Un peu de jeu. Beaucoup de déclics.</h2><p className="mt-7 max-w-md leading-7 text-[#635d4d]">Chaque jour, une situation courte pour entraîner votre regard. Trouvez le coup, puis accédez à une explication qui vous aide à refaire le même raisonnement demain.</p><div className="mt-9 space-y-3">{["Une position adaptée à votre niveau", "Des indices seulement si vous en avez besoin", "Une explication après votre essai"].map((line) => <div key={line} className="flex items-center gap-3 text-sm font-semibold text-[#39362d]"><span className="grid h-6 w-6 place-items-center rounded-full bg-[#d69024] text-[#173e37]"><Check size={14} strokeWidth={3} /></span>{line}</div>)}</div><a href="#top" className="button-ink mt-10">Je veux essayer <ChevronRight size={16} /></a></div>
           </div>
           <div className="absolute right-[6%] top-[12%] hidden h-16 w-16 rotate-45 border border-[#b9a477] lg:block" />
