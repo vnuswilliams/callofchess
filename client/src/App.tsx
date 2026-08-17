@@ -14,6 +14,8 @@ import Account from "./pages/Account";
 import Profile from "./pages/Profile";
 
 
+// Routes are intentionally kept in one place so Vercel SPA rewrites and
+// client navigation share the same deep-link contract.
 function Router() {
   return (
     <Switch>
@@ -33,6 +35,8 @@ function Router() {
 //   to keep consistent foreground/background color across components
 // - If you want to make theme switchable, pass `switchable` ThemeProvider and use `useTheme` hook
 
+// The providers wrap every route: theme and locale are UI state, while
+// Analytics/Speed Insights are mounted once to avoid duplicate telemetry.
 function App() {
   return (
     <ErrorBoundary>

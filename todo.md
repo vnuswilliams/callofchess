@@ -258,3 +258,34 @@ Constat final du diagnostic autonome : l’incident officiel GitHub du 17 août 
 - [x] Afficher les badges débloqués et verrouillés avec leur progression.
 - [x] Ajouter les libellés français et anglais et des états accessibles.
 - [x] Tester le calcul des badges et vérifier le rendu desktop/mobile.
+
+
+## Roadmap pédagogique A → Z
+
+- [ ] Lire et structurer les 18 niveaux de la roadmap fournie en progression pédagogique cohérente.
+- [ ] Créer un modèle de parcours avec niveaux, chapitres, objectifs, prérequis et exercices.
+- [ ] Ajouter une première sélection d’exercices jouables couvrant les fondamentaux, tactiques, calcul, finales et stratégie.
+- [ ] Intégrer une page Parcours avec progression visuelle, verrouillage par prérequis et accès aux leçons.
+- [ ] Ajouter les traductions FR/EN et les états de chargement, vide et non connecté.
+- [ ] Tester TypeScript, Vitest, build, routes directes et rendu responsive.
+- [ ] Pousser les changements sur GitHub et tenter le redéploiement Vercel.
+
+
+## Classement, partage de badges et notifications
+
+- [ ] Auditer les profils et la progression afin de définir un classement basé sur des données réelles, sans email public.
+- [ ] Ajouter le classement général avec rang, score de progression et état vide explicite.
+- [ ] Ajouter une carte interactive de partage pour un badge choisi, sans statistiques privées.
+- [ ] Ajouter Web Share/copie de lien et textes FR/EN pour la carte de badge.
+- [ ] Détecter un nouveau badge débloqué et afficher une notification ainsi qu’une animation accessible.
+- [ ] Ajouter les tests, vérifier confidentialité, responsive et publication GitHub/Vercel.
+
+
+## Réalignement Vercel et documentation
+
+- [x] Comparer le commit Vercel bloqué `089958c` avec le HEAD actuel de GitHub `main`.
+- [x] Vérifier le dépôt, la branche de production, les paramètres de build et l’historique Vercel.
+- [x] Corriger le raccordement ou documenter précisément le blocage GitHub/Vercel sans laisser de hook permanent.
+- [x] Annoter les zones clés du code avec des commentaires utiles et non redondants.
+- [x] Ajouter une documentation de développement, de déploiement, de Supabase et de dépannage Vercel.
+- [ ] Tester, pousser les corrections sur GitHub et tenter le redéploiement Vercel.

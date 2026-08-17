@@ -13,6 +13,8 @@ import { supabase } from "@/lib/supabase";
 type LessonStep = { from: string; to: string; san: string; answer: string; idea: string; reply: string; replySan: string };
 type LessonDefinition = { number: string; title: string; kicker: string; headline: string; steps: LessonStep[] };
 
+// Typed lesson data stays local and declarative: the board state is rebuilt
+// from the authoritative move sequence instead of being duplicated in React state.
 const lessonCatalog: Record<string, LessonDefinition> = {
   "1": {
     number: "01", title: "Le centre", kicker: "Ouverture · Le premier principe", headline: "Prenez le centre avec e4.",
@@ -40,6 +42,8 @@ const lessonCatalog: Record<string, LessonDefinition> = {
   },
 };
 
+// Progress restoration replays only validated user moves and their lesson replies,
+// which keeps a resumed lesson deterministic across browsers and sessions.
 function reconstructPosition(steps: LessonStep[], completedStep: number) {
   const game = new Chess();
   steps.slice(0, completedStep).forEach((step) => {
