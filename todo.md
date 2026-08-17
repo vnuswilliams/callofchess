@@ -118,3 +118,44 @@ Un déplacement volontaire `e2–e3` affiche « Diagnostic personnalisé · erre
 - [x] Afficher le diagnostic dans la leçon et tester localement.
 - [x] Publier la fonctionnalité pédagogique sur GitHub/Vercel et vérifier l’erreur e2–e3 en production.
 
+
+## Amélioration du coaching : pourquoi le meilleur coup
+
+- [x] Expliquer explicitement pourquoi le meilleur coup Stockfish est supérieur au coup joué.
+- [x] Afficher les bénéfices concrets du meilleur coup : contrôle du centre, développement, lignes ouvertes, gain de tempo ou sécurité du roi.
+- [x] Ajouter une phrase de principe à retenir et couvrir cette sortie par des tests Vitest.
+- [ ] Publier les améliorations du coaching sur GitHub/Vercel puis vérifier en production que le panneau affiche aussi « pourquoi le meilleur coup est supérieur » et « le principe à retenir ».
+
+
+## Nouvelles fonctionnalités demandées
+
+- [x] Convertir les coups UCI et la feuille de partie en notation algébrique lisible.
+- [x] Ajouter la leçon 02 sur le développement des pièces.
+- [x] Ajouter la leçon 03 sur la sécurité du roi et le roque.
+- [ ] Définir le modèle de progression utilisateur et la sauvegarde par le compte connecté.
+- [ ] Ajouter les procédures serveur de lecture et d’enregistrement de progression.
+- [ ] Ajouter l’interface de compte, connexion et état de progression.
+- [ ] Tester les leçons, la notation, la sauvegarde et les parcours authentifiés.
+- [ ] Publier la mise à jour sur GitHub/Vercel et vérifier la production.
+
+
+## Internationalisation français / anglais
+
+- [x] Ajouter un contexte de langue avec persistance locale et français par défaut.
+- [x] Ajouter un sélecteur de langue accessible dans la navigation.
+- [ ] Traduire la landing page, la navigation et les appels à l’action.
+- [ ] Traduire tous les libellés restants des leçons et du feedback Stockfish en anglais, y compris les cartes de fin et les textes de progression.
+- [ ] Tester la persistance de langue après rechargement et vérifier `/lecon/1`, `/lecon/2` et `/lecon/3` en français et en anglais.
+
+
+## Authentification MVP : email, mot de passe et Passkey
+
+- [ ] Vérifier le runtime de production et choisir le mode backend compatible avec Vercel.
+- [x] Créer le modèle utilisateur, sessions, identifiants et progression.
+- [x] Implémenter l’inscription et la connexion par email/mot de passe avec mots de passe hachés.
+- [ ] Ajouter déconnexion, session httpOnly, validation et messages d’erreur sûrs, puis tester les erreurs sans divulgation.
+- [ ] Tester réellement l’enregistrement et la vérification des Passkeys avec WebAuthn en environnement HTTPS compatible.
+- [ ] Restaurer aussi la position, l’historique et l’état de la leçon lors de la reprise de progression.
+- [ ] Ajouter des tests Vitest pour les handlers auth/progress et des tests client pour la page de compte.
+- [ ] Vérifier les parcours en local et publier la version MVP.
+

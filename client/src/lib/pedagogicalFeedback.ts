@@ -1,3 +1,5 @@
+import { Chess } from "chess.js";
+
 export type PedagogicalMistake = {
   attemptedMove: string;
   expectedMove: string;
@@ -9,6 +11,8 @@ export type PedagogicalMistake = {
   attemptNumber: number;
   engineBestMove?: string | null;
   engineGap?: string;
+  bestMoveWhy?: string;
+  lessonTakeaway?: string;
 };
 
 type ClassifyInput = {
@@ -18,10 +22,12 @@ type ClassifyInput = {
   expectedTo: string;
   stepIndex: number;
   attemptNumber: number;
+  language?: "fr" | "en";
 };
 
-export function classifyMistake({ attemptedFrom, attemptedTo, expectedFrom, expectedTo, stepIndex, attemptNumber }: ClassifyInput): PedagogicalMistake {
+export function classifyMistake({ attemptedFrom, attemptedTo, expectedFrom, expectedTo, stepIndex, attemptNumber, language = "fr" }: ClassifyInput): PedagogicalMistake {
   const attemptedMove = `${attemptedFrom}–${attemptedTo}`;
+  const isEnglish = language === "en";
   const expectedMove = `${expectedFrom}–${expectedTo}`;
 
   if (stepIndex === 0 && attemptedFrom === "e2") {
@@ -29,12 +35,12 @@ export function classifyMistake({ attemptedFrom, attemptedTo, expectedFrom, expe
       attemptedMove,
       expectedMove,
       category: "centre",
-      title: "Le centre mérite plus d’espace",
+      title: isEnglish ? "The center needs more space" : "Le centre mérite plus d’espace",
       explanation: attemptedTo === "e3"
-        ? "Vous avancez le pion d’une case. C’est légal, mais e4 contrôle davantage de cases centrales et ouvre immédiatement les diagonales du fou et de la dame."
-        : `Vous dirigez le pion vers ${attemptedTo}. Dans cette leçon, le pion du roi est votre levier le plus direct pour prendre le centre.`,
-      recommendation: "Avant de jouer, demandez-vous quelle case centrale votre coup contrôle et quelles lignes il ouvre.",
-      focus: "Contrôle du centre",
+        ? (isEnglish ? "You advance the pawn one square. It is legal, but e4 controls more central squares and immediately opens the bishop and queen diagonals." : "Vous avancez le pion d’une case. C’est légal, mais e4 contrôle davantage de cases centrales et ouvre immédiatement les diagonales du fou et de la dame.")
+        : (isEnglish ? `You move the pawn to ${attemptedTo}. In this lesson, the king pawn is your most direct lever to claim the center.` : `Vous dirigez le pion vers ${attemptedTo}. Dans cette leçon, le pion du roi est votre levier le plus direct pour prendre le centre.`),
+      recommendation: isEnglish ? "Before moving, ask which central square your move controls and which lines it opens." : "Avant de jouer, demandez-vous quelle case centrale votre coup contrôle et quelles lignes il ouvre.",
+      focus: isEnglish ? "Center control" : "Contrôle du centre",
       attemptNumber,
     };
   }
@@ -44,12 +50,12 @@ export function classifyMistake({ attemptedFrom, attemptedTo, expectedFrom, expe
       attemptedMove,
       expectedMove,
       category: "developpement",
-      title: "Développez une pièce vers une case active",
+      title: isEnglish ? "Develop a piece on an active square" : "Développez une pièce vers une case active",
       explanation: attemptedTo === "h3"
-        ? "Le cavalier va vers le bord. Depuis f3, il contrôle e5 et d4 et participe directement à la bataille centrale."
-        : `Le cavalier arrive sur ${attemptedTo}. La case f3 lui donne plus d’influence et prépare plus naturellement le roque.`,
-      recommendation: "Pour chaque pièce mineure, cherchez d’abord une case centrale qui augmente son nombre de possibilités.",
-      focus: "Développement des pièces",
+        ? (isEnglish ? "The knight moves toward the edge. From f3, it controls e5 and d4 and joins the central battle directly." : "Le cavalier va vers le bord. Depuis f3, il contrôle e5 et d4 et participe directement à la bataille centrale.")
+        : (isEnglish ? `The knight arrives on ${attemptedTo}. The f3 square gives it more influence and prepares castling more naturally.` : `Le cavalier arrive sur ${attemptedTo}. La case f3 lui donne plus d’influence et prépare plus naturellement le roque.`),
+      recommendation: isEnglish ? "For each minor piece, first look for a central square that increases its options." : "Pour chaque pièce mineure, cherchez d’abord une case centrale qui augmente son nombre de possibilités.",
+      focus: isEnglish ? "Piece development" : "Développement des pièces",
       attemptNumber,
     };
   }
@@ -58,24 +64,81 @@ export function classifyMistake({ attemptedFrom, attemptedTo, expectedFrom, expe
     attemptedMove,
     expectedMove,
     category: "intention",
-    title: "Votre idée mérite un meilleur point de départ",
-    explanation: `Vous avez essayé ${attemptedMove}, alors que l’objectif de cette étape est ${expectedMove}. Le moteur va comparer les deux intentions pour rendre la différence concrète.`,
-    recommendation: "Relisez la mission, observez la pièce concernée et cherchez le coup qui sert directement le principe étudié.",
-    focus: stepIndex === 0 ? "Prise du centre" : "Développement harmonieux",
+    title: isEnglish ? "Your idea needs a stronger starting point" : "Votre idée mérite un meilleur point de départ",
+    explanation: isEnglish ? `You tried ${attemptedMove}, while this step asks for ${expectedMove}. The engine will compare both intentions to make the difference concrete.` : `Vous avez essayé ${attemptedMove}, alors que l’objectif de cette étape est ${expectedMove}. Le moteur va comparer les deux intentions pour rendre la différence concrète.`,
+    recommendation: isEnglish ? "Read the mission again, observe the relevant piece and look for the move that directly serves the principle." : "Relisez la mission, observez la pièce concernée et cherchez le coup qui sert directement le principe étudié.",
+    focus: stepIndex === 0 ? (isEnglish ? "Claiming the center" : "Prise du centre") : (isEnglish ? "Harmonious development" : "Développement harmonieux"),
     attemptNumber,
   };
 }
 
-export function enrichMistakeWithEngine(mistake: PedagogicalMistake, bestMove: string | null | undefined): PedagogicalMistake {
+function explainBestMove(mistake: PedagogicalMistake, bestMove: string, language: "fr" | "en"): { why: string; takeaway: string } {
+  const isEnglish = language === "en";
+  if (mistake.category === "centre") {
+    return {
+      why: isEnglish ? `The best move ${bestMove} is stronger here because it takes more space in the center, controls d4 and f4, and immediately opens the bishop and queen diagonals. Your move ${mistake.attemptedMove} advances the pawn but gives your pieces less room.` : `Le meilleur coup ${bestMove} est supérieur ici parce qu’il occupe davantage le centre, contrôle les cases d4 et f4 et libère immédiatement les diagonales du fou et de la dame. Votre coup ${mistake.attemptedMove} avance le pion, mais laisse moins d’espace à vos pièces.`,
+      takeaway: isEnglish ? "Remember: in the opening, prefer moves that gain space while opening lines for several pieces." : "À retenir : en ouverture, privilégiez le coup qui gagne de l’espace tout en ouvrant des lignes pour plusieurs pièces.",
+    };
+  }
+
+  if (mistake.category === "developpement") {
+    return {
+      why: isEnglish ? `The best move ${bestMove} is stronger because it puts the knight on an active square: it influences the center, increases your options, and brings the king closer to castling. Your move ${mistake.attemptedMove} develops the piece toward a less useful square.` : `Le meilleur coup ${bestMove} est supérieur parce qu’il place le cavalier sur une case active : il influence le centre, augmente le nombre de réponses disponibles et rapproche le roi du roque. Votre coup ${mistake.attemptedMove} développe la pièce vers une case moins utile.`,
+      takeaway: isEnglish ? "Remember: develop your pieces toward the center before seeking a maneuver on the edge." : "À retenir : développez vos pièces vers le centre avant de chercher une manœuvre sur le bord de l’échiquier.",
+    };
+  }
+
+  return {
+    why: isEnglish ? `The best move ${bestMove} is stronger because it directly follows this lesson’s principle and creates more possibilities for your pieces than ${mistake.attemptedMove}.` : `Le meilleur coup ${bestMove} est supérieur parce qu’il répond directement au principe de cette étape et crée plus de possibilités pour vos pièces que ${mistake.attemptedMove}.`,
+    takeaway: isEnglish ? "Remember: the best move is not only legal; it must also serve the position’s plan." : "À retenir : le meilleur coup n’est pas seulement légal ; il doit aussi servir le plan de la position.",
+  };
+}
+
+export function enrichMistakeWithEngine(mistake: PedagogicalMistake, bestMove: string | null | undefined, language: "fr" | "en" = "fr"): PedagogicalMistake {
   if (!bestMove) return mistake;
   const normalizedBest = bestMove.toLowerCase().replace(/[^a-h0-9]/g, "");
   const normalizedExpected = mistake.expectedMove.toLowerCase().replace("–", "");
   const confirmsLesson = normalizedBest === normalizedExpected;
+  const { why, takeaway } = explainBestMove(mistake, bestMove, language);
+
   return {
     ...mistake,
     engineBestMove: bestMove,
     engineGap: confirmsLesson
-      ? `Stockfish confirme ${bestMove} : votre objectif et le meilleur coup moteur vont dans la même direction.`
-      : `Stockfish propose ${bestMove} plutôt que ${mistake.attemptedMove}. Comparez l’intention de ces deux coups avant de rejouer.`,
+      ? (language === "en" ? `Stockfish confirms ${bestMove}: your objective and the engine’s best move point in the same direction.` : `Stockfish confirme ${bestMove} : votre objectif et le meilleur coup moteur vont dans la même direction.`)
+      : (language === "en" ? `Stockfish suggests ${bestMove} rather than ${mistake.attemptedMove}. Compare the purpose of both moves before trying again.` : `Stockfish propose ${bestMove} plutôt que ${mistake.attemptedMove}. Comparez l’intention de ces deux coups avant de rejouer.`),
+    bestMoveWhy: why,
+    lessonTakeaway: takeaway,
   };
+}
+
+export function formatEngineMove(move: string): string {
+  const normalized = move.toLowerCase().replace(/[^a-h0-9]/g, "");
+  if (normalized.length < 4) return move;
+  return `${normalized.slice(0, 2)}–${normalized.slice(2, 4)}`;
+}
+
+export function formatUciAsSan(fen: string, move: string): string {
+  const normalized = move.toLowerCase().replace(/[^a-h0-9qrbn]/g, "");
+  if (normalized.length < 4) return move;
+  try {
+    const chess = new Chess(fen);
+    const result = chess.move({ from: normalized.slice(0, 2), to: normalized.slice(2, 4), promotion: normalized.slice(4, 5) || undefined });
+    return result.san;
+  } catch {
+    return formatEngineMove(move);
+  }
+}
+
+export function formatPrincipalVariation(fen: string, moves: string[]): string[] {
+  try {
+    const chess = new Chess(fen);
+    return moves.map((move) => {
+      const normalized = move.toLowerCase().replace(/[^a-h0-9qrbn]/g, "");
+      const result = chess.move({ from: normalized.slice(0, 2), to: normalized.slice(2, 4), promotion: normalized.slice(4, 5) || undefined });
+      return result.san;
+    });
+  } catch {
+    return moves.map(formatEngineMove);
+  }
 }

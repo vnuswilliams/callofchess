@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { ArrowDown, ArrowUpRight, Check, ChevronRight, Menu, Moon, Sparkles, Sun, X } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const boardRows = [
   ["♜", "♞", "♝", "♛", "♚", "♝", "", "♜"],
@@ -38,28 +39,35 @@ function MiniBoard() {
   );
 }
 
+function LanguageToggle() {
+  const { language, toggleLanguage, t } = useLanguage();
+  return <button type="button" onClick={toggleLanguage} aria-label={`${t("language")}: ${language === "fr" ? t("english") : t("french")}`} className="inline-flex h-10 items-center border border-[#b8aa86] px-3 text-[.62rem] font-extrabold uppercase tracking-[.12em] text-[#173e37] transition-colors hover:border-[#d69024] hover:bg-[#f5ecd7]"><span aria-hidden="true">{language === "fr" ? "EN" : "FR"}</span><span className="sr-only">{language === "fr" ? t("english") : t("french")}</span></button>;
+}
+
 function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
+  const { t } = useLanguage();
   const isDark = theme === "dark";
 
   return (
     <button
       type="button"
       onClick={toggleTheme}
-      aria-label={isDark ? "Activer le mode clair" : "Activer le mode sombre"}
+      aria-label={isDark ? t("lightMode") : t("darkMode")}
       aria-pressed={isDark}
       className="theme-toggle group inline-flex h-10 items-center gap-2 border border-[#b8aa86] px-3 text-[.62rem] font-extrabold uppercase tracking-[.12em] text-[#173e37] transition-colors hover:border-[#d69024] hover:bg-[#f5ecd7]"
     >
       <span className="grid h-5 w-5 place-items-center rounded-full bg-[#173e37] text-[#fffaf0] transition-transform duration-200 group-hover:scale-105">
         {isDark ? <Sun size={12} strokeWidth={2.5} /> : <Moon size={12} strokeWidth={2.5} />}
       </span>
-      <span className="hidden min-[1180px]:inline">{isDark ? "Clair" : "Sombre"}</span>
+      <span className="hidden min-[1180px]:inline">{isDark ? t("light") : t("dark")}</span>
     </button>
   );
 }
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { t, language } = useLanguage();
 
   const closeMenu = () => setMenuOpen(false);
 
@@ -72,14 +80,14 @@ export default function Home() {
             <div className="leading-none"><span className="display-font block text-[1.6rem] tracking-[-.04em]">Échiquier</span><span className="block pt-1 text-[.58rem] font-extrabold uppercase tracking-[.18em] text-[#766d57]">Apprendre en jouant</span></div>
           </a>
           <nav className="hidden items-center gap-8 text-[.7rem] font-extrabold uppercase tracking-[.12em] lg:flex" aria-label="Navigation principale">
-            <a className="transition-colors hover:text-[#8b6217]" href="#parcours">Le parcours</a>
-            <a className="transition-colors hover:text-[#8b6217]" href="#methode">La méthode</a>
-            <a className="transition-colors hover:text-[#8b6217]" href="#puzzle">Puzzle du jour</a>
+            <a className="transition-colors hover:text-[#8b6217]" href="#parcours">{language === "fr" ? "Le parcours" : "The path"}</a>
+            <a className="transition-colors hover:text-[#8b6217]" href="#methode">{language === "fr" ? "La méthode" : "The method"}</a>
+            <a className="transition-colors hover:text-[#8b6217]" href="#puzzle">{language === "fr" ? "Puzzle du jour" : "Daily puzzle"}</a>
           </nav>
-          <div className="hidden items-center gap-3 lg:flex"><ThemeToggle /><a href="/lecon/1" className="button-ink !min-h-10 !px-5">Essayer le premier coup <ArrowUpRight size={15} /></a></div>
-          <div className="flex items-center gap-2 lg:hidden"><ThemeToggle /><button className="grid h-11 w-11 place-items-center border border-[#b8aa86]" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label="Ouvrir le menu">{menuOpen ? <X size={22} /> : <Menu size={22} />}</button></div>
+          <div className="hidden items-center gap-3 lg:flex"><LanguageToggle /><ThemeToggle /><a href="/compte" className="text-[.65rem] font-extrabold uppercase tracking-[.12em] text-[#173e37] hover:text-[#8b6217]">{t("account")}</a><a href="/lecon/1" className="button-ink !min-h-10 !px-5">{t("tryFirstMove")} <ArrowUpRight size={15} /></a></div>
+          <div className="flex items-center gap-2 lg:hidden"><LanguageToggle /><ThemeToggle /><button className="grid h-11 w-11 place-items-center border border-[#b8aa86]" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label={language === "fr" ? "Ouvrir le menu" : "Open menu"}>{menuOpen ? <X size={22} /> : <Menu size={22} />}</button></div>
         </div>
-        {menuOpen && <div className="echequier-mobile-menu absolute inset-x-0 top-full border-b border-[#cbc09f] bg-[#fbf6e9] px-5 py-5 shadow-xl lg:hidden"><nav className="flex flex-col gap-4 text-sm font-extrabold"><a onClick={closeMenu} href="#parcours">Le parcours</a><a onClick={closeMenu} href="#methode">La méthode</a><a onClick={closeMenu} href="#puzzle">Puzzle du jour</a></nav></div>}
+        {menuOpen && <div className="echequier-mobile-menu absolute inset-x-0 top-full border-b border-[#cbc09f] bg-[#fbf6e9] px-5 py-5 shadow-xl lg:hidden"><nav className="flex flex-col gap-4 text-sm font-extrabold"><a onClick={closeMenu} href="#parcours">{language === "fr" ? "Le parcours" : "The path"}</a><a onClick={closeMenu} href="#methode">{language === "fr" ? "La méthode" : "The method"}</a><a onClick={closeMenu} href="#puzzle">{language === "fr" ? "Puzzle du jour" : "Daily puzzle"}</a><a onClick={closeMenu} href="/compte">{t("account")}</a></nav></div>}
       </header>
 
       <main id="top">
@@ -87,11 +95,11 @@ export default function Home() {
           <div className="hero-sidewash absolute inset-y-0 right-0 -z-10 hidden w-[46%] bg-[#e8d7ae]/50 lg:block" />
           <div className="mx-auto grid max-w-[1440px] gap-12 px-5 pb-24 pt-14 sm:px-8 sm:pt-20 lg:grid-cols-[.94fr_1.06fr] lg:px-12 lg:pb-28 lg:pt-24">
             <div className="rise-in relative z-10 flex max-w-xl flex-col items-start lg:pt-8">
-              <div className="mb-7 flex items-center gap-3"><span className="h-px w-10 bg-[#d69024]" /><span className="eyebrow">Le premier coup compte</span></div>
-              <h1 className="display-font max-w-[11ch] text-[clamp(3.8rem,7.2vw,7rem)] leading-[.88] tracking-[-.06em] text-[#173e37]">Votre prochain coup peut tout changer.</h1>
-              <p className="mt-8 max-w-[48ch] text-[1rem] leading-8 text-[#5d594d] sm:text-[1.08rem]">Des leçons courtes, des positions à jouer et des repères concrets pour apprendre les échecs sans vous perdre dans la théorie.</p>
-              <div className="mt-9 flex flex-wrap items-center gap-3"><a href="/lecon/1" className="button-ink">Commencer la leçon <ArrowUpRight size={16} /></a><a href="#methode" className="inline-flex items-center gap-2 px-3 py-3 text-xs font-extrabold uppercase tracking-[.1em] text-[#173e37] transition-colors hover:text-[#8b6217]">Voir la méthode <ArrowDown size={16} /></a></div>
-              <div className="mt-16 flex gap-8 border-l border-[#b6a985] pl-5"><div><span className="display-font block text-3xl leading-none text-[#173e37]">12 min</span><span className="mt-2 block text-[.62rem] font-extrabold uppercase tracking-[.13em] text-[#756d58]">par leçon</span></div><div><span className="display-font block text-3xl leading-none text-[#173e37]">1 coup</span><span className="mt-2 block text-[.62rem] font-extrabold uppercase tracking-[.13em] text-[#756d58]">à la fois</span></div></div>
+              <div className="mb-7 flex items-center gap-3"><span className="h-px w-10 bg-[#d69024]" /><span className="eyebrow">{language === "fr" ? "Le premier coup compte" : "The first move matters"}</span></div>
+              <h1 className="display-font max-w-[11ch] text-[clamp(3.8rem,7.2vw,7rem)] leading-[.88] tracking-[-.06em] text-[#173e37]">{language === "fr" ? "Votre prochain coup peut tout changer." : "Your next move can change everything."}</h1>
+              <p className="mt-8 max-w-[48ch] text-[1rem] leading-8 text-[#5d594d] sm:text-[1.08rem]">{language === "fr" ? "Des leçons courtes, des positions à jouer et des repères concrets pour apprendre les échecs sans vous perdre dans la théorie." : "Short lessons, playable positions and practical guidance to learn chess without getting lost in theory."}</p>
+              <div className="mt-9 flex flex-wrap items-center gap-3"><a href="/lecon/1" className="button-ink">{t("startLesson")} <ArrowUpRight size={16} /></a><a href="#methode" className="inline-flex items-center gap-2 px-3 py-3 text-xs font-extrabold uppercase tracking-[.1em] text-[#173e37] transition-colors hover:text-[#8b6217]">{t("viewMethod")} <ArrowDown size={16} /></a></div>
+              <div className="mt-16 flex gap-8 border-l border-[#b6a985] pl-5"><div><span className="display-font block text-3xl leading-none text-[#173e37]">12 min</span><span className="mt-2 block text-[.62rem] font-extrabold uppercase tracking-[.13em] text-[#756d58]">{language === "fr" ? "par leçon" : "per lesson"}</span></div><div><span className="display-font block text-3xl leading-none text-[#173e37]">1 coup</span><span className="mt-2 block text-[.62rem] font-extrabold uppercase tracking-[.13em] text-[#756d58]">{language === "fr" ? "à la fois" : "at a time"}</span></div></div>
             </div>
             <div className="rise-in-delay relative flex min-h-[390px] items-center justify-center pb-6 pt-9 sm:min-h-[510px] lg:justify-end lg:pb-10">
               <span className="pointer-events-none absolute right-[4%] top-[7%] select-none font-mono text-[clamp(4.6rem,11vw,10rem)] font-bold leading-none text-[#173e37]/[.055]">e4</span>
