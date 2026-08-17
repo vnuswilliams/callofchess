@@ -12,6 +12,7 @@ import Home from "./pages/Home";
 import Lesson from "./pages/Lesson";
 import Account from "./pages/Account";
 import Profile from "./pages/Profile";
+import Path from "./pages/Path";
 
 
 // Routes are intentionally kept in one place so Vercel SPA rewrites and
@@ -23,6 +24,7 @@ function Router() {
       <Route path={"/lecon/:id"} component={Lesson} />
       <Route path={"/compte"} component={Account} />
       <Route path={"/profil"} component={Profile} />
+      <Route path={"/parcours"} component={Path} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

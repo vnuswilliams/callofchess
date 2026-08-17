@@ -80,14 +80,14 @@ export default function Home() {
             <div className="leading-none"><span className="display-font block text-[1.6rem] tracking-[-.04em]">Échiquier</span><span className="block pt-1 text-[.58rem] font-extrabold uppercase tracking-[.18em] text-[#766d57]">Apprendre en jouant</span></div>
           </a>
           <nav className="hidden items-center gap-8 text-[.7rem] font-extrabold uppercase tracking-[.12em] lg:flex" aria-label="Navigation principale">
-            <a className="transition-colors hover:text-[#8b6217]" href="#parcours">{language === "fr" ? "Le parcours" : "The path"}</a>
+            <a className="transition-colors hover:text-[#8b6217]" href="/parcours">{language === "fr" ? "Le parcours" : "The path"}</a>
             <a className="transition-colors hover:text-[#8b6217]" href="#methode">{language === "fr" ? "La méthode" : "The method"}</a>
             <a className="transition-colors hover:text-[#8b6217]" href="#puzzle">{language === "fr" ? "Puzzle du jour" : "Daily puzzle"}</a>
           </nav>
           <div className="hidden items-center gap-3 lg:flex"><LanguageToggle /><ThemeToggle /><a href="/compte" className="text-[.65rem] font-extrabold uppercase tracking-[.12em] text-[#173e37] hover:text-[#8b6217]">{t("account")}</a><a href="/lecon/1" className="button-ink !min-h-10 !px-5">{t("tryFirstMove")} <ArrowUpRight size={15} /></a></div>
           <div className="flex items-center gap-2 lg:hidden"><LanguageToggle /><ThemeToggle /><button className="grid h-11 w-11 place-items-center border border-[#b8aa86]" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label={language === "fr" ? "Ouvrir le menu" : "Open menu"}>{menuOpen ? <X size={22} /> : <Menu size={22} />}</button></div>
         </div>
-        {menuOpen && <div className="echequier-mobile-menu absolute inset-x-0 top-full border-b border-[#cbc09f] bg-[#fbf6e9] px-5 py-5 shadow-xl lg:hidden"><nav className="flex flex-col gap-4 text-sm font-extrabold"><a onClick={closeMenu} href="#parcours">{language === "fr" ? "Le parcours" : "The path"}</a><a onClick={closeMenu} href="#methode">{language === "fr" ? "La méthode" : "The method"}</a><a onClick={closeMenu} href="#puzzle">{language === "fr" ? "Puzzle du jour" : "Daily puzzle"}</a><a onClick={closeMenu} href="/compte">{t("account")}</a></nav></div>}
+        {menuOpen && <div className="echequier-mobile-menu absolute inset-x-0 top-full border-b border-[#cbc09f] bg-[#fbf6e9] px-5 py-5 shadow-xl lg:hidden"><nav className="flex flex-col gap-4 text-sm font-extrabold"><a onClick={closeMenu} href="/parcours">{language === "fr" ? "Le parcours" : "The path"}</a><a onClick={closeMenu} href="#methode">{language === "fr" ? "La méthode" : "The method"}</a><a onClick={closeMenu} href="#puzzle">{language === "fr" ? "Puzzle du jour" : "Daily puzzle"}</a><a onClick={closeMenu} href="/compte">{t("account")}</a></nav></div>}
       </header>
 
       <main id="top">

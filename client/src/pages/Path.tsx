@@ -1,0 +1,81 @@
+import { useEffect, useMemo, useState } from "react";
+import { ArrowLeft, ArrowUpRight, BookOpen, CheckCircle2, ChevronRight, LockKeyhole, Target, Trophy } from "lucide-react";
+import { Link } from "wouter";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { supabase } from "@/lib/supabase";
+import { isLevelUnlocked, learningPath, type PathLevel } from "@/lib/learningPath";
+
+type ProgressRow = { lesson_id: string; completed: boolean; completed_step: number };
+
+function levelCompletion(level: PathLevel, completedLessons: Set<string>) {
+  if (level.id === 0) return Math.min(level.exercises.length, completedLessons.has("1") ? 1 : 0);
+  if (level.id === 1) return Math.min(level.exercises.length, ["1", "2", "3"].filter((id) => completedLessons.has(id)).length);
+  return 0;
+}
+
+function LevelCard({ level, language, completedLessons }: { level: PathLevel; language: "fr" | "en"; completedLessons: Set<string> }) {
+  const copy = level[language];
+  const unlocked = isLevelUnlocked(level, completedLessons);
+  const completed = levelCompletion(level, completedLessons);
+  const progress = Math.round((completed / level.exercises.length) * 100);
+  const lessonLink = level.id === 1 ? "/lecon/1" : level.id === 2 ? "/lecon/2" : level.id === 3 ? "/lecon/3" : null;
+
+  return (
+    <article className={`relative overflow-hidden border p-6 transition-all sm:p-8 ${unlocked ? "border-[#cbbd99] bg-[#fffaf0] hover:-translate-y-1 hover:border-[#d69024]" : "border-[#d7ccb0] bg-[#eee8d8]/70"}`}>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <span className={`font-mono text-xs font-bold ${unlocked ? "text-[#d69024]" : "text-[#8d846f]"}`}>{String(level.id).padStart(2, "0")} / 17</span>
+          <h2 className={`display-font mt-5 text-3xl leading-none sm:text-4xl ${unlocked ? "text-[#173e37]" : "text-[#756c58]"}`}>{copy.title}</h2>
+        </div>
+        <span className={`grid h-11 w-11 shrink-0 place-items-center rounded-full ${unlocked ? "bg-[#f0dfb9] text-[#a87416]" : "bg-[#ddd4bc] text-[#8d846f]"}`} aria-hidden="true">
+          {unlocked ? <Target size={19} /> : <LockKeyhole size={18} />}
+        </span>
+      </div>
+      <p className="mt-5 min-h-14 max-w-xl text-sm leading-6 text-[#625d50]">{copy.summary}</p>
+      <div className="mt-6 flex flex-wrap gap-3 text-[.62rem] font-extrabold uppercase tracking-[.11em] text-[#756d58]"><span>{level.estimatedLessons} {language === "fr" ? "leçons" : "lessons"}</span><span>·</span><span>{level.exercises.length} {language === "fr" ? "exercices" : "exercises"}</span></div>
+      <div className="mt-5"><div className="flex justify-between text-xs font-semibold text-[#756d58]"><span>{unlocked ? (language === "fr" ? "Progression" : "Progress") : (language === "fr" ? "À débloquer" : "Locked")}</span><span>{completed}/{level.exercises.length}</span></div><div className="mt-2 h-2 bg-[#e5ddc8]"><div className={`h-full transition-all duration-500 ${unlocked ? "bg-[#d69024]" : "bg-[#a89d83]"}`} style={{ width: `${unlocked ? progress : 0}%` }} /></div></div>
+      <div className="mt-6 border-l-2 border-[#d69024] pl-4"><p className="text-[.62rem] font-extrabold uppercase tracking-[.12em] text-[#9a6b18]">{language === "fr" ? "Jalon" : "Milestone"}</p><p className="mt-1 text-sm font-semibold leading-5 text-[#3c4c43]">{copy.milestone}</p></div>
+      <div className="mt-7 space-y-2">
+        {level.exercises.map((item) => { const itemCopy = item[language]; return <div key={item.id} className="flex items-start gap-3 border-t border-[#e2d8be] pt-3"><span className="mt-0.5 text-[#a87416]"><ChevronRight size={15} /></span><div><p className="text-sm font-bold text-[#173e37]">{itemCopy.title}</p><p className="mt-1 text-xs leading-5 text-[#756c58]">{itemCopy.goal}</p></div></div>; })}
+      </div>
+      {lessonLink && unlocked ? <Link href={lessonLink} className="button-ink mt-7 inline-flex !min-h-10 !px-4">{language === "fr" ? "Jouer la leçon" : "Play the lesson"}<ArrowUpRight size={15} /></Link> : !unlocked ? <p className="mt-7 flex items-center gap-2 text-xs font-bold text-[#8d846f]"><LockKeyhole size={14} />{language === "fr" ? `Terminez le niveau ${level.prerequisite} pour continuer.` : `Complete level ${level.prerequisite} to continue.`}</p> : null}
+    </article>
+  );
+}
+
+export default function Path() {
+  const { language, toggleLanguage } = useLanguage();
+  const fr = language === "fr";
+  const [rows, setRows] = useState<ProgressRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [signedIn, setSignedIn] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    async function load() {
+      const { data: auth } = await supabase.auth.getUser();
+      if (!active) return;
+      setSignedIn(Boolean(auth.user));
+      if (!auth.user) { setLoading(false); return; }
+      const { data } = await supabase.from("lesson_progress").select("lesson_id, completed, completed_step").eq("user_id", auth.user.id).limit(100);
+      if (active) { setRows((data ?? []) as ProgressRow[]); setLoading(false); }
+    }
+    load().catch(() => { if (active) setLoading(false); });
+    return () => { active = false; };
+  }, []);
+
+  const completedLessons = useMemo(() => new Set(rows.filter((row) => row.completed).map((row) => row.lesson_id)), [rows]);
+  const unlockedCount = useMemo(() => learningPath.filter((level) => isLevelUnlocked(level, completedLessons)).length, [completedLessons]);
+
+  useEffect(() => {
+    const title = fr ? "Le parcours Échiquier" : "The Échiquier path";
+    const description = fr ? "Un cursus d’échecs progressif, des premières règles aux finales avancées." : "A progressive chess curriculum, from first rules to advanced endgames.";
+    document.title = `${title} — Échiquier`;
+    const tags = [{ name: "description", content: description }, { property: "og:title", content: title }, { property: "og:description", content: description }];
+    const previous = tags.map((tag) => { const selector = tag.name ? `meta[name="${tag.name}"]` : `meta[property="${tag.property}"]`; const element = document.querySelector(selector) as HTMLMetaElement | null; return { element, content: element?.content }; });
+    tags.forEach((tag) => { const selector = tag.name ? `meta[name="${tag.name}"]` : `meta[property="${tag.property}"]`; const element = document.querySelector(selector) as HTMLMetaElement | null; if (element) element.content = tag.content; });
+    return () => { document.title = "Échiquier — Apprendre les échecs simplement"; previous.forEach(({ element, content }) => { if (element && content !== undefined) element.content = content; }); };
+  }, [fr]);
+
+  return <main className="min-h-screen bg-[#f7f0df] px-5 py-10 text-[#173e37] sm:px-8 lg:px-12"><div className="mx-auto max-w-6xl"><div className="flex items-center justify-between"><Link href="/" className="inline-flex items-center gap-2 text-[.7rem] font-extrabold uppercase tracking-[.14em] text-[#987019]"><ArrowLeft size={15} />{fr ? "Retour à l’accueil" : "Back home"}</Link><button type="button" onClick={toggleLanguage} className="border border-[#cbbd99] px-3 py-2 text-[.68rem] font-extrabold uppercase tracking-[.12em] hover:border-[#a87416]" aria-label={fr ? "Passer en anglais" : "Switch to French"}>{fr ? "EN" : "FR"}</button></div><header className="mt-14 max-w-4xl"><p className="eyebrow">{fr ? "La roadmap A → Z" : "The A → Z roadmap"}</p><h1 className="display-font mt-4 text-6xl leading-[.88] sm:text-8xl">{fr ? "Un chemin clair pour progresser." : "A clear path to progress."}</h1><p className="mt-6 max-w-2xl text-base leading-8 text-[#625d50]">{fr ? "Des fondamentaux aux finales avancées, chaque niveau ajoute une idée, une position et un réflexe. Les exercices se débloquent dans l’ordre pour construire une vraie évolution." : "From fundamentals to advanced endgames, every level adds an idea, a position and a reflex. Exercises unlock in sequence to build real progress."}</p></header><section className="mt-10 grid gap-px border border-[#cbbd99] bg-[#cbbd99] sm:grid-cols-3"><div className="bg-[#fffaf0] p-5"><Trophy className="text-[#a87416]" size={18} /><p className="mt-4 font-mono text-3xl font-bold">18</p><p className="mt-2 text-[.65rem] font-extrabold uppercase tracking-[.12em] text-[#756c58]">{fr ? "niveaux" : "levels"}</p></div><div className="bg-[#fffaf0] p-5"><BookOpen className="text-[#a87416]" size={18} /><p className="mt-4 font-mono text-3xl font-bold">{learningPath.reduce((total, level) => total + level.exercises.length, 0)}</p><p className="mt-2 text-[.65rem] font-extrabold uppercase tracking-[.12em] text-[#756c58]">{fr ? "exercices structurés" : "structured exercises"}</p></div><div className="bg-[#fffaf0] p-5"><CheckCircle2 className="text-[#a87416]" size={18} /><p className="mt-4 font-mono text-3xl font-bold">{loading ? "—" : `${unlockedCount}/18`}</p><p className="mt-2 text-[.65rem] font-extrabold uppercase tracking-[.12em] text-[#756c58]">{fr ? "niveaux accessibles" : "levels available"}</p></div></section>{!signedIn && !loading && <p className="mt-5 text-sm text-[#756c58]">{fr ? "Connectez-vous pour sauvegarder votre progression. Le parcours reste consultable librement." : "Sign in to save your progress. You can browse the path freely."} <Link href="/compte" className="font-bold text-[#987019] underline">{fr ? "Ouvrir un compte" : "Open an account"}</Link></p>}<section className="mt-12 space-y-5" aria-label={fr ? "Niveaux du parcours" : "Path levels"}>{learningPath.map((level) => <LevelCard key={level.id} level={level} language={language} completedLessons={completedLessons} />)}</section></div></main>;
+}
