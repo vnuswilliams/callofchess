@@ -238,10 +238,10 @@ Constat final du diagnostic autonome : l’incident officiel GitHub du 17 août 
 
 ## Publication des trois améliorations du profil
 
-- [ ] Valider les statistiques enrichies et la visualisation de progression.
-- [ ] Pousser les changements du profil sur GitHub `main`.
+- [x] Valider les statistiques enrichies et la visualisation de progression.
+- [x] Pousser les changements du profil sur GitHub `main`.
 - [ ] Tenter le redéploiement Vercel depuis le commit final.
-- [ ] Vérifier et documenter le statut de production Vercel.
+- [x] Vérifier et documenter le statut de production Vercel.
 
 
 ## Graphique de progression et partage social
