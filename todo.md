@@ -105,3 +105,16 @@ The Stockfish 17.1 lite single-threaded engine returns depth 12, a centipawn eva
 
 
 Production runtime check: `https://lionchess.vercel.app/lecon/1` loads the Stockfish panel and its analysis button. A direct click returns `+0.40`, depth `12`, best move `e2e4`, and the principal variation `e2e4 · d7d5 · e4d5 · d8d5 · g1f3 · c8g4 · b1c3 · d5e6`. During a fresh production run, the button changed to `Analyse en cours`, became disabled, the `Arrêter` button appeared, and the board square remained present with the same geometry before and after the run, demonstrating a non-blocking visible UI.
+
+## Validation pédagogique
+
+Un déplacement volontaire `e2–e3` affiche « Diagnostic personnalisé · erreur 1 », le titre « Le centre mérite plus d’espace », une explication sur la portée de `e4`, un conseil actionnable sur le contrôle des cases centrales et le repère moteur `e2e4`. Après enrichissement, l’interface affiche aussi « Stockfish confirme e2e4 : votre objectif et le meilleur coup moteur vont dans la même direction. »
+
+## Explications pédagogiques personnalisées
+
+- [x] Capturer les coups joués et leur contexte pédagogique.
+- [x] Classifier les erreurs avec Stockfish et des règles adaptées aux débutants.
+- [x] Générer une explication claire et un conseil personnalisé pour chaque erreur.
+- [x] Afficher le diagnostic dans la leçon et tester localement.
+- [ ] Publier la fonctionnalité pédagogique sur GitHub/Vercel et vérifier l’erreur e2–e3 en production.
+

@@ -4,6 +4,7 @@ import { Chess, type Square } from "chess.js";
 import { Chessboard } from "react-chessboard";
 import { ArrowLeft, Check, ChevronRight, CircleHelp, Cpu, Lightbulb, Loader2, RotateCcw, Sparkles, SquareArrowOutUpRight, Trophy } from "lucide-react";
 import { useStockfish } from "@/hooks/useStockfish";
+import { classifyMistake, enrichMistakeWithEngine, type PedagogicalMistake } from "@/lib/pedagogicalFeedback";
 import { Button } from "@/components/ui/button";
 
 const lessonSteps = [
@@ -31,6 +32,21 @@ function BrandMark() {
   return <img className="h-10 w-10 object-contain" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663890875436/WMeJhgIGICmYOuIM.png" alt="Symbole Échiquier" />;
 }
 
+function CoachingPanel({ mistake }: { mistake: PedagogicalMistake }) {
+  return (
+    <section className="lesson-coaching border border-[#d6a16b] bg-[#fff1dc] p-5" aria-live="polite">
+      <div className="flex items-start gap-3">
+        <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#d69024] text-[#173e37]"><Sparkles size={17} /></div>
+        <div><p className="eyebrow text-[#9a6b18]">Diagnostic personnalisé · erreur {mistake.attemptNumber}</p><h2 className="display-font mt-2 text-3xl leading-none text-[#173e37]">{mistake.title}</h2></div>
+      </div>
+      <p className="mt-4 text-sm leading-6 text-[#4e5146]">{mistake.explanation}</p>
+      <div className="mt-4 border-l-2 border-[#d69024] pl-4"><p className="text-[.62rem] font-extrabold uppercase tracking-[.12em] text-[#9a6b18]">Votre prochain repère</p><p className="mt-1 text-sm font-semibold leading-6 text-[#3c4c43]">{mistake.recommendation}</p></div>
+      <div className="mt-4 flex flex-wrap items-center gap-3 text-[.66rem] font-extrabold uppercase tracking-[.1em] text-[#796a4e]"><span>Focus · {mistake.focus}</span>{mistake.engineBestMove && <span className="border-l border-[#d6b37b] pl-3">Repère moteur · {mistake.engineBestMove}</span>}</div>
+      {mistake.engineGap && <p className="mt-4 border-t border-[#e2c28d] pt-3 text-xs leading-5 text-[#66553a]">{mistake.engineGap}</p>}
+    </section>
+  );
+}
+
 export default function Lesson() {
   const [position, setPosition] = useState(() => new Chess().fen());
   const [currentStep, setCurrentStep] = useState(0);
@@ -38,10 +54,16 @@ export default function Lesson() {
   const [feedback, setFeedback] = useState<"idle" | "wrong" | "correct" | "complete">("idle");
   const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
   const [showAnalysis, setShowAnalysis] = useState(false);
+  const [mistake, setMistake] = useState<PedagogicalMistake | null>(null);
+  const [attempts, setAttempts] = useState(0);
   const { isReady: engineReady, isAnalyzing, analysis, error: engineError, analyze, stop } = useStockfish();
 
   const completed = currentStep >= lessonSteps.length;
   const activeStep = lessonSteps[Math.min(currentStep, lessonSteps.length - 1)];
+
+  useEffect(() => {
+    if (mistake && analysis?.bestMove) setMistake((current) => current ? enrichMistakeWithEngine(current, analysis.bestMove) : current);
+  }, [analysis?.bestMove, mistake]);
 
   useEffect(() => {
     document.title = "Leçon 01 — Le centre | Échiquier";
@@ -56,6 +78,8 @@ export default function Lesson() {
     setFeedback("idle");
     setSelectedSquare(null);
     setShowAnalysis(false);
+    setMistake(null);
+    setAttempts(0);
   };
 
   const handleAnalyze = () => {
@@ -66,7 +90,13 @@ export default function Lesson() {
   const handlePieceDrop = (sourceSquare: string, targetSquare: string | null) => {
     if (!targetSquare || completed) return false;
     if (sourceSquare !== activeStep.from || targetSquare !== activeStep.to) {
+      const nextAttempt = attempts + 1;
+      const diagnostic = classifyMistake({ attemptedFrom: sourceSquare, attemptedTo: targetSquare, expectedFrom: activeStep.from, expectedTo: activeStep.to, stepIndex: currentStep, attemptNumber: nextAttempt });
+      setAttempts(nextAttempt);
+      setMistake({ ...diagnostic, engineBestMove: analysis?.bestMove ?? null });
       setFeedback("wrong");
+      setShowAnalysis(true);
+      analyze(position, 12);
       return false;
     }
 
@@ -78,6 +108,7 @@ export default function Lesson() {
       const nextStep = currentStep + 1;
       setCurrentStep(nextStep);
       setFeedback(nextStep === lessonSteps.length ? "complete" : "correct");
+      setMistake(null);
       setShowHint(false);
       setSelectedSquare(null);
       return true;
@@ -147,6 +178,9 @@ export default function Lesson() {
             </section>
 
             <section className={`lesson-feedback border p-5 ${feedback === "wrong" ? "border-[#c96442] bg-[#fff0e7]" : feedback === "complete" ? "border-[#6f977c] bg-[#e9f0e6]" : feedback === "correct" ? "border-[#90a98d] bg-[#f2f4e9]" : "border-[#cbbd99] bg-[#f5ecd8]"}`}><div className="flex gap-3"><div className={`mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full ${feedback === "wrong" ? "bg-[#c96442] text-white" : "bg-[#d69024] text-[#173e37]"}`}>{feedback === "wrong" ? <CircleHelp size={15} /> : <Check size={16} strokeWidth={3} />}</div><div><p className="text-[.65rem] font-extrabold uppercase tracking-[.13em] text-[#736954]">{feedback === "wrong" ? "Essayez encore" : feedback === "idle" ? "Un conseil" : feedback === "complete" ? "Séquence terminée" : "Coup validé"}</p><p className="mt-2 text-sm leading-6 text-[#4e5146]">{feedback === "wrong" ? "Ce coup n’est pas l’objectif de cette étape. Utilisez l’indice si vous souhaitez revoir les cases à relier." : feedback === "complete" ? "Retenez ce rythme : centre, développement, puis sécurité du roi." : feedback === "correct" ? "La réponse noire est jouée. Continuez avec le prochain principe." : "Un bon coup d’ouverture aide vos pièces à respirer et contrôle les cases importantes."}</p></div></div></section>
+
+            {mistake && <CoachingPanel mistake={mistake} />}
+
 
             <section className="lesson-analysis border border-[#cbbd99] bg-[#173e37] p-5 text-[#fffaf0]">
               <div className="flex items-start justify-between gap-4">
