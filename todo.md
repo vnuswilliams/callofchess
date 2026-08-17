@@ -159,3 +159,18 @@ Un déplacement volontaire `e2–e3` affiche « Diagnostic personnalisé · erre
 - [ ] Ajouter des tests Vitest pour les handlers auth/progress et des tests client pour la page de compte.
 - [ ] Vérifier les parcours en local et publier la version MVP.
 
+
+## Migration Supabase et nouveau domaine
+
+- [x] Inspecter les connecteurs Supabase, Vercel et GitHub disponibles.
+- [x] Confirmer le projet Supabase, son URL et la clé publique anon sans exposer de secret serveur. Test `supabaseHealth.test.ts` réussi : l’endpoint Auth répond avec les variables publiques injectées.
+- [x] Créer le schéma Supabase pour profils et progression avec RLS ; Passkeys est ensuite activé et rechargé avec succès dans Supabase Auth.
+- [x] Configurer les variables Supabase côté Vercel et localement via les secrets publics `VITE_SUPABASE_URL` et `VITE_SUPABASE_ANON_KEY`. Vercel les affiche en Production et Preview ; un redéploiement a été créé.
+- [ ] Remplacer les appels auth maison par Supabase Auth email/mot de passe.
+- [ ] Ajouter récupération de compte et réinitialisation de mot de passe.
+- [x] Activer et vérifier après rechargement Passkeys via Supabase Auth/WebAuthn avec RP ID `callofchess.vercel.app` et origine `https://callofchess.vercel.app`. Le test avec un authenticator réel reste ouvert.
+- [ ] Relier la progression des leçons aux utilisateurs Supabase authentifiés.
+- [x] Relier/vérifier le dépôt GitHub et le projet Vercel existants.
+- [x] Remplacer `lionchess.vercel.app` par `callofchess.vercel.app` avec redirection 307 de l’ancien domaine.
+- [ ] Tester réellement l’inscription, la récupération, la progression et Passkey sur `callofchess.vercel.app` avec un compte de test.
+
