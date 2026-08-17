@@ -1,0 +1,7 @@
+{
+  "board": "Chessboard",
+  "position": "Position",
+  "move": "Move",
+  "white": "White",
+  "black": "Black"
+}

@@ -24,7 +24,7 @@ function createAnimatedGame(): BoardStep[] {
 }
 
 export default function LandingChessboard() {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const fr = language === "fr";
   const gameSteps = useMemo(() => createAnimatedGame(), []);
   const [stepIndex, setStepIndex] = useState(0);
@@ -102,14 +102,14 @@ export default function LandingChessboard() {
   }
 
   const currentMove = gameSteps[stepIndex]?.move;
-  const moveLabel = currentMove ? `${currentMove.color === "w" ? Math.ceil(stepIndex / 2) : Math.ceil(stepIndex / 2)}. ${currentMove.san}` : fr ? "Position de départ" : "Starting position";
+  const moveLabel = currentMove ? `${currentMove.color === "w" ? Math.ceil(stepIndex / 2) : Math.ceil(stepIndex / 2)}. ${currentMove.san}` : t("inline_a8fbd92cbd");
 
   return (
     <div className="landing-board-shell w-[min(92vw,560px)] max-w-full rounded-[.9rem] bg-[#153d36] p-3 shadow-[22px_26px_0_rgba(31,32,22,.14),0_22px_48px_rgba(24,42,35,.24)] sm:p-5">
       <div className="mb-3 flex items-center justify-between gap-3 text-[#fffaf0]">
         <div>
-          <p className="eyebrow !text-[#e6b95e]">{fr ? "Partie en direct" : "Live game"}</p>
-          <p className="mt-1 text-xs text-[#cbd8cc]">{fr ? "Une partie générée à l’arrivée" : "A game generated on arrival"}</p>
+          <p className="eyebrow !text-[#e6b95e]">{t("inline_2b93de809e")}</p>
+          <p className="mt-1 text-xs text-[#cbd8cc]">{t("inline_3f54041eaf")}</p>
         </div>
         <span className="rounded-full border border-[#66857c] px-2.5 py-1 font-mono text-[.65rem] text-[#e6b95e]">{stepIndex}/{gameSteps.length - 1}</span>
       </div>
@@ -119,18 +119,18 @@ export default function LandingChessboard() {
       <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
         <p className="min-w-0 flex-1 truncate font-mono text-xs text-[#e6b95e]" aria-live="polite">{moveLabel}</p>
         <div className="flex gap-2">
-          <Button type="button" size="sm" onClick={() => setPlaying((current) => !current)} className="rounded-[.55rem] bg-[#d69024] text-[#173e37] hover:bg-[#e7ba61]" aria-label={playing ? (fr ? "Mettre la partie en pause" : "Pause game") : (fr ? "Reprendre la partie" : "Resume game")}>
-            {playing ? <Pause size={14} /> : <Play size={14} />}{playing ? (fr ? "Pause" : "Pause") : (fr ? "Jouer" : "Play")}
+          <Button type="button" size="sm" onClick={() => setPlaying((current) => !current)} className="rounded-[.55rem] bg-[#d69024] text-[#173e37] hover:bg-[#e7ba61]" aria-label={playing ? (t("inline_fa9fc0152f")) : (t("inline_a735a7f91c"))}>
+            {playing ? <Pause size={14} /> : <Play size={14} />}{playing ? (t("inline_a1839c38d6")) : (t("inline_b6adb83e63"))}
           </Button>
-          <Button type="button" size="sm" variant="outline" onClick={reset} className="rounded-[.55rem] border-[#66857c] bg-transparent text-[#fffaf0] hover:bg-[#285448]" aria-label={fr ? "Rejouer la partie" : "Restart game"}>
+          <Button type="button" size="sm" variant="outline" onClick={reset} className="rounded-[.55rem] border-[#66857c] bg-transparent text-[#fffaf0] hover:bg-[#285448]" aria-label={t("inline_a151b5ebd7")}>
             <RotateCcw size={14} />
           </Button>
-          <Button type="button" size="sm" variant="outline" onClick={toggleSound} className="rounded-[.55rem] border-[#66857c] bg-transparent text-[#fffaf0] hover:bg-[#285448]" aria-pressed={!soundEnabled} aria-label={soundEnabled ? (fr ? "Couper les sons" : "Mute sounds") : (fr ? "Activer les sons" : "Enable sounds")}>
+          <Button type="button" size="sm" variant="outline" onClick={toggleSound} className="rounded-[.55rem] border-[#66857c] bg-transparent text-[#fffaf0] hover:bg-[#285448]" aria-pressed={!soundEnabled} aria-label={soundEnabled ? (t("inline_3c23e14bd4")) : (t("inline_9bbd4ec9da"))}>
             {soundEnabled ? <Volume2 size={14} /> : <VolumeX size={14} />}
           </Button>
         </div>
       </div>
-      {!playing && stepIndex === 0 && <p className="mt-2 text-[.68rem] text-[#cbd8cc]">{fr ? "Mettez la partie en pause pour essayer vos propres coups." : "Pause the game to try your own moves."}</p>}
+      {!playing && stepIndex === 0 && <p className="mt-2 text-[.68rem] text-[#cbd8cc]">{t("inline_86a3e8b147")}</p>}
     </div>
   );
 }
