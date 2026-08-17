@@ -264,7 +264,7 @@ Constat final du diagnostic autonome : l’incident officiel GitHub du 17 août 
 
 - [x] Lire et structurer les 18 niveaux de la roadmap fournie en progression pédagogique cohérente.
 - [x] Créer un modèle de parcours avec niveaux, chapitres, objectifs, prérequis et exercices.
-- [ ] Ajouter une première sélection d’exercices jouables couvrant les fondamentaux, tactiques, calcul, finales et stratégie.
+- [x] Ajouter une première sélection d’exercices jouables couvrant les fondamentaux, tactiques, calcul, finales et stratégie.
 - [x] Intégrer une page Parcours avec progression visuelle, verrouillage par prérequis et accès aux leçons.
 - [x] Ajouter les traductions FR/EN et les états de chargement, vide et non connecté.
 - [x] Tester TypeScript, Vitest, build, routes directes et rendu responsive.

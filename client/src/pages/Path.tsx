@@ -13,6 +13,12 @@ function levelCompletion(level: PathLevel, completedLessons: Set<string>) {
   return 0;
 }
 
+const playableLessonForExercise: Record<string, string> = {
+  "1-center": "/lecon/1",
+  "1-development": "/lecon/2",
+  "1-safety": "/lecon/3",
+};
+
 function LevelCard({ level, language, completedLessons }: { level: PathLevel; language: "fr" | "en"; completedLessons: Set<string> }) {
   const copy = level[language];
   const unlocked = isLevelUnlocked(level, completedLessons);
@@ -36,7 +42,7 @@ function LevelCard({ level, language, completedLessons }: { level: PathLevel; la
       <div className="mt-5"><div className="flex justify-between text-xs font-semibold text-[#756d58]"><span>{unlocked ? (language === "fr" ? "Progression" : "Progress") : (language === "fr" ? "À débloquer" : "Locked")}</span><span>{completed}/{level.exercises.length}</span></div><div className="mt-2 h-2 bg-[#e5ddc8]"><div className={`h-full transition-all duration-500 ${unlocked ? "bg-[#d69024]" : "bg-[#a89d83]"}`} style={{ width: `${unlocked ? progress : 0}%` }} /></div></div>
       <div className="mt-6 border-l-2 border-[#d69024] pl-4"><p className="text-[.62rem] font-extrabold uppercase tracking-[.12em] text-[#9a6b18]">{language === "fr" ? "Jalon" : "Milestone"}</p><p className="mt-1 text-sm font-semibold leading-5 text-[#3c4c43]">{copy.milestone}</p></div>
       <div className="mt-7 space-y-2">
-        {level.exercises.map((item) => { const itemCopy = item[language]; return <div key={item.id} className="flex items-start gap-3 border-t border-[#e2d8be] pt-3"><span className="mt-0.5 text-[#a87416]"><ChevronRight size={15} /></span><div><p className="text-sm font-bold text-[#173e37]">{itemCopy.title}</p><p className="mt-1 text-xs leading-5 text-[#756c58]">{itemCopy.goal}</p></div></div>; })}
+        {level.exercises.map((item) => { const itemCopy = item[language]; const playableHref = playableLessonForExercise[item.id]; return <div key={item.id} className="flex items-start justify-between gap-3 border-t border-[#e2d8be] pt-3"><div className="flex min-w-0 items-start gap-3"><span className="mt-0.5 shrink-0 text-[#a87416]"><ChevronRight size={15} /></span><div><p className="text-sm font-bold text-[#173e37]">{itemCopy.title}</p><p className="mt-1 text-xs leading-5 text-[#756c58]">{itemCopy.goal}</p></div></div>{playableHref && unlocked ? <Link href={playableHref} className="shrink-0 text-[.62rem] font-extrabold uppercase tracking-[.1em] text-[#987019] underline decoration-[#d69024] underline-offset-4">{language === "fr" ? "Jouer" : "Play"}</Link> : null}</div>; })}
       </div>
       {lessonLink && unlocked ? <Link href={lessonLink} className="button-ink mt-7 inline-flex !min-h-10 !px-4">{language === "fr" ? "Jouer la leçon" : "Play the lesson"}<ArrowUpRight size={15} /></Link> : !unlocked ? <p className="mt-7 flex items-center gap-2 text-xs font-bold text-[#8d846f]"><LockKeyhole size={14} />{language === "fr" ? `Terminez le niveau ${level.prerequisite} pour continuer.` : `Complete level ${level.prerequisite} to continue.`}</p> : null}
     </article>
