@@ -193,3 +193,18 @@ Un déplacement volontaire `e2–e3` affiche « Diagnostic personnalisé · erre
 
 
 Constat final du diagnostic autonome : l’incident officiel GitHub du 17 août 2026 affecte actuellement les API, webhooks et téléchargements de contenu brut avec des taux d’erreur élevés. Vercel est correctement relié à `vnuswilliams/echequier`, mais ne peut pas résoudre le SHA `75d4d75` et ses Deploy Hooks redéploient l’ancien snapshot. Le domaine `callofchess.vercel.app` est correctement rattaché à Production ; le code local et Supabase sont sains. La publication du nouveau bundle reste donc suspendue jusqu’au rétablissement GitHub/Vercel.
+
+
+## Retours visuels de l’inscription
+
+- [x] Ajouter une animation de chargement visible pendant l’inscription et la connexion.
+- [x] Afficher des messages d’erreur clairs et bilingues selon le contexte Supabase.
+- [x] Ajouter un état de succès et une validation accessible pour le formulaire.
+- [ ] Couvrir les états visuels et les messages par des tests, puis vérifier le rendu responsive. (Rendu responsive et build vérifiés ; test dédié des messages encore à ajouter.)
+
+
+## Confidentialité des libellés du compte
+
+- [x] Retirer les mentions Supabase Auth, récupération par email et bêta Passkeys de l’interface utilisateur.
+- [x] Remplacer ces mentions par des formulations neutres, compréhensibles et bilingues.
+- [x] Vérifier que les messages d’erreur ne révèlent pas de détail technique ou de fournisseur.
