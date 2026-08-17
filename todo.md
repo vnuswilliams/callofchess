@@ -273,8 +273,8 @@ Constat final du diagnostic autonome : l’incident officiel GitHub du 17 août 
 
 ## Classement, partage de badges et notifications
 
-- [ ] Auditer les profils et la progression afin de définir un classement basé sur des données réelles, sans email public.
-- [ ] Ajouter le classement général avec rang, score de progression et état vide explicite.
+- [x] Auditer les profils et la progression afin de définir un classement basé sur des données réelles, sans email public.
+- [x] Ajouter le classement général avec rang, score de progression et état vide explicite.
 - [ ] Ajouter une carte interactive de partage pour un badge choisi, sans statistiques privées.
 - [ ] Ajouter Web Share/copie de lien et textes FR/EN pour la carte de badge.
 - [x] Détecter un nouveau badge débloqué et afficher une notification ainsi qu’une animation accessible.
