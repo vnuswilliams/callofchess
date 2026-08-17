@@ -116,5 +116,5 @@ Un déplacement volontaire `e2–e3` affiche « Diagnostic personnalisé · erre
 - [x] Classifier les erreurs avec Stockfish et des règles adaptées aux débutants.
 - [x] Générer une explication claire et un conseil personnalisé pour chaque erreur.
 - [x] Afficher le diagnostic dans la leçon et tester localement.
-- [ ] Publier la fonctionnalité pédagogique sur GitHub/Vercel et vérifier l’erreur e2–e3 en production.
+- [x] Publier la fonctionnalité pédagogique sur GitHub/Vercel et vérifier l’erreur e2–e3 en production.
 
