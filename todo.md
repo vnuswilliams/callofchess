@@ -11,7 +11,7 @@ Le 17 août 2026, le sélecteur de thème a été testé dans la navigation desk
 - [x] Vérifier les accès GitHub et Vercel disponibles pour cette tâche.
 - [x] Ajouter la configuration de production Vercel et la documentation de déploiement.
 - [x] Créer le dépôt GitHub privé et y publier la branche principale.
-- [ ] Déployer le projet sur Vercel et vérifier l’URL de production.
+- [x] Déployer le projet sur Vercel et vérifier l’URL de production.
 
 ## Test du connecteur Vercel
 
@@ -25,3 +25,11 @@ Le connecteur Vercel répond correctement aux requêtes en lecture seule. Il ret
 ## Reprise après autorisation
 
 La session Vercel autorisée confirme que le projet `echequier` est associé au dépôt GitHub et qu’un push vers `main` déclenchera le déploiement de production.
+
+Après le push de déclenchement, le tableau de bord Vercel affiche encore « No Production Deployment » et propose l’étape « Connect Git Repository ». L’intégration Git doit donc être finalisée dans le projet Vercel avant que les pushes vers `main` puissent lancer un déploiement.
+
+Après l’autorisation, Vercel a bien détecté le commit `a0ae751` et a lancé une construction. L’aperçu revient toutefois à « No Production Deployment » : le statut et les journaux du déploiement doivent être consultés avant de considérer la publication comme terminée.
+
+L’historique des déploiements affiche désormais une entrée de production pour le commit `a0ae751` sur `main`, avec l’URL `echequier-qwimgaqsb-vnuswilliams1.vercel.app`. La réponse HTTP de cette URL doit encore être vérifiée.
+
+La landing page est servie correctement à l’adresse https://echequier-qwimgaqsb-vnuswilliams1.vercel.app ; le titre, les visuels, la navigation et le sélecteur de thème sont accessibles en production.
