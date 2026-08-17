@@ -11,3 +11,18 @@ L’historique montre encore un déploiement Production basé sur `089958c`, ain
 Le remote `github` pointe vers `https://github.com/vnuswilliams/echequier.git`. Le remote `origin` pointe vers un artefact interne Cloudflare et ne doit pas être utilisé pour publier sur GitHub.
 
 Conclusion : le projet Vercel n’est pas bloqué à cause du code du commit `089958c`. Le décalage vient de deux facteurs distincts : des commits locaux récents n’ont pas encore été poussés sur `github/main`, et l’incident GitHub empêche Vercel de recevoir automatiquement les nouveaux événements ou de résoudre certaines références de commit. La procédure corrective est de pousser explicitement vers le remote `github`, puis de relancer un déploiement manuel depuis Vercel lorsque l’interface l’accepte.
+
+
+## Reprise constatée après correction
+
+Après le push explicite vers `github/main` du commit `1bfc96d`, Vercel a créé un nouveau déploiement Production lié directement à `1bfc96d` et à la branche `main`. Son état est `Building` au moment du contrôle. Cette entrée n’est plus un redeploy d’un ancien snapshot ; elle référence le commit GitHub exact. Le bandeau GitHub Outage reste affiché, mais le pipeline a accepté cette publication manuelle.
+
+
+## Déploiement rétabli
+
+Le déploiement créé depuis `1bfc96d` est passé de `Building` à `Ready` en Production. Vercel affiche le lien GitHub vers `1bfc96d`, la branche `main` et l’URL de déploiement `lionchess-oa2uafbx5-vnuswilliams1.vercel.app`. Le projet ne reste donc plus bloqué sur `089958c` pour cette publication.
+
+
+## Vérification publique
+
+La route directe `/profil` répond correctement sur `https://lionchess-oa2uafbx5-vnuswilliams1.vercel.app/profil` et sur `https://callofchess.vercel.app/profil`. Le titre est `Mon parcours Échiquier — Échiquier`, et l’état non connecté affiche bien le parcours prévu. Le domaine canonique suit donc le nouveau déploiement Ready issu de `1bfc96d`.

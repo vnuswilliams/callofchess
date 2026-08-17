@@ -288,4 +288,4 @@ Constat final du diagnostic autonome : l’incident officiel GitHub du 17 août 
 - [x] Corriger le raccordement ou documenter précisément le blocage GitHub/Vercel sans laisser de hook permanent.
 - [x] Annoter les zones clés du code avec des commentaires utiles et non redondants.
 - [x] Ajouter une documentation de développement, de déploiement, de Supabase et de dépannage Vercel.
-- [ ] Tester, pousser les corrections sur GitHub et tenter le redéploiement Vercel.
+- [x] Tester, pousser les corrections sur GitHub et tenter le redéploiement Vercel.
