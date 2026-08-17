@@ -305,5 +305,5 @@ Constat final du diagnostic autonome : l’incident officiel GitHub du 17 août 
 - [x] Supprimer le script Umami non configuré qui provoquait des warnings Vite ; conserver Vercel Analytics et Speed Insights déjà intégrés.
 - [x] Mettre à jour les métadonnées canoniques vers `callofchess.vercel.app`.
 - [x] Documenter le contrôle du SHA GitHub contre le commit réellement déployé par Vercel.
-- [ ] Confirmer dans Vercel que le projet `lionchess` reste relié à `vnuswilliams/echequier`, branche `main`, et que les pushes déclenchent automatiquement un nouveau déploiement.
-- [ ] Vérifier en production que le dernier SHA GitHub est le SHA servi par `callofchess.vercel.app`.
+- [x] Confirmer dans Vercel que le projet `lionchess` reste relié à `vnuswilliams/echequier`, branche `main`, et que les pushes déclenchent automatiquement un nouveau déploiement : le commit `633392f` a été créé automatiquement après le push.
+- [x] Vérifier en production que le dernier SHA GitHub est le SHA servi par `callofchess.vercel.app` : le déploiement Vercel `633392f` est Ready et le domaine canonique répond correctement.
