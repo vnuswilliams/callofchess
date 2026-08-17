@@ -26,3 +26,8 @@ Le déploiement créé depuis `1bfc96d` est passé de `Building` à `Ready` en P
 ## Vérification publique
 
 La route directe `/profil` répond correctement sur `https://lionchess-oa2uafbx5-vnuswilliams1.vercel.app/profil` et sur `https://callofchess.vercel.app/profil`. Le titre est `Mon parcours Échiquier — Échiquier`, et l’état non connecté affiche bien le parcours prévu. Le domaine canonique suit donc le nouveau déploiement Ready issu de `1bfc96d`.
+
+
+## Publication du parcours
+
+Le commit `a415fb6` contenant la page `/parcours`, le catalogue des 18 niveaux et ses tests est poussé sur `github/main`. Lors du contrôle Vercel, l’historique affiche encore `1bfc96d` comme dernier déploiement et le bandeau GitHub Outage est toujours visible ; `a415fb6` n’a pas encore été indexé. Le déploiement précédent reste Ready et continue de servir la version documentée précédente.
