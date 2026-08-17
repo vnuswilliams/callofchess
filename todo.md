@@ -275,8 +275,8 @@ Constat final du diagnostic autonome : l’incident officiel GitHub du 17 août 
 
 - [x] Auditer les profils et la progression afin de définir un classement basé sur des données réelles, sans email public.
 - [x] Ajouter le classement général avec rang, score de progression et état vide explicite.
-- [ ] Ajouter une carte interactive de partage pour un badge choisi, sans statistiques privées.
-- [ ] Ajouter Web Share/copie de lien et textes FR/EN pour la carte de badge.
+- [x] Ajouter une carte interactive de partage pour un badge choisi, sans statistiques privées.
+- [x] Ajouter Web Share/copie de lien et textes FR/EN pour la carte de badge.
 - [x] Détecter un nouveau badge débloqué et afficher une notification ainsi qu’une animation accessible.
 - [ ] Ajouter les tests, vérifier confidentialité, responsive et publication GitHub/Vercel.
 
