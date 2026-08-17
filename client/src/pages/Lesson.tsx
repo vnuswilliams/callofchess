@@ -8,6 +8,7 @@ import { classifyMistake, enrichMistakeWithEngine, formatEngineMove, formatPrinc
 import { Button } from "@/components/ui/button";
 import { useParams } from "wouter";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { supabase } from "@/lib/supabase";
 
 type LessonStep = { from: string; to: string; san: string; answer: string; idea: string; reply: string; replySan: string };
 type LessonDefinition = { number: string; title: string; kicker: string; headline: string; steps: LessonStep[] };
@@ -99,19 +100,36 @@ export default function Lesson() {
   }, [analysis?.bestMove, language, mistake]);
 
   useEffect(() => {
-    fetch("/api/progress", { credentials: "include" }).then((response) => response.ok ? response.json() : null).then((data) => {
-      const saved = data?.progress?.find((item: { lessonId: string; completedStep: number }) => item.lessonId === id);
-      if (saved && Number.isFinite(saved.completedStep)) {
-        const restoredStep = Math.min(lessonSteps.length, saved.completedStep);
-        setCurrentStep(restoredStep);
-        setPosition(reconstructPosition(lessonSteps, restoredStep));
-      }
+    let active = true;
+    supabase.auth.getUser().then(async ({ data: { user } }) => {
+      if (!user || !active) return;
+      const { data } = await supabase
+        .from("lesson_progress")
+        .select("completed_step, completed")
+        .eq("user_id", user.id)
+        .eq("lesson_id", id)
+        .maybeSingle();
+      if (!active || !data || !Number.isFinite(data.completed_step)) return;
+      const restoredStep = Math.min(lessonSteps.length, data.completed_step);
+      setCurrentStep(restoredStep);
+      setPosition(reconstructPosition(lessonSteps, restoredStep));
+      if (data.completed) setFeedback("complete");
     }).catch(() => undefined);
+    return () => { active = false; };
   }, [id, lessonSteps.length]);
 
   useEffect(() => {
     if (currentStep === 0) return;
-    fetch("/api/progress", { method: "PUT", credentials: "include", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ lessonId: id, completedStep: currentStep, completed }) }).catch(() => undefined);
+    supabase.auth.getUser().then(async ({ data: { user } }) => {
+      if (!user) return;
+      await supabase.from("lesson_progress").upsert({
+        user_id: user.id,
+        lesson_id: id,
+        completed_step: currentStep,
+        completed,
+        updated_at: new Date().toISOString(),
+      }, { onConflict: "user_id,lesson_id" });
+    }).catch(() => undefined);
   }, [completed, currentStep, id]);
 
   useEffect(() => {
