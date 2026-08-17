@@ -213,6 +213,6 @@ Constat final du diagnostic autonome : l’incident officiel GitHub du 17 août 
 ## Publication de la version finale du compte
 
 - [x] Valider les derniers changements de la page de compte avec TypeScript, tests et build.
-- [ ] Pousser la version finale sur GitHub `main`.
+- [x] Pousser la version finale sur GitHub `main`.
 - [ ] Redéployer cette version sur Vercel.
 - [ ] Vérifier la page `/compte` et les nouveaux libellés sur `callofchess.vercel.app`.
