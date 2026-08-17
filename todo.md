@@ -216,3 +216,13 @@ Constat final du diagnostic autonome : l’incident officiel GitHub du 17 août 
 - [x] Pousser la version finale sur GitHub `main`.
 - [ ] Redéployer cette version sur Vercel.
 - [ ] Vérifier la page `/compte` et les nouveaux libellés sur `callofchess.vercel.app`.
+
+
+## Profil utilisateur et statistiques
+
+- [x] Ajouter une route de profil utilisateur accessible depuis le compte.
+- [x] Afficher les statistiques personnelles calculées à partir des données disponibles.
+- [x] Afficher l’historique des parties ou des sessions de leçon sans données fictives.
+- [x] Prévoir les états non connecté, chargement, erreur et historique vide.
+- [x] Ajouter les libellés français et anglais et vérifier le rendu responsive.
+- [x] Ajouter ou mettre à jour les tests, puis sauvegarder la version livrable.

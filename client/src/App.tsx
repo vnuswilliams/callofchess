@@ -11,6 +11,7 @@ import { LanguageProvider } from "./contexts/LanguageContext";
 import Home from "./pages/Home";
 import Lesson from "./pages/Lesson";
 import Account from "./pages/Account";
+import Profile from "./pages/Profile";
 
 
 function Router() {
@@ -19,6 +20,7 @@ function Router() {
       <Route path={"/"} component={Home} />
       <Route path={"/lecon/:id"} component={Lesson} />
       <Route path={"/compte"} component={Account} />
+      <Route path={"/profil"} component={Profile} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
