@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { friendlyAuthError, genericAuthError } from "./Account";
+import { friendlyAuthError, genericAuthError } from "@/lib/authErrors";
 
 describe("account authentication messages", () => {
   it("keeps generic errors provider-neutral in French and English", () => {
