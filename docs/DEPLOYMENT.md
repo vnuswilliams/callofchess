@@ -31,10 +31,19 @@ Puis, dans Vercel, comparer ce SHA à la colonne **Commit** du dernier déploiem
 
 ## Publication contrôlée
 
-Avant de pousser, vérifiez la branche et le commit :
+Avant tout commit destiné à Vercel, configurez une fois l’identité Git du dépôt avec une adresse e-mail vérifiée sur le compte GitHub. Cette configuration locale est persistante pour ce clone et évite que Vercel bloque les prochains déploiements pour une adresse `users.noreply.github.com` non associée :
+
+```bash
+git config --local user.name "vnuswilliams"
+git config --local user.email "payongvenus@gmail.com"
+```
+
+Avant de pousser, vérifiez la branche, l’identité et le commit :
 
 ```bash
 git status --short --branch
+git config --get user.name
+git config --get user.email
 git log --oneline -5
 git remote -v
 pnpm check
