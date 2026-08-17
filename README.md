@@ -77,4 +77,6 @@ Un Deploy Hook peut servir de diagnostic ponctuel, mais il doit être révoqué 
 
 ## Documentation complémentaire
 
+Le guide [`docs/I18N.md`](docs/I18N.md) explique comment ajouter une langue, créer une clé de traduction, organiser les domaines JSON et vérifier la parité entre les langues.
+
 Les fichiers `production-auth-verification.md`, `production-domain-verification.md`, `production-supabase-verification.md`, `supabase-schema-verification.md` et `vercel-github-root-cause.md` conservent les décisions et contrôles spécifiques réalisés pendant le projet. Les fichiers de statut temporaires d’audit ne doivent pas contenir de secrets ni de tokens de déploiement.
