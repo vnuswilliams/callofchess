@@ -182,3 +182,14 @@ Un déplacement volontaire `e2–e3` affiche « Diagnostic personnalisé · erre
 - [ ] Vérifier que Vercel déploie ce commit sur `callofchess.vercel.app`.
 - [ ] Vérifier que le bundle public contient bien Supabase Auth et corriger l’inscription si nécessaire.
 
+
+## Rétablissement autonome du pipeline
+
+- [x] Auditer les connecteurs GitHub, Vercel et Supabase ainsi que les références du projet.
+- [x] Vérifier que GitHub main, le projet Vercel et le domaine callofchess pointent vers la même application.
+- [ ] Déclencher ou réparer le déploiement Vercel depuis le commit GitHub actuel.
+- [ ] Vérifier que callofchess.vercel.app sert le bundle Supabase Auth et tester l’inscription.
+- [ ] Documenter le résultat final et la cause de tout blocage résiduel.
+
+
+Constat final du diagnostic autonome : l’incident officiel GitHub du 17 août 2026 affecte actuellement les API, webhooks et téléchargements de contenu brut avec des taux d’erreur élevés. Vercel est correctement relié à `vnuswilliams/echequier`, mais ne peut pas résoudre le SHA `75d4d75` et ses Deploy Hooks redéploient l’ancien snapshot. Le domaine `callofchess.vercel.app` est correctement rattaché à Production ; le code local et Supabase sont sains. La publication du nouveau bundle reste donc suspendue jusqu’au rétablissement GitHub/Vercel.
