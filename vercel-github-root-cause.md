@@ -36,3 +36,13 @@ Le commit `a415fb6` contenant la page `/parcours`, le catalogue des 18 niveaux e
 ## Contrôle après publication du parcours
 
 À 15:31, le dashboard Vercel affiche toujours `1bfc96d` comme dernier déploiement Production Ready. Le commit `a415fb6` est bien poussé sur GitHub mais n’apparaît pas encore dans l’historique Vercel. Le bandeau « GitHub Outage — Automatic deployments from GitHub are temporarily unavailable » reste visible. La création manuelle doit être relancée lorsque le formulaire accepte la référence ; le précédent déploiement reste stable.
+
+
+## Vérification publique du parcours
+
+Le domaine canonique `https://callofchess.vercel.app/parcours` renvoie actuellement la page 404 de l’ancien déploiement. L’historique Vercel confirme que `1bfc96d` reste le dernier déploiement Production Ready et que le bandeau GitHub Outage est toujours actif. Le commit `a415fb6` est présent sur `github/main`, mais n’est pas encore déployé.
+
+
+## Tentative de création manuelle
+
+Le lien Create Deployment fourni par Vercel a ouvert un ancien déploiement `Hwp4fzHSp` basé sur `6e1be0e`, marqué Ready mais Stale, et non le commit demandé `a415fb6`. Cela confirme que la panne GitHub empêche Vercel de résoudre la révision actuelle ; la production canonique reste sur une version antérieure et `/parcours` renvoie 404.
