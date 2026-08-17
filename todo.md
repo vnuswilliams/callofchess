@@ -54,6 +54,18 @@ Le déploiement de production Vercel associé au commit `4ecd6e5` est prêt. La 
 
 Le contrôle de la route directe `/lecon/1` renvoie encore une erreur 404, tant sur le sous-domaine de production que sur l’URL de déploiement. La réécriture SPA Vercel est corrigée avant la validation finale en utilisant `/` comme destination, conformément au comportement `cleanUrls`.
 
+Le commit correctif `feb9ac7` est publié sur GitHub. Le tableau des déploiements ne l’affiche pas encore : le déclenchement Git de Vercel est relancé pour appliquer le routage corrigé.
+
+L’intégration Git reste connectée au dépôt `vnuswilliams/echequier`, mais le commit correctif n’apparaît toujours pas dans l’historique Vercel. Un déclenchement manuel de la branche principale est préparé pour appliquer la correction sans attendre le webhook.
+
+Un déclencheur nommé `production-route-redeploy` est prêt pour la branche `main` dans les paramètres Git de Vercel.
+
+Le déclencheur manuel a lancé un nouveau déploiement de production pour le commit correctif `feb9ac7`. Son état et la route directe de la leçon sont vérifiés avant la clôture.
+
+La route publique `https://lionchess.vercel.app/lecon/1` est maintenant servie correctement. Les métadonnées Open Graph, l’image de partage, l’URL canonique ainsi que les scripts Vercel Analytics et Speed Insights sont présents dans la version de production.
+
+Le déclencheur de déploiement temporaire a été révoqué après utilisation. Le projet conserve uniquement l’intégration GitHub standard pour les déploiements futurs.
+
 Un test d’interaction par pointeur a été envoyé sur le mouvement attendu `e2–e4`. La leçon propose désormais également une sélection par clic de la pièce puis de sa destination, afin de couvrir les usages tactiles et souris. Les clics sur les cases `e2` puis `e4` ont été déclenchés pour valider ce second parcours de jeu; la séquence complète est vérifiée lors du contrôle suivant.
 
 Après la validation de `e4`, le second coup `Cf3` a été déclenché par sélection des cases `g1` puis `f3`; l’état final de réussite est contrôlé ensuite.
