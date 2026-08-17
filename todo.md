@@ -12,3 +12,16 @@ Le 17 août 2026, le sélecteur de thème a été testé dans la navigation desk
 - [x] Ajouter la configuration de production Vercel et la documentation de déploiement.
 - [x] Créer le dépôt GitHub privé et y publier la branche principale.
 - [ ] Déployer le projet sur Vercel et vérifier l’URL de production.
+
+## Test du connecteur Vercel
+
+- [x] Interroger les équipes et projets accessibles via le connecteur Vercel.
+- [x] Présenter les capacités disponibles et la limite actuelle de déploiement.
+
+## Résultat du test
+
+Le connecteur Vercel répond correctement aux requêtes en lecture seule. Il retourne un espace accessible, `vnuswilliams` (`team_6YEmKGlfQ7Br7pSPTmpYmPyc`, slug `vnuswilliams1`), et l’inventaire des projets renvoie actuellement une liste vide dans cet espace. La création du projet Git associé a bien renvoyé un identifiant, mais la création du déploiement a été refusée avec une erreur d’autorisation 403.
+
+## Reprise après autorisation
+
+La session Vercel autorisée confirme que le projet `echequier` est associé au dépôt GitHub et qu’un push vers `main` déclenchera le déploiement de production.
