@@ -22,7 +22,9 @@ export function setPageMeta(meta: PageMeta) {
   document.documentElement.lang = meta.language ?? 'fr';
   document.title = meta.title;
   upsertMeta('name', 'description', meta.description);
+  upsertMeta('name', 'robots', 'index, follow');
   upsertMeta('property', 'og:type', 'website');
+  upsertMeta('property', 'og:locale', meta.language === 'en' ? 'en_US' : 'fr_FR');
   upsertMeta('property', 'og:site_name', 'Call of Chess');
   upsertMeta('property', 'og:url', canonical);
   upsertMeta('property', 'og:title', meta.title);

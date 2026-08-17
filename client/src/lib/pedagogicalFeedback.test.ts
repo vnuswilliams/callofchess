@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { classifyMistake, enrichMistakeWithEngine, formatEngineMove, formatPrincipalVariation, formatUciAsSan } from "./pedagogicalFeedback";
+import { classifyMistake, enrichMistakeWithEngine, explainEngineForBeginner, formatEngineMove, formatPrincipalVariation, formatUciAsSan } from "./pedagogicalFeedback";
 
 describe("pedagogical feedback", () => {
   it("explains why e3 is less ambitious than e4 for the center lesson", () => {
@@ -48,6 +48,20 @@ describe("pedagogical feedback", () => {
     const feedback = classifyMistake({ attemptedFrom: "e2", attemptedTo: "e3", expectedFrom: "e2", expectedTo: "e4", stepIndex: 0, attemptNumber: 1, language: "en" });
     expect(feedback.title).toBe("The center needs more space");
     expect(feedback.explanation).toContain("controls more central squares");
+  });
+
+  it("turns a balanced engine score into a beginner-friendly explanation", () => {
+    const explanation = explainEngineForBeginner(18, null, "e4", "fr");
+    expect(explanation.label).toBe("Position équilibrée");
+    expect(explanation.summary).toContain("équilibre");
+    expect(explanation.nextQuestion).toContain("pièce");
+  });
+
+  it("explains a mating alert without exposing only a raw score", () => {
+    const explanation = explainEngineForBeginner(null, 2, "g1f3", "en");
+    expect(explanation.label).toBe("Tactical alert");
+    expect(explanation.summary).toContain("mate in 2");
+    expect(explanation.nextQuestion).toContain("threatened");
   });
 
   it("personalizes a knight development error", () => {

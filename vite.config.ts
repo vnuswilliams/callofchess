@@ -219,6 +219,16 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          "react-core": ["react", "react-dom", "wouter"],
+          "chess-ui": ["chess.js", "react-chessboard"],
+          "supabase-client": ["@supabase/supabase-js"],
+          "ui-icons": ["lucide-react"],
+        },
+      },
+    },
   },
   server: {
     port: 3000,

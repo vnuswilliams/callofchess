@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Chess, type Move, type Square } from "chess.js";
 import { Chessboard } from "react-chessboard";
-import { Pause, Play, RotateCcw } from "lucide-react";
+import { Pause, Play, RotateCcw, Volume2, VolumeX } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 
@@ -30,7 +30,38 @@ export default function LandingChessboard() {
   const [stepIndex, setStepIndex] = useState(0);
   const [playing, setPlaying] = useState(true);
   const [position, setPosition] = useState(gameSteps[0]?.fen ?? new Chess().fen());
+  const [soundEnabled, setSoundEnabled] = useState(() => localStorage.getItem("call-of-chess:sound") !== "off");
   const timerRef = useRef<number | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+
+  const playMoveSound = useCallback(() => {
+    if (!soundEnabled || typeof window === "undefined") return;
+    const AudioContextClass = window.AudioContext ?? (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+    if (!AudioContextClass) return;
+    const context = audioContextRef.current ?? new AudioContextClass();
+    audioContextRef.current = context;
+    if (context.state === "suspended") void context.resume();
+    const oscillator = context.createOscillator();
+    const gain = context.createGain();
+    oscillator.type = "sine";
+    oscillator.frequency.setValueAtTime(520, context.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(680, context.currentTime + 0.07);
+    gain.gain.setValueAtTime(0.0001, context.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.045, context.currentTime + 0.012);
+    gain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + 0.12);
+    oscillator.connect(gain).connect(context.destination);
+    oscillator.start();
+    oscillator.stop(context.currentTime + 0.13);
+  }, [soundEnabled]);
+
+  const toggleSound = useCallback(() => {
+    setSoundEnabled((current) => {
+      const next = !current;
+      localStorage.setItem("call-of-chess:sound", next ? "on" : "off");
+      if (next) playMoveSound();
+      return next;
+    });
+  }, [playMoveSound]);
 
   const reset = useCallback(() => {
     setStepIndex(0);
@@ -48,13 +79,14 @@ export default function LandingChessboard() {
           return current;
         }
         setPosition(gameSteps[next].fen);
+        playMoveSound();
         return next;
       });
     }, 1150);
     return () => {
       if (timerRef.current !== null) window.clearInterval(timerRef.current);
     };
-  }, [gameSteps.length, playing, gameSteps]);
+  }, [gameSteps.length, playing, gameSteps, playMoveSound]);
 
   function movePiece(sourceSquare: string, targetSquare: string) {
     if (playing) return false;
@@ -92,6 +124,9 @@ export default function LandingChessboard() {
           </Button>
           <Button type="button" size="sm" variant="outline" onClick={reset} className="rounded-[.55rem] border-[#66857c] bg-transparent text-[#fffaf0] hover:bg-[#285448]" aria-label={fr ? "Rejouer la partie" : "Restart game"}>
             <RotateCcw size={14} />
+          </Button>
+          <Button type="button" size="sm" variant="outline" onClick={toggleSound} className="rounded-[.55rem] border-[#66857c] bg-transparent text-[#fffaf0] hover:bg-[#285448]" aria-pressed={!soundEnabled} aria-label={soundEnabled ? (fr ? "Couper les sons" : "Mute sounds") : (fr ? "Activer les sons" : "Enable sounds")}>
+            {soundEnabled ? <Volume2 size={14} /> : <VolumeX size={14} />}
           </Button>
         </div>
       </div>

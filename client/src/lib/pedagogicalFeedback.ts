@@ -1,5 +1,12 @@
 import { Chess } from "chess.js";
 
+export type EngineBeginnerExplanation = {
+  label: string;
+  summary: string;
+  why: string;
+  nextQuestion: string;
+};
+
 export type PedagogicalMistake = {
   attemptedMove: string;
   expectedMove: string;
@@ -109,6 +116,31 @@ export function enrichMistakeWithEngine(mistake: PedagogicalMistake, bestMove: s
       : (language === "en" ? `Stockfish suggests ${bestMove} rather than ${mistake.attemptedMove}. Compare the purpose of both moves before trying again.` : `Stockfish propose ${bestMove} plutôt que ${mistake.attemptedMove}. Comparez l’intention de ces deux coups avant de rejouer.`),
     bestMoveWhy: why,
     lessonTakeaway: takeaway,
+  };
+}
+
+export function explainEngineForBeginner(scoreCp: number | null, mate: number | null, bestMove: string | null, language: "fr" | "en" = "fr", mistake?: PedagogicalMistake | null): EngineBeginnerExplanation {
+  const fr = language === "fr";
+  const move = bestMove ?? (fr ? "le coup recommandé" : "the recommended move");
+  const attempted = mistake?.attemptedMove;
+  if (mate !== null) {
+    return {
+      label: fr ? "Alerte tactique" : "Tactical alert",
+      summary: fr ? `Le moteur voit un mat en ${Math.abs(mate)}. La priorité n’est plus de gagner de l’espace : il faut chercher les échecs, les captures et les menaces immédiates.` : `The engine sees mate in ${Math.abs(mate)}. The priority is no longer gaining space: look for checks, captures and immediate threats.`,
+      why: fr ? `${move} est le premier repère donné par Stockfish pour éviter ou créer cette menace. ${attempted ? `Votre coup ${attempted} ne répond pas assez directement au danger.` : "La position demande une réponse concrète."}` : `${move} is Stockfish’s first reference for avoiding or creating this threat. ${attempted ? `Your move ${attempted} does not answer the danger directly enough.` : "The position requires a concrete response."}`,
+      nextQuestion: fr ? "Qu’est-ce qui est menacé dès le prochain coup ?" : "What is threatened on the very next move?",
+    };
+  }
+  const score = scoreCp === null ? null : Math.abs(scoreCp);
+  const label = score === null || score < 35 ? (fr ? "Position équilibrée" : "Balanced position") : score < 100 ? (fr ? "Petit avantage" : "Small advantage") : score < 220 ? (fr ? "Avantage clair" : "Clear advantage") : (fr ? "Danger important" : "Serious danger");
+  const summary = score === null || score < 35
+    ? (fr ? "La position reste proche de l’équilibre. Le bon coup est surtout celui qui améliore vos pièces et garde un plan simple." : "The position is close to balanced. The best move is mainly the one that improves your pieces and keeps a simple plan.")
+    : (fr ? `Stockfish détecte ${label.toLowerCase()}. ${attempted ? `Le coup ${attempted} laisse donc une réponse plus forte à l’adversaire.` : "Un détail concret de la position devient prioritaire."}` : `Stockfish detects ${label.toLowerCase()}. ${attempted ? `The move ${attempted} therefore allows a stronger reply.` : "A concrete detail in the position becomes the priority."}`);
+  return {
+    label,
+    summary,
+    why: fr ? `${move} est recommandé parce qu’il améliore immédiatement la position : il crée une menace, gagne du temps ou rend vos pièces plus actives. ${attempted ? `Comparez-le à ${attempted} : ce dernier répond moins directement au besoin de la position.` : "Observez la différence sur l’échiquier plutôt que de retenir le score seul."}` : `${move} is recommended because it immediately improves the position: it creates a threat, gains time or makes your pieces more active. ${attempted ? `Compare it with ${attempted}: that move answers the position less directly.` : "Observe the difference on the board instead of memorising the score alone."}`,
+    nextQuestion: fr ? "Avant votre prochain coup, quelle pièce est la moins active et quelle menace devez-vous vérifier ?" : "Before your next move, which piece is least active and which threat should you check?",
   };
 }
 
