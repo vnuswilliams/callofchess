@@ -250,3 +250,11 @@ Constat final du diagnostic autonome : l’incident officiel GitHub du 17 août 
 - [x] Ajouter une carte de partage social avec aperçu joli, texte bilingue et actions Web Share/copie de lien.
 - [x] Mettre à jour les métadonnées de partage sans exposer l’email ni les statistiques privées.
 - [x] Corriger les tests du profil et vérifier le rendu desktop/mobile et les états de partage.
+
+
+## Badges et succès du profil
+
+- [x] Définir des badges calculés uniquement à partir des leçons terminées.
+- [x] Afficher les badges débloqués et verrouillés avec leur progression.
+- [x] Ajouter les libellés français et anglais et des états accessibles.
+- [x] Tester le calcul des badges et vérifier le rendu desktop/mobile.
