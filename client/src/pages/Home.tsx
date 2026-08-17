@@ -1,6 +1,7 @@
 /* Design reminder — L’Atelier de l’Ouverture: une landing éditoriale, chaleureuse et asymétrique; le safran ne signale que l’action ou le progrès. */
 import { useState } from "react";
-import { ArrowDown, ArrowUpRight, Check, ChevronRight, Menu, Sparkles, X } from "lucide-react";
+import { ArrowDown, ArrowUpRight, Check, ChevronRight, Menu, Moon, Sparkles, Sun, X } from "lucide-react";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const boardRows = [
   ["♜", "♞", "♝", "♛", "♚", "♝", "", "♜"],
@@ -37,14 +38,34 @@ function MiniBoard() {
   );
 }
 
+function ThemeToggle() {
+  const { theme, toggleTheme } = useTheme();
+  const isDark = theme === "dark";
+
+  return (
+    <button
+      type="button"
+      onClick={toggleTheme}
+      aria-label={isDark ? "Activer le mode clair" : "Activer le mode sombre"}
+      aria-pressed={isDark}
+      className="theme-toggle group inline-flex h-10 items-center gap-2 border border-[#b8aa86] px-3 text-[.62rem] font-extrabold uppercase tracking-[.12em] text-[#173e37] transition-colors hover:border-[#d69024] hover:bg-[#f5ecd7]"
+    >
+      <span className="grid h-5 w-5 place-items-center rounded-full bg-[#173e37] text-[#fffaf0] transition-transform duration-200 group-hover:scale-105">
+        {isDark ? <Sun size={12} strokeWidth={2.5} /> : <Moon size={12} strokeWidth={2.5} />}
+      </span>
+      <span className="hidden min-[1180px]:inline">{isDark ? "Clair" : "Sombre"}</span>
+    </button>
+  );
+}
+
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const closeMenu = () => setMenuOpen(false);
 
   return (
-    <div className="min-h-screen overflow-hidden bg-[#fbf6e9] text-[#27241d]">
-      <header className="paper-texture relative z-30 border-b border-[#cbc09f]">
+    <div className="echequier-site min-h-screen overflow-hidden bg-[#fbf6e9] text-[#27241d]">
+      <header className="echequier-header paper-texture relative z-30 border-b border-[#cbc09f]">
         <div className="mx-auto flex min-h-[76px] max-w-[1440px] items-center justify-between px-5 sm:px-8 lg:px-12">
           <a href="#top" aria-label="Échiquier, retour au début" className="group flex items-center gap-3">
             <Mark />
@@ -55,15 +76,15 @@ export default function Home() {
             <a className="transition-colors hover:text-[#8b6217]" href="#methode">La méthode</a>
             <a className="transition-colors hover:text-[#8b6217]" href="#puzzle">Puzzle du jour</a>
           </nav>
-          <div className="hidden lg:block"><a href="#parcours" className="button-ink !min-h-10 !px-5">Essayer le premier coup <ArrowUpRight size={15} /></a></div>
-          <button className="grid h-11 w-11 place-items-center border border-[#b8aa86] lg:hidden" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label="Ouvrir le menu">{menuOpen ? <X size={22} /> : <Menu size={22} />}</button>
+          <div className="hidden items-center gap-3 lg:flex"><ThemeToggle /><a href="#parcours" className="button-ink !min-h-10 !px-5">Essayer le premier coup <ArrowUpRight size={15} /></a></div>
+          <div className="flex items-center gap-2 lg:hidden"><ThemeToggle /><button className="grid h-11 w-11 place-items-center border border-[#b8aa86]" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label="Ouvrir le menu">{menuOpen ? <X size={22} /> : <Menu size={22} />}</button></div>
         </div>
-        {menuOpen && <div className="absolute inset-x-0 top-full border-b border-[#cbc09f] bg-[#fbf6e9] px-5 py-5 shadow-xl lg:hidden"><nav className="flex flex-col gap-4 text-sm font-extrabold"><a onClick={closeMenu} href="#parcours">Le parcours</a><a onClick={closeMenu} href="#methode">La méthode</a><a onClick={closeMenu} href="#puzzle">Puzzle du jour</a></nav></div>}
+        {menuOpen && <div className="echequier-mobile-menu absolute inset-x-0 top-full border-b border-[#cbc09f] bg-[#fbf6e9] px-5 py-5 shadow-xl lg:hidden"><nav className="flex flex-col gap-4 text-sm font-extrabold"><a onClick={closeMenu} href="#parcours">Le parcours</a><a onClick={closeMenu} href="#methode">La méthode</a><a onClick={closeMenu} href="#puzzle">Puzzle du jour</a></nav></div>}
       </header>
 
       <main id="top">
-        <section className="paper-texture relative isolate border-b border-[#cbc09f]">
-          <div className="absolute inset-y-0 right-0 -z-10 hidden w-[46%] bg-[#e8d7ae]/50 lg:block" />
+        <section className="echequier-hero paper-texture relative isolate border-b border-[#cbc09f]">
+          <div className="hero-sidewash absolute inset-y-0 right-0 -z-10 hidden w-[46%] bg-[#e8d7ae]/50 lg:block" />
           <div className="mx-auto grid max-w-[1440px] gap-12 px-5 pb-24 pt-14 sm:px-8 sm:pt-20 lg:grid-cols-[.94fr_1.06fr] lg:px-12 lg:pb-28 lg:pt-24">
             <div className="rise-in relative z-10 flex max-w-xl flex-col items-start lg:pt-8">
               <div className="mb-7 flex items-center gap-3"><span className="h-px w-10 bg-[#d69024]" /><span className="eyebrow">Le premier coup compte</span></div>
@@ -82,7 +103,7 @@ export default function Home() {
           <div className="checker-line h-3" />
         </section>
 
-        <section id="parcours" className="relative bg-[#fffaf0] py-24 sm:py-32">
+        <section id="parcours" className="echequier-path relative bg-[#fffaf0] py-24 sm:py-32">
           <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
             <div className="grid items-end gap-9 border-b border-[#cfc3a5] pb-11 lg:grid-cols-[1.2fr_.8fr]">
               <div><p className="eyebrow">Un parcours, pas un labyrinthe</p><h2 className="display-font mt-5 max-w-[10ch] text-5xl leading-[.93] tracking-[-.045em] text-[#173e37] sm:text-6xl">Comprendre. Jouer. Progresser.</h2></div>
@@ -94,7 +115,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="methode" className="ink-panel relative overflow-hidden py-24 sm:py-32">
+        <section id="methode" className="echequier-method ink-panel relative overflow-hidden py-24 sm:py-32">
           <div className="absolute left-0 top-0 h-full w-[27%] checker-line opacity-10" />
           <div className="relative mx-auto grid max-w-[1440px] gap-16 px-5 sm:px-8 lg:grid-cols-[.85fr_1.15fr] lg:px-12">
             <div className="flex flex-col items-start"><p className="eyebrow !text-[#e6b95e]">La méthode Échiquier</p><h2 className="display-font mt-5 max-w-[8ch] text-5xl leading-[.93] tracking-[-.045em] text-[#fffaf0] sm:text-6xl">La théorie attend. La position, non.</h2><p className="mt-7 max-w-[42ch] leading-7 text-[#d2d8ca]">Vous n’apprenez pas seulement ce qu’un coup signifie. Vous le jouez, vous l’observez, puis vous comprenez son idée.</p><a href="#puzzle" className="button-paper mt-9">Découvrir un exercice <ArrowDown size={16} /></a></div>
@@ -102,7 +123,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="puzzle" className="relative bg-[#e9dcc0] py-24 sm:py-32">
+        <section id="puzzle" className="echequier-puzzle relative bg-[#e9dcc0] py-24 sm:py-32">
           <div className="mx-auto grid max-w-[1440px] items-center gap-14 px-5 sm:px-8 lg:grid-cols-[1.06fr_.94fr] lg:px-12">
             <div className="relative min-h-[360px] overflow-hidden border border-[#bba980] bg-[#f8f0df] sm:min-h-[510px]"><img src="/manus-storage/echequier-puzzle-still-life_3fbe2461.png" alt="Cavalier et échiquier sur un carnet de travail" className="absolute inset-0 h-full w-full object-cover" /><div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#163d36] via-[#163d36]/70 to-transparent p-7 pt-24 text-[#fffaf0] sm:p-10"><p className="eyebrow !text-[#e6b95e]">Position d’entraînement</p><p className="display-font mt-3 text-3xl leading-tight">Les blancs jouent.<br />Quel est votre plan ?</p></div></div>
             <div className="lg:pl-8"><div className="flex items-center gap-3"><Sparkles size={16} className="text-[#a87416]" /><span className="eyebrow">Le puzzle du jour</span></div><h2 className="display-font mt-5 max-w-[8ch] text-5xl leading-[.93] tracking-[-.045em] text-[#173e37] sm:text-6xl">Un peu de jeu. Beaucoup de déclics.</h2><p className="mt-7 max-w-md leading-7 text-[#635d4d]">Chaque jour, une situation courte pour entraîner votre regard. Trouvez le coup, puis accédez à une explication qui vous aide à refaire le même raisonnement demain.</p><div className="mt-9 space-y-3">{["Une position adaptée à votre niveau", "Des indices seulement si vous en avez besoin", "Une explication après votre essai"].map((line) => <div key={line} className="flex items-center gap-3 text-sm font-semibold text-[#39362d]"><span className="grid h-6 w-6 place-items-center rounded-full bg-[#d69024] text-[#173e37]"><Check size={14} strokeWidth={3} /></span>{line}</div>)}</div><a href="#top" className="button-ink mt-10">Je veux essayer <ChevronRight size={16} /></a></div>
@@ -110,12 +131,12 @@ export default function Home() {
           <div className="absolute right-[6%] top-[12%] hidden h-16 w-16 rotate-45 border border-[#b9a477] lg:block" />
         </section>
 
-        <section className="bg-[#fffaf0] py-20 sm:py-28">
+        <section className="echequier-cta bg-[#fffaf0] py-20 sm:py-28">
           <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12"><div className="relative overflow-hidden bg-[#173e37] px-7 py-12 text-[#fffaf0] sm:px-12 sm:py-16 lg:flex lg:items-end lg:justify-between"><div className="absolute right-0 top-0 h-full w-[35%] checker-line opacity-10" /><div className="relative"><p className="eyebrow !text-[#e6b95e]">La prochaine position vous attend</p><h2 className="display-font mt-5 max-w-[11ch] text-5xl leading-[.92] tracking-[-.045em] sm:text-6xl">Prenez le temps de bien jouer.</h2></div><a href="#parcours" className="button-paper relative mt-9 lg:mt-0">Commencer gratuitement <ArrowUpRight size={16} /></a></div></div>
         </section>
       </main>
 
-      <footer className="border-t border-[#376057] bg-[#173e37] text-[#fffaf0]"><div className="mx-auto flex max-w-[1440px] flex-col gap-8 px-5 py-10 sm:px-8 md:flex-row md:items-end md:justify-between lg:px-12"><div className="flex items-center gap-3"><Mark /><div><span className="display-font block text-2xl tracking-[-.03em]">Échiquier</span><span className="text-[.58rem] font-extrabold uppercase tracking-[.17em] text-[#bfcbbd]">Apprendre en jouant</span></div></div><p className="max-w-sm text-xs leading-5 text-[#bfcbbd]">Un projet d’apprentissage des échecs pensé pour rendre la stratégie plus accessible, un coup à la fois.</p><div className="text-[.62rem] font-extrabold uppercase tracking-[.15em] text-[#bfcbbd]">© 2026 Échiquier</div></div></footer>
+      <footer className="echequier-footer border-t border-[#376057] bg-[#173e37] text-[#fffaf0]"><div className="mx-auto flex max-w-[1440px] flex-col gap-8 px-5 py-10 sm:px-8 md:flex-row md:items-end md:justify-between lg:px-12"><div className="flex items-center gap-3"><Mark /><div><span className="display-font block text-2xl tracking-[-.03em]">Échiquier</span><span className="text-[.58rem] font-extrabold uppercase tracking-[.17em] text-[#bfcbbd]">Apprendre en jouant</span></div></div><p className="max-w-sm text-xs leading-5 text-[#bfcbbd]">Un projet d’apprentissage des échecs pensé pour rendre la stratégie plus accessible, un coup à la fois.</p><div className="text-[.62rem] font-extrabold uppercase tracking-[.15em] text-[#bfcbbd]">© 2026 Échiquier</div></div></footer>
     </div>
   );
 }

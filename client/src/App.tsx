@@ -1,3 +1,4 @@
+/* Design reminder — L’Atelier de l’Ouverture conserve des thèmes clair et sombre : contrastes feutrés, vert encre et safran de décision. */
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
@@ -28,7 +29,7 @@ function App() {
     <ErrorBoundary>
       <ThemeProvider
         defaultTheme="light"
-        // switchable
+        switchable
       >
         <TooltipProvider>
           <Toaster />

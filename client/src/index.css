@@ -125,3 +125,42 @@
 
 @keyframes rise-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes board-float { 0%, 100% { transform: rotate(-2.5deg) translateY(0); } 50% { transform: rotate(-2.5deg) translateY(-10px); } }
+
+/* Dark theme — a low-luminance reading surface that preserves the Atelier’s green ink, tactile texture and saffron cues. */
+html.dark { color-scheme: dark; }
+html.dark .echequier-site { background: #102520; color: #f5eedf; }
+html.dark .paper-texture { background-color: #152e29; background-image: radial-gradient(rgba(246, 226, 182, .11) .6px, transparent .6px); }
+html.dark .echequier-header, html.dark .echequier-mobile-menu { border-color: #46645b; background-color: #152e29; color: #f7efdd; }
+html.dark .echequier-header .text-\[\#766d57\] { color: #b9c3b8; }
+html.dark .echequier-header nav a:hover { color: #e6b95e; }
+html.dark .theme-toggle { border-color: #628074; color: #f7efdd; }
+html.dark .theme-toggle:hover { background: #24463c; border-color: #e6b95e; }
+html.dark .theme-toggle span { background: #e6b95e; color: #153d36; }
+html.dark .echequier-hero { border-color: #46645b; }
+html.dark .echequier-hero .hero-sidewash { background: #214036; }
+html.dark .echequier-site .checker-line { background-image: conic-gradient(#e6b95e 25%, #173e37 0 50%, #e6b95e 0 75%, #173e37 0); }
+html.dark .echequier-site h1, html.dark .echequier-site h2, html.dark .echequier-site h3, html.dark .echequier-site .display-font { color: #f8efd8; }
+html.dark .echequier-site .eyebrow { color: #e6b95e; }
+html.dark .echequier-site p { color: #cbd5c8; }
+html.dark .echequier-site .text-\[\#173e37\] { color: #f8efd8; }
+html.dark .echequier-site .text-\[\#5d594d\], html.dark .echequier-site .text-\[\#6b6555\], html.dark .echequier-site .text-\[\#625d50\], html.dark .echequier-site .text-\[\#635d4d\], html.dark .echequier-site .text-\[\#39362d\] { color: #cbd5c8; }
+html.dark .echequier-site .text-\[\#756d58\] { color: #aebeb0; }
+html.dark .echequier-site .border-\[\#cbc09f\], html.dark .echequier-site .border-\[\#cfc3a5\] { border-color: #46645b; }
+html.dark .echequier-site .border-\[\#b6a985\] { border-color: #6f8d7f; }
+html.dark .echequier-path { background: #1b332e; }
+html.dark .echequier-path > div > div:first-child { border-color: #46645b; }
+html.dark .echequier-path .bg-\[\#d3c7aa\] { background: #46645b; }
+html.dark .echequier-path article { background: #224239; }
+html.dark .echequier-path article:hover { background: #295146; }
+html.dark .echequier-path .border-\[\#b9ab86\] { border-color: #628074; }
+html.dark .echequier-method { background: #102520; }
+html.dark .echequier-method .bg-\[\#173e37\] { background: #18352e; }
+html.dark .echequier-method .bg-\[\#66857c\/50\] { background: #46645b; }
+html.dark .echequier-puzzle { background: #203f36; }
+html.dark .echequier-puzzle > div > div:nth-child(2) p { color: #d2ddcf; }
+html.dark .echequier-puzzle > div > div:nth-child(2) .text-\[\#39362d\] { color: #e4ecdf; }
+html.dark .echequier-puzzle img { filter: brightness(.82) saturate(.88); }
+html.dark .echequier-puzzle .border-\[\#bba980\] { border-color: #789585; }
+html.dark .echequier-cta { background: #102520; }
+html.dark .echequier-cta .bg-\[\#173e37\] { background: #1b3b33; }
+html.dark .echequier-footer { background: #0c1d19; border-color: #46645b; }
