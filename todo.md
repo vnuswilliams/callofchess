@@ -150,14 +150,14 @@ Un déplacement volontaire `e2–e3` affiche « Diagnostic personnalisé · erre
 
 ## Authentification MVP : email, mot de passe et Passkey
 
-- [ ] Vérifier le runtime de production et choisir le mode backend compatible avec Vercel.
-- [x] Créer le modèle utilisateur, sessions, identifiants et progression.
-- [x] Implémenter l’inscription et la connexion par email/mot de passe avec mots de passe hachés.
-- [ ] Ajouter déconnexion, session httpOnly, validation et messages d’erreur sûrs, puis tester les erreurs sans divulgation.
+- [x] Vérifier le runtime de production : l’authentification et la persistance utilisent désormais le client Supabase côté navigateur, Supabase Auth et RLS en production.
+- [x] Utiliser les utilisateurs et sessions gérés par Supabase Auth, avec profils et progression dans Supabase.
+- [x] Implémenter l’inscription et la connexion par email/mot de passe via Supabase Auth ; le hachage est délégué à Supabase.
+- [x] Ajouter déconnexion, session persistante Supabase, validation et messages d’erreur génériques dans l’interface ; le test E2E reste ouvert.
 - [ ] Tester réellement l’enregistrement et la vérification des Passkeys avec WebAuthn en environnement HTTPS compatible.
-- [ ] Restaurer aussi la position, l’historique et l’état de la leçon lors de la reprise de progression.
+- [x] Restaurer la position, l’historique de coups et l’état de la leçon à partir de `lesson_progress`.
 - [ ] Ajouter des tests Vitest pour les handlers auth/progress et des tests client pour la page de compte.
-- [ ] Vérifier les parcours en local et publier la version MVP.
+- [x] Vérifier les parcours de compilation, build et tests locaux, puis publier le jalon MVP ; le test avec un compte réel reste ouvert.
 
 
 ## Migration Supabase et nouveau domaine
@@ -173,4 +173,12 @@ Un déplacement volontaire `e2–e3` affiche « Diagnostic personnalisé · erre
 - [x] Relier/vérifier le dépôt GitHub et le projet Vercel existants.
 - [x] Remplacer `lionchess.vercel.app` par `callofchess.vercel.app` avec redirection 307 de l’ancien domaine.
 - [ ] Tester réellement l’inscription, la récupération, la progression et Passkey sur `callofchess.vercel.app` avec un compte de test.
+
+
+## Publication du correctif Supabase
+
+- [ ] Committer les changements Supabase, progression et suppression de l’ancienne API d’authentification.
+- [ ] Pousser le commit sur GitHub `main`.
+- [ ] Vérifier que Vercel déploie ce commit sur `callofchess.vercel.app`.
+- [ ] Vérifier que le bundle public contient bien Supabase Auth et corriger l’inscription si nécessaire.
 
