@@ -4,7 +4,7 @@
 
 ## Démarrage local
 
-Le projet utilise Node.js 22 et pnpm.
+Le projet utilise Node.js 24 et pnpm. La version majeure est verrouillée par `package.json` (`engines.node: 24.x`) et `.nvmrc` afin de rester alignée avec Vercel.
 
 ```bash
 pnpm install --frozen-lockfile
