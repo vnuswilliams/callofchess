@@ -234,5 +234,33 @@
   "inline_b5c7d2e0b2": "Clear advantage",
   "inline_0aca06fe69": "Serious danger",
   "inline_3141ceb11f": "The position is close to balanced. The best move is mainly the one that improves your pieces and keeps a simple plan.",
-  "inline_b0535f021e": "Before your next move, which piece is least active and which threat should you check?"
+  "inline_b0535f021e": "Before your next move, which piece is least active and which threat should you check?",
+  "landing": {
+    "path": {
+      "basicsTitle": "The basics",
+      "basicsText": "The board, the pieces and the essential rules. Play your first guided game.",
+      "basicsTag": "5 lessons",
+      "threatsTitle": "See the threats",
+      "threatsText": "Spot attacks, protect your pieces and discover useful tactical patterns.",
+      "threatsTag": "8 lessons",
+      "thinkingTitle": "Think one move ahead",
+      "thinkingText": "Learn a simple routine to choose your move, even when the board looks complex.",
+      "thinkingTag": "6 lessons"
+    },
+    "puzzle": {
+      "adapted": "A position matched to your level",
+      "hints": "Hints only when you need them",
+      "explanation": "An explanation after your attempt"
+    },
+    "method": {
+      "idea": "An idea",
+      "ideaText": "A clear rule, explained with just the right amount of detail.",
+      "position": "A position",
+      "positionText": "A concrete board to explore with a precise objective.",
+      "reflex": "A reflex",
+      "reflexText": "A correction that turns a move into a method."
+    },
+    "boardAlt": "Training position on a chessboard",
+    "boardQuestion": "White to move. What is your plan?"
+  }
 }

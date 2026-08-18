@@ -234,5 +234,33 @@
   "inline_b5c7d2e0b2": "Avantage clair",
   "inline_0aca06fe69": "Danger important",
   "inline_3141ceb11f": "La position reste proche de l’équilibre. Le bon coup est surtout celui qui améliore vos pièces et garde un plan simple.",
-  "inline_b0535f021e": "Avant votre prochain coup, quelle pièce est la moins active et quelle menace devez-vous vérifier ?"
+  "inline_b0535f021e": "Avant votre prochain coup, quelle pièce est la moins active et quelle menace devez-vous vérifier?",
+  "landing": {
+    "path": {
+      "basicsTitle": "Les bases",
+      "basicsText": "Le plateau, les pièces et les règles essentielles. Vous jouez votre première partie guidée.",
+      "basicsTag": "5 leçons",
+      "threatsTitle": "Voir les menaces",
+      "threatsText": "Repérez les attaques, protégez vos pièces et découvrez les motifs tactiques les plus utiles.",
+      "threatsTag": "8 leçons",
+      "thinkingTitle": "Penser un coup",
+      "thinkingText": "Apprenez une routine simple pour choisir votre coup, même lorsque l’échiquier semble complexe.",
+      "thinkingTag": "6 leçons"
+    },
+    "puzzle": {
+      "adapted": "Une position adaptée à votre niveau",
+      "hints": "Des indices seulement si vous en avez besoin",
+      "explanation": "Une explication après votre essai"
+    },
+    "method": {
+      "idea": "Une idée",
+      "ideaText": "Une règle nette, expliquée avec le juste niveau de détail.",
+      "position": "Une position",
+      "positionText": "Un échiquier concret à explorer et un objectif précis.",
+      "reflex": "Un réflexe",
+      "reflexText": "Une correction qui transforme le coup en méthode."
+    },
+    "boardAlt": "Position d’entraînement sur un échiquier",
+    "boardQuestion": "Les blancs jouent. Quel est votre plan ?"
+  }
 }

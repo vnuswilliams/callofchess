@@ -292,3 +292,34 @@ html.dark .echequier-path article { background: var(--coc-surface-raised) !impor
 html.dark .echequier-path article:hover { background: #214239 !important; }
 html.dark .echequier-puzzle { background: #1a352e !important; }
 html.dark .echequier-method { background: #0b201b !important; }
+
+@layer components {
+  .landing-cta {
+    align-items: center;
+    display: inline-flex;
+    gap: .55rem;
+    justify-content: center;
+    min-height: 3rem;
+    padding: .75rem 1.1rem;
+    border-radius: .7rem;
+    font-size: .68rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+    line-height: 1;
+    text-transform: uppercase;
+    transition: transform .18s ease, background-color .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease;
+  }
+  .landing-cta-primary { width: 12.25rem; min-width: 12.25rem; }
+  .landing-cta-secondary { width: 10.75rem; min-width: 10.75rem; border: 1px solid var(--coc-line-strong); color: var(--coc-ink); }
+  .landing-cta-secondary:hover { border-color: var(--coc-saffron); background: var(--coc-saffron-soft); color: var(--coc-ink); transform: translateY(-1px); }
+  .landing-cta-paper { width: 12rem; min-width: 12rem; }
+  .landing-cta:focus-visible { outline: 3px solid var(--coc-saffron); outline-offset: 3px; }
+  .landing-cta:active { transform: translateY(1px); }
+  @media (max-width: 479px) {
+    .landing-actions { align-items: stretch; flex-direction: column; width: 100%; }
+    .landing-actions .landing-cta { width: 100%; }
+  }
+}
+
+html.dark .landing-cta-secondary { color: var(--coc-ink); border-color: var(--coc-line-strong); }
+html.dark .landing-cta-secondary:hover { color: var(--coc-ink); background: var(--coc-saffron-soft); }
