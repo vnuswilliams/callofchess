@@ -192,3 +192,103 @@ html.dark .lesson-history .text-\[\#867c64\], html.dark .lesson-history .text-\[
 html.dark .lesson-notes { border-color: #557267; background: #557267; }
 html.dark .lesson-notes > div { background: #1d3b33; }
 html.dark .lesson-notes p, html.dark .lesson-notes .text-\[\#615d50\] { color: #d2ddcf; }
+
+/* Call of Chess — visual system refresh */
+:root {
+  --coc-surface: #f7f8f4;
+  --coc-surface-raised: #ffffff;
+  --coc-ink: #102f2a;
+  --coc-ink-soft: #24483f;
+  --coc-text: #26352f;
+  --coc-muted: #53615b;
+  --coc-line: #d9dfd7;
+  --coc-line-strong: #b8c5bc;
+  --coc-saffron: #d89a32;
+  --coc-saffron-soft: #f5e7c8;
+  --coc-success: #2f8f68;
+  --coc-danger: #b54747;
+  --coc-shadow-sm: 0 1px 2px rgba(16, 47, 42, .05), 0 8px 24px rgba(16, 47, 42, .06);
+  --coc-shadow-md: 0 10px 30px rgba(16, 47, 42, .1), 0 2px 6px rgba(16, 47, 42, .05);
+  --coc-radius: 1rem;
+}
+
+@layer base {
+  html { background: var(--coc-surface); }
+  body { background: var(--coc-surface); color: var(--coc-text); font-family: "Manrope", ui-sans-serif, system-ui, sans-serif; }
+  :where(a, button, input, textarea, select):focus-visible { outline: 3px solid color-mix(in srgb, var(--coc-saffron) 82%, white); outline-offset: 3px; }
+  ::selection { background: var(--coc-saffron-soft); color: var(--coc-ink); }
+}
+
+@layer components {
+  .echequier-site { background: var(--coc-surface) !important; color: var(--coc-text) !important; }
+  .paper-texture { background-color: var(--coc-surface) !important; background-image: linear-gradient(90deg, rgba(16,47,42,.025) 1px, transparent 1px), linear-gradient(rgba(16,47,42,.02) 1px, transparent 1px) !important; background-size: 32px 32px !important; }
+  .echequier-header { background: rgba(247,248,244,.92) !important; border-color: var(--coc-line) !important; backdrop-filter: blur(18px); }
+  .echequier-header .display-font { color: var(--coc-ink); font-size: 1.45rem; }
+  .echequier-header nav a { color: var(--coc-muted); transition: color .2s ease; }
+  .echequier-header nav a:hover { color: var(--coc-ink) !important; }
+  .echequier-hero { background: var(--coc-surface) !important; border-color: var(--coc-line) !important; }
+  .hero-sidewash { background: linear-gradient(135deg, #eef2ec 0%, #e8efe8 100%) !important; }
+  .echequier-hero h1, .echequier-site h1, .echequier-site h2, .echequier-site h3 { color: var(--coc-ink) !important; }
+  .echequier-site p { color: var(--coc-muted); }
+  .eyebrow { color: #8a5f16 !important; letter-spacing: .16em; }
+  .button-ink, .echequier-site .bg-\[\#173e37\] { background: var(--coc-ink) !important; }
+  .button-ink:hover, .echequier-site .hover\:bg-\[\#285448\]:hover { background: var(--coc-ink-soft) !important; }
+  .button-ink { border-radius: .7rem; box-shadow: 0 5px 0 #0a211d, 0 10px 20px rgba(16,47,42,.12); letter-spacing: .04em; }
+  .button-ink:hover { transform: translateY(-1px); box-shadow: 0 6px 0 #0a211d, 0 12px 24px rgba(16,47,42,.14); }
+  .button-ink:active { transform: translateY(3px); box-shadow: 0 2px 0 #0a211d; }
+  .echequier-path, .echequier-puzzle, .echequier-cta { background: var(--coc-surface-raised) !important; }
+  .echequier-path .grid.gap-px, .echequier-method .grid.gap-px { background: var(--coc-line) !important; }
+  .echequier-path article { background: var(--coc-surface-raised) !important; box-shadow: var(--coc-shadow-sm); transition: box-shadow .2s ease, transform .2s ease, background .2s ease; }
+  .echequier-path article:hover { background: #fbfcfa !important; box-shadow: var(--coc-shadow-md); transform: translateY(-3px); }
+  .echequier-path article h3 { color: var(--coc-ink) !important; }
+  .echequier-method { background: var(--coc-ink) !important; }
+  .echequier-method .bg-\[\#173e37\] { background: #153b34 !important; }
+  .echequier-method .bg-\[\#173e37\] h3 { color: #f8faf6 !important; }
+  .echequier-method .bg-\[\#173e37\] p { color: #c7d7cc !important; }
+  .echequier-puzzle { background: #edf1eb !important; }
+  .echequier-puzzle > div > div:first-child { border-color: var(--coc-line-strong) !important; box-shadow: var(--coc-shadow-md); }
+  .echequier-puzzle .bg-\[\#173e37\] { background: linear-gradient(180deg, transparent, rgba(16,47,42,.96)) !important; }
+  .echequier-cta > div > div { border-radius: 1rem; box-shadow: var(--coc-shadow-md); }
+  .echequier-footer { background: #0b2420 !important; border-color: #234c41 !important; }
+  .theme-toggle, .echequier-header button { border-color: var(--coc-line-strong) !important; border-radius: .65rem; }
+  .theme-toggle:hover, .echequier-header button:hover { background: var(--coc-saffron-soft) !important; border-color: var(--coc-saffron) !important; }
+  .echequier-mobile-menu { background: var(--coc-surface) !important; border-color: var(--coc-line) !important; }
+  .checker-line { background-image: conic-gradient(var(--coc-ink) 25%, var(--coc-saffron-soft) 0 50%, var(--coc-ink) 0 75%, var(--coc-saffron-soft) 0) !important; background-size: 16px 16px !important; }
+  .lesson-shell { background: var(--coc-surface) !important; }
+  .lesson-paper, .lesson-history, .lesson-feedback, .lesson-notes { border-color: var(--coc-line) !important; border-radius: var(--coc-radius) !important; box-shadow: var(--coc-shadow-sm); }
+  .lesson-paper { background: var(--coc-surface-raised) !important; }
+}
+
+@media (max-width: 767px) {
+  .echequier-hero h1 { font-size: clamp(3.2rem, 17vw, 5.3rem) !important; }
+  .echequier-hero > div { gap: 2.5rem; }
+  .echequier-path, .echequier-method, .echequier-puzzle { padding-top: 4.5rem !important; padding-bottom: 4.5rem !important; }
+  .echequier-path article { min-height: 250px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+  .hero-board { animation: none !important; }
+}
+
+html.dark {
+  --coc-surface: #101f1b;
+  --coc-surface-raised: #18332c;
+  --coc-ink: #eff6ee;
+  --coc-ink-soft: #d7e6db;
+  --coc-text: #edf4ed;
+  --coc-muted: #bdcfc1;
+  --coc-line: #35564b;
+  --coc-line-strong: #587568;
+  --coc-saffron: #e6b95e;
+  --coc-saffron-soft: #35463a;
+  --coc-shadow-sm: 0 1px 2px rgba(0,0,0,.16), 0 8px 24px rgba(0,0,0,.14);
+  --coc-shadow-md: 0 10px 30px rgba(0,0,0,.24), 0 2px 6px rgba(0,0,0,.16);
+}
+html.dark .echequier-header { background: rgba(21,46,41,.92) !important; }
+html.dark .hero-sidewash { background: #1b3931 !important; }
+html.dark .echequier-path, html.dark .echequier-puzzle, html.dark .echequier-cta { background: var(--coc-surface) !important; }
+html.dark .echequier-path article { background: var(--coc-surface-raised) !important; }
+html.dark .echequier-path article:hover { background: #214239 !important; }
+html.dark .echequier-puzzle { background: #1a352e !important; }
+html.dark .echequier-method { background: #0b201b !important; }

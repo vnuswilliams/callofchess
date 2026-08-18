@@ -1,5 +1,5 @@
 /* Design reminder — L’Atelier de l’Ouverture conserve des thèmes clair et sombre : contrastes feutrés, vert encre et safran de décision. */
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Analytics } from "@vercel/analytics/react";
@@ -9,14 +9,14 @@ import { Route, Switch, useLocation, useParams } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { LanguageProvider } from "./contexts/LanguageContext";
-import Home from "./pages/Home";
-import Lesson from "./pages/Lesson";
-import Account from "./pages/Account";
-import Profile from "./pages/Profile";
-import Path from "./pages/Path";
-import Leaderboard from "./pages/Leaderboard";
 import PageMeta from "./components/PageMeta";
 
+const Home = lazy(() => import("./pages/Home"));
+const Lesson = lazy(() => import("./pages/Lesson"));
+const Account = lazy(() => import("./pages/Account"));
+const Profile = lazy(() => import("./pages/Profile"));
+const Path = lazy(() => import("./pages/Path"));
+const Leaderboard = lazy(() => import("./pages/Leaderboard"));
 
 // Routes are intentionally kept in one place so Vercel SPA rewrites and
 // client navigation share the same deep-link contract.
@@ -31,10 +31,15 @@ function LegacyLessonRedirect() {
   return <LegacyRedirect to={`/lesson/${id}`} />;
 }
 
+function RouteLoading() {
+  return <div className="flex min-h-screen items-center justify-center bg-background px-6 text-sm font-semibold text-muted-foreground" role="status" aria-live="polite">Chargement…</div>;
+}
+
 function Router() {
   return (
     <>
       <PageMeta />
+      <Suspense fallback={<RouteLoading />}>
       <Switch>
       <Route path={"/"} component={Home} />
       <Route path={"/lesson/:id"} component={Lesson} />
@@ -51,6 +56,7 @@ function Router() {
       {/* Final fallback route */}
       <Route component={NotFound} />
       </Switch>
+      </Suspense>
     </>
   );
 }
