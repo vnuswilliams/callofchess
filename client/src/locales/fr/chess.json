@@ -3,5 +3,6 @@
   "position": "Position",
   "move": "Coup",
   "white": "Blancs",
-  "black": "Noirs"
+  "black": "Noirs",
+  "computerReplying": "Réponse de l’ordinateur…"
 }

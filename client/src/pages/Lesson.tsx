@@ -1,5 +1,5 @@
 /* Design reminder — L’Atelier de l’Ouverture: la leçon doit ressembler à une partie annotée, calme et précise; le safran indique le coup attendu. */
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Chess, type Square } from "chess.js";
 import { Chessboard } from "react-chessboard";
 import { ArrowLeft, Check, ChevronRight, CircleHelp, Cpu, Lightbulb, Loader2, RotateCcw, Sparkles, SquareArrowOutUpRight, Trophy } from "lucide-react";
@@ -56,7 +56,7 @@ function reconstructPosition(steps: LessonStep[], completedStep: number) {
 }
 
 function BrandMark() {
-  return <img className="h-10 w-10 object-contain" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663890875436/WMeJhgIGICmYOuIM.png" alt="Symbole Échiquier" />;
+  return <img className="h-10 w-10 object-contain" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663890875436/WMeJhgIGICmYOuIM.png" alt="Symbole Call of Chess" />;
 }
 
 function LanguageToggle() {
@@ -96,11 +96,21 @@ export default function Lesson() {
   const [showAnalysis, setShowAnalysis] = useState(false);
   const [mistake, setMistake] = useState<PedagogicalMistake | null>(null);
   const [attempts, setAttempts] = useState(0);
+  const [isComputerReplying, setIsComputerReplying] = useState(false);
+  const replyTimer = useRef<number | null>(null);
   const { isReady: engineReady, isAnalyzing, analysis, error: engineError, analyze, stop } = useStockfish();
 
   const completed = currentStep >= lessonSteps.length;
   const activeStep = lessonSteps[Math.min(currentStep, lessonSteps.length - 1)];
   const activeStepCopy = language === "fr" ? activeStep : activeStep.san === "e4" ? { ...activeStep, answer: "Move the king pawn two squares.", idea: "Take the center: e4 opens a diagonal for your bishop and gives your queen more room." } : activeStep.san === "Cf3" ? { ...activeStep, answer: "Develop the king knight to f3.", idea: "Your knight controls the central squares e5 and d4 while preparing to castle." } : activeStep.san === "d4" ? { ...activeStep, answer: "Open a line with the queen pawn.", idea: "d4 claims central space and frees the c1 bishop to join the game." } : activeStep.san === "Cc3" ? { ...activeStep, answer: "Develop the second knight.", idea: "Nc3 supports the center and completes harmonious development without moving the same piece twice." } : activeStep.san === "Fc4" ? { ...activeStep, answer: "Develop the bishop to c4.", idea: "Bc4 completes kingside development and prepares castling." } : activeStep.san === "O-O" ? { ...activeStep, answer: "Castle kingside.", idea: "Castling shelters the king and activates the rook on f1 in one move." } : activeStep;
+
+  const clearReplyTimer = () => {
+    if (replyTimer.current) window.clearTimeout(replyTimer.current);
+    replyTimer.current = null;
+    setIsComputerReplying(false);
+  };
+
+  useEffect(() => () => clearReplyTimer(), []);
 
   useEffect(() => {
     if (mistake && analysis?.bestMove) setMistake((current) => current ? enrichMistakeWithEngine(current, analysis.bestMove, language) : current);
@@ -140,11 +150,12 @@ export default function Lesson() {
   }, [completed, currentStep, id]);
 
   useEffect(() => {
-    document.title = `${t("inline_646141d3f2")} ${lesson.number} — ${language === "fr" ? lesson.title : id === "1" ? "The center" : id === "2" ? "Development" : "King safety"} | Échiquier`;
-    return () => { document.title = "Échiquier — Apprendre les échecs simplement"; };
+    document.title = `${t("inline_646141d3f2")} ${lesson.number} — ${language === "fr" ? lesson.title : id === "1" ? "The center" : id === "2" ? "Development" : "King safety"} | Call of Chess`;
+    return () => { document.title = "Call of Chess — Apprendre les échecs simplement"; };
   }, [id, language, lesson.number, lesson.title]);
 
   const resetLesson = () => {
+    clearReplyTimer();
     stop();
     setPosition(new Chess().fen());
     setCurrentStep(0);
@@ -162,7 +173,7 @@ export default function Lesson() {
   };
 
   const handlePieceDrop = (sourceSquare: string, targetSquare: string | null) => {
-    if (!targetSquare || completed) return false;
+    if (!targetSquare || completed || isComputerReplying) return false;
     if (sourceSquare !== activeStep.from || targetSquare !== activeStep.to) {
       const nextAttempt = attempts + 1;
       const diagnostic = classifyMistake({ attemptedFrom: sourceSquare, attemptedTo: targetSquare, expectedFrom: activeStep.from, expectedTo: activeStep.to, stepIndex: currentStep, attemptNumber: nextAttempt, language });
@@ -174,17 +185,25 @@ export default function Lesson() {
       return false;
     }
 
-    const next = new Chess(position);
+      const afterUserMove = new Chess(position);
     try {
-      next.move({ from: sourceSquare as Square, to: targetSquare as Square, promotion: "q" });
-      next.move(activeStep.reply);
-      setPosition(next.fen());
-      const nextStep = currentStep + 1;
-      setCurrentStep(nextStep);
-      setFeedback(nextStep === lessonSteps.length ? "complete" : "correct");
+      afterUserMove.move({ from: sourceSquare as Square, to: targetSquare as Square, promotion: "q" });
+      setPosition(afterUserMove.fen());
+      setIsComputerReplying(true);
+      setFeedback("correct");
       setMistake(null);
       setShowHint(false);
       setSelectedSquare(null);
+      replyTimer.current = window.setTimeout(() => {
+        const afterReply = new Chess(afterUserMove.fen());
+        afterReply.move(activeStep.reply);
+        const nextStep = currentStep + 1;
+        setPosition(afterReply.fen());
+        setCurrentStep(nextStep);
+        setFeedback(nextStep === lessonSteps.length ? "complete" : "correct");
+        setIsComputerReplying(false);
+        replyTimer.current = null;
+      }, 220);
       return true;
     } catch {
       setFeedback("wrong");
@@ -193,7 +212,7 @@ export default function Lesson() {
   };
 
   const handleSquareClick = (square: string) => {
-    if (completed) return;
+    if (completed || isComputerReplying) return;
     const clickedPiece = new Chess(position).get(square as Square);
     const isWhitePiece = clickedPiece?.color === "w";
     if (!selectedSquare) {
@@ -224,7 +243,7 @@ export default function Lesson() {
     <div className="lesson-shell min-h-screen bg-[#f7f0df] text-[#203830]">
       <header className="lesson-header paper-texture border-b border-[#c9bb96]">
         <div className="mx-auto flex min-h-[76px] max-w-[1440px] items-center justify-between px-5 sm:px-8 lg:px-12">
-          <a href="/" className="flex items-center gap-3" aria-label="Retour à l’accueil Échiquier"><BrandMark /><div className="leading-none"><span className="display-font block text-[1.55rem] tracking-[-.04em]">Échiquier</span><span className="block pt-1 text-[.58rem] font-extrabold uppercase tracking-[.16em] text-[#766d57]">{t("guidedLesson")}</span></div></a>
+          <a href="/" className="flex items-center gap-3" aria-label="Retour à l’accueil Call of Chess"><BrandMark /><div className="leading-none"><span className="display-font block text-[1.55rem] tracking-[-.04em]">Call of Chess</span><span className="block pt-1 text-[.58rem] font-extrabold uppercase tracking-[.16em] text-[#766d57]">{t("guidedLesson")}</span></div></a>
           <div className="hidden items-center gap-3 sm:flex"><span className="font-mono text-[.64rem] font-bold tracking-[.1em] text-[#9a6b18]">{t("lesson").toUpperCase()} {lesson.number} / 03</span><span className="h-px w-10 bg-[#c5b58f]" /><span className="text-xs font-bold uppercase tracking-[.12em] text-[#59655e]">{language === "fr" ? lesson.title : id === "1" ? "The center" : id === "2" ? "Development" : "King safety"}</span></div><LanguageToggle />
           <div className="flex items-center gap-4"><AccountMenu /><a href="/" className="inline-flex items-center gap-2 text-[.68rem] font-extrabold uppercase tracking-[.11em] text-[#173e37] transition-colors hover:text-[#a87416]"><ArrowLeft size={16} /> {t("back")}</a></div>
         </div>
@@ -241,9 +260,15 @@ export default function Lesson() {
             <div className="pointer-events-none absolute inset-x-0 top-0 h-1.5 checker-line opacity-90" />
             <div className="mb-4 flex items-center justify-between px-1 text-[#fffaf0]"><div><p className="text-[.6rem] font-extrabold uppercase tracking-[.16em] text-[#e7ba61]">{t("inline_a8fbd92cbd")}</p><p className="display-font mt-1 text-2xl">{t("whiteToMove")}</p></div><div className="grid h-10 w-10 place-items-center border border-[#759287] text-[#e7ba61]"><Sparkles size={17} /></div></div>
             <div className="lesson-board-wrap mx-auto max-w-[680px] bg-[#153d36] p-2 sm:p-3">
-              <Chessboard options={{ id: "first-opening-lesson", position, boardOrientation: "white", showNotation: true, allowDragging: !completed, allowDrawingArrows: false, animationDurationInMs: 220, darkSquareStyle: { backgroundColor: "#3a6658" }, lightSquareStyle: { backgroundColor: "#f0dfb9" }, squareStyles: highlightedSquares, canDragPiece: ({ piece }) => piece.pieceType.startsWith("w") && !completed, onPieceDrop: ({ sourceSquare, targetSquare }) => handlePieceDrop(sourceSquare, targetSquare), onPieceClick: ({ square, piece }) => { if (piece.pieceType.startsWith("w") && square) setSelectedSquare(square); }, onSquareClick: ({ square }) => handleSquareClick(square) }} />
+              <Chessboard options={{ id: "first-opening-lesson", position, boardOrientation: "white", showNotation: true, allowDragging: !completed && !isComputerReplying, allowDrawingArrows: false, animationDurationInMs: 220, darkSquareStyle: { backgroundColor: "#3a6658" }, lightSquareStyle: { backgroundColor: "#f0dfb9" }, squareStyles: highlightedSquares, canDragPiece: ({ piece }) => piece.pieceType.startsWith("w") && !completed && !isComputerReplying, onPieceDrop: ({ sourceSquare, targetSquare }) => handlePieceDrop(sourceSquare, targetSquare), onPieceClick: ({ square, piece }) => { if (piece.pieceType.startsWith("w") && square && !isComputerReplying) setSelectedSquare(square); }, onSquareClick: ({ square }) => handleSquareClick(square) }} />
             </div>
-            <div className="mt-5 flex flex-wrap items-center justify-between gap-3 px-1"><div className="flex items-center gap-2 text-xs text-[#d9e0d6]"><span className="h-2 w-2 rounded-full bg-[#d69024]" /> {t("dragHint")}</div><Button variant="outline" size="sm" onClick={resetLesson} className="rounded-[.65rem] border-[#66857c] bg-transparent text-[.66rem] font-extrabold uppercase tracking-[.1em] text-[#fffaf0] hover:bg-[#284d43] hover:text-[#fffaf0]"><RotateCcw size={14} /> {t("reset")}</Button></div>
+            <div className="mt-4 grid grid-cols-2 gap-2 border-t border-[#66857c] pt-4 text-[#d9e0d6] sm:grid-cols-4" aria-label={t("chess.position")}>
+              <div><span className="block text-[.58rem] font-extrabold uppercase tracking-[.12em] text-[#9cb4a9]">{t("chess.position")}</span><strong className="mt-1 block font-mono text-sm text-[#fffaf0]">{String(Math.min(currentStep + 1, lessonSteps.length)).padStart(2, "0")} / {String(lessonSteps.length).padStart(2, "0")}</strong></div>
+              <div><span className="block text-[.58rem] font-extrabold uppercase tracking-[.12em] text-[#9cb4a9]">{t("chess.move")}</span><strong className="mt-1 block font-mono text-sm text-[#fffaf0]">{history.at(-1) ?? "—"}</strong></div>
+              <div><span className="block text-[.58rem] font-extrabold uppercase tracking-[.12em] text-[#9cb4a9]">{t("chess.board")}</span><strong className="mt-1 block font-mono text-sm text-[#fffaf0]">a–h · 1–8</strong></div>
+              <div><span className="block text-[.58rem] font-extrabold uppercase tracking-[.12em] text-[#9cb4a9]">{t("chess.white")}</span><strong className="mt-1 block text-sm text-[#fffaf0]">{isComputerReplying ? "…" : t("whiteToMove")}</strong></div>
+            </div>
+            <div className="mt-5 flex flex-wrap items-center justify-between gap-3 px-1"><div className="flex items-center gap-2 text-xs text-[#d9e0d6]"><span className={`h-2 w-2 rounded-full ${isComputerReplying ? "animate-pulse bg-[#e7ba61]" : "bg-[#d69024]"}`} /> {isComputerReplying ? t("chess.computerReplying") : t("dragHint")}</div><Button variant="outline" size="sm" onClick={resetLesson} className="rounded-[.65rem] border-[#66857c] bg-transparent text-[.66rem] font-extrabold uppercase tracking-[.1em] text-[#fffaf0] hover:bg-[#284d43] hover:text-[#fffaf0]"><RotateCcw size={14} /> {t("reset")}</Button></div>
           </section>
 
           <aside className="space-y-4">

@@ -9,7 +9,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { Link } from "wouter";
 
 function Mark() {
-  return <img className="h-10 w-10 object-contain" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663890875436/WMeJhgIGICmYOuIM.png" alt="Symbole Échiquier" />;
+  return <img className="h-10 w-10 object-contain" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663890875436/WMeJhgIGICmYOuIM.png" alt="Symbole Call of Chess" />;
 }
 
 function MiniBoard() {
@@ -52,9 +52,9 @@ export default function Home() {
     <div className="echequier-site min-h-screen overflow-hidden bg-[#fbf6e9] text-[#27241d]">
       <header className="echequier-header paper-texture relative z-30 border-b border-[#cbc09f]">
         <div className="mx-auto flex min-h-[76px] max-w-[1440px] items-center justify-between px-5 sm:px-8 lg:px-12">
-          <a href="#top" aria-label="Échiquier, retour au début" className="group flex items-center gap-3">
+          <a href="#top" aria-label="Call of Chess, retour au début" className="group flex items-center gap-3">
             <Mark />
-            <div className="leading-none"><span className="display-font block text-[1.6rem] tracking-[-.04em]">Échiquier</span><span className="block pt-1 text-[.58rem] font-extrabold uppercase tracking-[.18em] text-[#766d57]">Apprendre en jouant</span></div>
+            <div className="leading-none"><span className="display-font block text-[1.6rem] tracking-[-.04em]">Call of Chess</span><span className="block pt-1 text-[.58rem] font-extrabold uppercase tracking-[.18em] text-[#766d57]">Apprendre en jouant</span></div>
           </a>
           <nav className="hidden items-center gap-8 text-[.7rem] font-extrabold uppercase tracking-[.12em] lg:flex" aria-label="Navigation principale">
             <a className="transition-colors hover:text-[#8b6217]" href="/path">{t("inline_8ce4187b64")}</a>
@@ -121,7 +121,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="echequier-footer border-t border-[#376057] bg-[#173e37] text-[#fffaf0]"><div className="mx-auto flex max-w-[1440px] flex-col gap-8 px-5 py-10 sm:px-8 md:flex-row md:items-end md:justify-between lg:px-12"><div className="flex items-center gap-3"><Mark /><div><span className="display-font block text-2xl tracking-[-.03em]">Échiquier</span><span className="text-[.58rem] font-extrabold uppercase tracking-[.17em] text-[#bfcbbd]">{t("inline_52bb481a4d")}</span></div></div><p className="max-w-sm text-xs leading-5 text-[#bfcbbd]">{t("inline_a77cc6a837")}</p><div className="text-[.62rem] font-extrabold uppercase tracking-[.15em] text-[#bfcbbd]">© 2026 Échiquier</div></div></footer>
+      <footer className="echequier-footer border-t border-[#376057] bg-[#173e37] text-[#fffaf0]"><div className="mx-auto flex max-w-[1440px] flex-col gap-8 px-5 py-10 sm:px-8 md:flex-row md:items-end md:justify-between lg:px-12"><div className="flex items-center gap-3"><Mark /><div><span className="display-font block text-2xl tracking-[-.03em]">Call of Chess</span><span className="text-[.58rem] font-extrabold uppercase tracking-[.17em] text-[#bfcbbd]">{t("inline_52bb481a4d")}</span></div></div><p className="max-w-sm text-xs leading-5 text-[#bfcbbd]">{t("inline_a77cc6a837")}</p><div className="text-[.62rem] font-extrabold uppercase tracking-[.15em] text-[#bfcbbd]">© 2026 Call of Chess</div></div></footer>
     </div>
   );
 }

@@ -3,5 +3,6 @@
   "position": "Position",
   "move": "Move",
   "white": "White",
-  "black": "Black"
+  "black": "Black",
+  "computerReplying": "Computer reply…"
 }
