@@ -309,3 +309,10 @@ Constat final du diagnostic autonome : l’incident officiel GitHub du 17 août 
 - [x] Vérifier en production que le dernier SHA GitHub est le SHA servi par `callofchess.vercel.app` : le déploiement Vercel `633392f` est Ready et le domaine canonique répond correctement.
 
 - [x] Passe interface, profil, responsive, métadonnées et partage — 2026-08-17
+
+## E-mails d’authentification Call of Chess
+
+- [x] Remplacer la Site URL Supabase `http://localhost:3000` par `https://callofchess.vercel.app` et autoriser cette URL de redirection.
+- [x] Forcer les liens de confirmation d’inscription et de récupération vers l’origine canonique de production dans le client.
+- [x] Préparer le modèle HTML responsive et contrasté Call of Chess dans `docs/email-template-confirm-signup.html`.
+- [ ] Configurer un SMTP personnalisé avec une adresse d’envoi vérifiée afin de remplacer l’expéditeur par défaut Supabase Auth et activer le modèle personnalisé.

@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/lib/supabase";
 import { friendlyAuthError } from "@/lib/authErrors";
+import { authRedirect } from "@/lib/authRedirects";
 
 type AuthMode = "login" | "register" | "reset" | "update";
 
@@ -64,11 +65,11 @@ export default function Account() {
         setMode("login");
         setMessage(t("inline_d63177af7c"));
       } else if (mode === "reset") {
-        const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/account?reset=1` });
+        const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: authRedirect("/account?reset=1") });
         if (error) throw error;
         setMessage(t("inline_0ba0e93087"));
       } else if (mode === "register") {
-        const { data, error } = await supabase.auth.signUp({ email, password });
+        const { data, error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: authRedirect("/account") } });
         if (error) throw error;
         setPassword("");
         if (data.session) setLocation("/profile");
