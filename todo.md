@@ -329,3 +329,10 @@ Constat final du diagnostic autonome : l’incident officiel GitHub du 17 août 
 - [x] Typer le client Supabase avec le schéma UUID et corriger `completed_steps` dans le code et le SQL du classement.
 - [x] Vérifier Supabase après migration : 18 niveaux, 27 leçons, 23 exercices et 0 progression.
 - [ ] Publier le code et vérifier le déploiement Vercel ; le test d’intégration Supabase local reste dépendant des variables `VITE_SUPABASE_URL` et `VITE_SUPABASE_ANON_KEY`.
+
+## Garantie UUID pour les futures tables — 2026-08-18
+- [x] Ajouter l’event trigger `enforce_public_uuid_primary_keys` dans Supabase.
+- [x] Refuser les tables publiques sans clé primaire ou avec une clé primaire non-UUID.
+- [x] Tester une table UUID acceptée et une table `bigint` refusée, sans laisser de table de test.
+- [x] Documenter le périmètre et la procédure administrative dans `docs/uuid-primary-key-policy.md`.
+- [ ] Pousser et déployer cette nouvelle migration.
