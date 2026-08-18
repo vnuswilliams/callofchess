@@ -358,3 +358,8 @@ Constat final du diagnostic autonome : l’incident officiel GitHub du 17 août 
 Le commit `2c31a5a` est poussé sur `main` avec l’auteur `payongvenus@gmail.com`. Le domaine `https://callofchess.online/profile` répond correctement et le bundle public contient le nouveau message neutre ainsi que le code du partage avec repli vers la copie. La validation du bouton lui-même avec un badge débloqué reste une action manuelle nécessitant une session authentifiée.
 
 La correction ne nécessite pas de migration Supabase ni de modification de données utilisateur.
+
+
+## Test réel du partage de badge — 2026-08-18
+
+Le test a été effectué depuis une session utilisateur connectée sur `https://callofchess.online/profile`. Le badge `Premier pas` a été partagé avec succès : le bouton est devenu `Lien copié`, puis l’URL publique `https://callofchess.online/profile?badge=first-step` a chargé correctement la page Profil. Aucun message lié à un appareil indisponible n’est apparu. Le comportement validé est le repli vers la copie du lien lorsque le partage natif n’est pas disponible dans le navigateur de test.
