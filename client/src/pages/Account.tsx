@@ -1,7 +1,18 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
-import { Fingerprint, KeyRound, Link as LinkIcon, Loader2, LogIn, LogOut, ShieldCheck, UserPlus } from "lucide-react";
+import { AlertTriangle, Fingerprint, KeyRound, Link as LinkIcon, Loader2, LogIn, LogOut, ShieldCheck, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -26,6 +37,8 @@ export default function Account() {
   const [mode, setMode] = useState<AuthMode>("login");
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
+  const [deleteBusy, setDeleteBusy] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
 
   useEffect(() => {
     let active = true;
@@ -117,6 +130,21 @@ export default function Account() {
     setMessage(t("inline_018715048c"));
   }
 
+  async function deleteAccount() {
+    setDeleteBusy(true);
+    setDeleteError("");
+    const { error: deletionError } = await supabase.rpc("delete_current_user");
+    if (deletionError) {
+      setDeleteError(t("settings.deleteAccountError"));
+      setDeleteBusy(false);
+      return;
+    }
+    await supabase.auth.signOut();
+    setDeleteBusy(false);
+    setUser(null);
+    setLocation("/");
+  }
+
   const title = mode === "update" ? (t("inline_c1ad68e0b8")) : mode === "reset" ? (t("inline_82c88aba3b")) : mode === "register" ? (t("inline_5127a55413")) : (t("inline_2e1c924611"));
   const formMode = mode === "update" ? "update" : mode;
 
@@ -180,6 +208,42 @@ export default function Account() {
           )}
         </Card>
       </div>
+
+      {user && mode !== "update" && (
+        <section className="mx-auto mt-5 w-full max-w-6xl border border-[#c98d7f] bg-[#fff1dc] p-6 text-[#70251d] shadow-sm sm:p-8" aria-labelledby="danger-zone-title">
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+            <div className="max-w-2xl">
+              <div className="flex items-center gap-2">
+                <AlertTriangle size={18} aria-hidden="true" />
+                <h2 id="danger-zone-title" className="text-sm font-extrabold uppercase tracking-[.14em]">{t("settings.dangerZone")}</h2>
+              </div>
+              <p className="mt-3 text-sm leading-6 text-[#70251d]">{t("settings.dangerZoneDescription")}</p>
+            </div>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button disabled={deleteBusy} variant="outline" className="min-h-11 shrink-0 justify-center border-[#9d3b2e] bg-transparent text-[#9d3b2e] hover:bg-[#9d3b2e] hover:text-[#fffaf0]">
+                  <AlertTriangle size={16} aria-hidden="true" />
+                  {t("settings.deleteAccount")}
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent className="border-[#cbbd99] bg-[#fffaf0] text-[#173e37]">
+                <AlertDialogHeader>
+                  <AlertDialogTitle className="display-font flex items-center gap-2 text-3xl text-[#70251d]"><AlertTriangle size={22} aria-hidden="true" />{t("settings.deleteAccountTitle")}</AlertDialogTitle>
+                  <AlertDialogDescription className="leading-6 text-[#625d50]">{t("settings.deleteAccountDescription")}</AlertDialogDescription>
+                </AlertDialogHeader>
+                {deleteError && <p role="alert" className="text-sm leading-6 text-[#9d3b2e]">{deleteError}</p>}
+                <AlertDialogFooter>
+                  <AlertDialogCancel disabled={deleteBusy} className="border-[#b8aa86] bg-transparent text-[#173e37]">{t("settings.cancel")}</AlertDialogCancel>
+                  <AlertDialogAction disabled={deleteBusy} onClick={(event) => { event.preventDefault(); void deleteAccount(); }} className="bg-[#9d3b2e] text-[#fffaf0] hover:bg-[#70251d]">
+                    {deleteBusy && <Loader2 size={16} className="animate-spin" aria-hidden="true" />}
+                    {deleteBusy ? t("settings.deleteAccountLoading") : t("settings.confirmDeleteAccount")}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
+        </section>
+      )}
     </main>
   );
 }

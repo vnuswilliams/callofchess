@@ -1,17 +1,6 @@
 import { useEffect, useState } from "react";
-import { AlertTriangle, Loader2, LogIn, LogOut, UserCircle, UserRound } from "lucide-react";
+import { Loader2, LogIn, LogOut, Settings2, UserCircle, UserRound } from "lucide-react";
 import { Link, useLocation } from "wouter";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,7 +22,6 @@ export default function AccountMenu({ className = "" }: AccountMenuProps) {
   const [, setLocation] = useLocation();
   const [hasUser, setHasUser] = useState(false);
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState("");
 
   useEffect(() => {
     let active = true;
@@ -51,27 +39,11 @@ export default function AccountMenu({ className = "" }: AccountMenuProps) {
 
   async function signOut() {
     setBusy(true);
-    setError("");
     const { error: signOutError } = await supabase.auth.signOut();
     if (signOutError) {
-      setError(t("settings.signOutError"));
       setBusy(false);
       return;
     }
-    setBusy(false);
-    setLocation("/");
-  }
-
-  async function deleteAccount() {
-    setBusy(true);
-    setError("");
-    const { error: deletionError } = await supabase.rpc("delete_current_user");
-    if (deletionError) {
-      setError(t("settings.deleteAccountError"));
-      setBusy(false);
-      return;
-    }
-    await supabase.auth.signOut();
     setBusy(false);
     setLocation("/");
   }
@@ -93,32 +65,14 @@ export default function AccountMenu({ className = "" }: AccountMenuProps) {
         <DropdownMenuItem asChild className="gap-3 px-3 py-2.5 focus:bg-[#f5ecd7]">
           <Link href="/profile"><UserRound size={16} aria-hidden="true" />{t("profile")}</Link>
         </DropdownMenuItem>
+        <DropdownMenuItem asChild className="gap-3 px-3 py-2.5 focus:bg-[#f5ecd7]">
+          <Link href="/account"><Settings2 size={16} aria-hidden="true" />{t("common.profileNav.account")}</Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator className="bg-[#e0d4b7]" />
         <DropdownMenuItem disabled={busy} onSelect={() => void signOut()} className="gap-3 px-3 py-2.5 focus:bg-[#f5ecd7]">
           {busy ? <Loader2 size={16} className="animate-spin" aria-hidden="true" /> : <LogOut size={16} aria-hidden="true" />}
           {busy ? t("settings.signOutLoading") : t("settings.signOut")}
         </DropdownMenuItem>
-        <DropdownMenuSeparator className="bg-[#e0d4b7]" />
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <DropdownMenuItem disabled={busy} onSelect={(event) => event.preventDefault()} className="gap-3 px-3 py-2.5 text-[#9d3b2e] focus:bg-[#fff1dc] focus:text-[#70251d]">
-              <AlertTriangle size={16} aria-hidden="true" />{t("settings.deleteAccount")}
-            </DropdownMenuItem>
-          </AlertDialogTrigger>
-          <AlertDialogContent className="border-[#cbbd99] bg-[#fffaf0] text-[#173e37]">
-            <AlertDialogHeader>
-              <AlertDialogTitle className="display-font flex items-center gap-2 text-3xl text-[#70251d]"><AlertTriangle size={22} aria-hidden="true" />{t("settings.deleteAccountTitle")}</AlertDialogTitle>
-              <AlertDialogDescription className="leading-6 text-[#625d50]">{t("settings.deleteAccountDescription")}</AlertDialogDescription>
-            </AlertDialogHeader>
-            {error && <p role="alert" className="text-sm leading-6 text-[#9d3b2e]">{error}</p>}
-            <AlertDialogFooter>
-              <AlertDialogCancel disabled={busy} className="border-[#b8aa86] bg-transparent text-[#173e37]">{t("settings.cancel")}</AlertDialogCancel>
-              <AlertDialogAction disabled={busy} onClick={(event) => { event.preventDefault(); void deleteAccount(); }} className="bg-[#9d3b2e] text-[#fffaf0] hover:bg-[#70251d]">
-                {busy && <Loader2 size={16} className="animate-spin" aria-hidden="true" />}
-                {busy ? t("settings.deleteAccountLoading") : t("settings.confirmDeleteAccount")}
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
       </DropdownMenuContent>
     </DropdownMenu>
   );

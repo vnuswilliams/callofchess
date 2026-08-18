@@ -5,6 +5,8 @@
   "language": "Language",
   "theme": "Theme",
   "deleteAccount": "Delete my account",
+  "dangerZone": "Danger zone",
+  "dangerZoneDescription": "Deleting your account permanently removes your progress data. This action cannot be undone.",
   "deleteAccountTitle": "Delete your account permanently?",
   "deleteAccountDescription": "This action deletes your account and progress data. It is permanent and cannot be undone.",
   "confirmDeleteAccount": "Delete permanently",
