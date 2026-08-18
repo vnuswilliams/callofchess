@@ -26,7 +26,8 @@ Le serveur de développement est lancé par le script du projet et choisit le po
 | Zone | Responsabilité |
 | --- | --- |
 | `client/src/App.tsx` | Providers globaux, analytics et routes SPA. |
-| `client/src/pages/Lesson.tsx` | Leçons jouables, validation chess.js, feedback et Stockfish. |
+| `client/src/pages/Lesson.tsx` | Leçons jouables, validation chess.js, feedback et progression. |
+| `client/src/lib/levelZeroLessons.ts` | Contenu bilingue, positions FEN et séquences de coups du Niveau 0. |
 | `client/src/pages/Account.tsx` | Inscription, connexion, récupération et gestion de session. |
 | `client/src/pages/Profile.tsx` | Progression privée, statistiques, badges et partage. |
 | `client/src/lib/supabase.ts` | Instance unique du client Supabase côté navigateur. |
@@ -45,7 +46,7 @@ Les écrans de profil ne doivent jamais publier l’adresse email, les identifia
 
 ## Tests
 
-Les tests Vitest couvrent notamment le parsing Stockfish, le feedback pédagogique, la santé Supabase, les statistiques du profil et les seuils de badges. Avant chaque commit fonctionnel, exécutez `pnpm check && pnpm test && pnpm build`.
+Les tests Vitest couvrent notamment le parsing Stockfish, le feedback pédagogique, la santé Supabase, les statistiques du profil, les seuils de badges et la légalité des séquences du Niveau 0. Le seed curriculum correspondant est `supabase/migrations/20260818010000_seed_level_zero_curriculum.sql`. Avant chaque commit fonctionnel, exécutez `pnpm check && pnpm test && pnpm build`.
 
 ## Déploiement Vercel
 

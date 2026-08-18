@@ -336,3 +336,12 @@ Constat final du diagnostic autonome : l’incident officiel GitHub du 17 août 
 - [x] Tester une table UUID acceptée et une table `bigint` refusée, sans laisser de table de test.
 - [x] Documenter le périmètre et la procédure administrative dans `docs/uuid-primary-key-policy.md`.
 - [ ] Pousser et déployer cette nouvelle migration.
+
+## Niveau 0 — Comprendre le jeu
+
+- [x] Structurer six leçons bilingues : échiquier, mouvements, prises/promotion, coups spéciaux, fins de partie et synthèse.
+- [x] Ajouter les positions FEN, les coups guidés, les réponses adverses, les explications et les rappels de notion.
+- [x] Relier les six exercices au parcours `/path` et aux routes canoniques `/lesson/:id`.
+- [x] Étendre la restauration et la sauvegarde de `lesson_progress` aux six leçons.
+- [x] Seed Supabase avec une migration idempotente : `20260818010000_seed_level_zero_curriculum.sql`.
+- [x] Tester la légalité de toutes les séquences avec chess.js et vérifier le rendu local du parcours et de deux leçons.

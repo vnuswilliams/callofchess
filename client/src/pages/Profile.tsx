@@ -20,9 +20,12 @@ type ProgressRow = {
 type SessionUser = { id: string; email?: string | null };
 
 const lessonNames: Record<string, { fr: string; en: string }> = {
-  [PUBLIC_LESSON_ID_BY_KEY["1"]]: { fr: "Le centre", en: "The center" },
-  [PUBLIC_LESSON_ID_BY_KEY["2"]]: { fr: "Le développement", en: "Development" },
-  [PUBLIC_LESSON_ID_BY_KEY["3"]]: { fr: "La sécurité du roi", en: "King safety" },
+  [PUBLIC_LESSON_ID_BY_KEY["1"]]: { fr: "Le repère des 64 cases", en: "The 64-square map" },
+  [PUBLIC_LESSON_ID_BY_KEY["2"]]: { fr: "Le mouvement des pièces", en: "How the pieces move" },
+  [PUBLIC_LESSON_ID_BY_KEY["3"]]: { fr: "Prendre et promouvoir", en: "Capture and promote" },
+  [PUBLIC_LESSON_ID_BY_KEY["4"]]: { fr: "Le roque et la prise en passant", en: "Castling and en passant" },
+  [PUBLIC_LESSON_ID_BY_KEY["5"]]: { fr: "Échec, mat, pat et nulles", en: "Check, mate, stalemate and draws" },
+  [PUBLIC_LESSON_ID_BY_KEY["6"]]: { fr: "Une partie légale", en: "A legal game" },
 };
 
 function lessonName(id: string, language: "fr" | "en", t: (key: string) => string) {

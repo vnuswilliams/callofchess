@@ -20,9 +20,12 @@ function levelCompletion(level: PathLevel, completedLessons: Set<string>) {
 }
 
 const playableLessonForExercise: Record<string, string> = {
-  "0-center": `/lesson/${PUBLIC_LESSON_ID_BY_KEY["1"]}`,
-  "0-development": `/lesson/${PUBLIC_LESSON_ID_BY_KEY["2"]}`,
-  "0-safety": `/lesson/${PUBLIC_LESSON_ID_BY_KEY["3"]}`,
+  "0-board": `/lesson/${PUBLIC_LESSON_ID_BY_KEY["1"]}`,
+  "0-pieces": `/lesson/${PUBLIC_LESSON_ID_BY_KEY["2"]}`,
+  "0-capture": `/lesson/${PUBLIC_LESSON_ID_BY_KEY["3"]}`,
+  "0-special": `/lesson/${PUBLIC_LESSON_ID_BY_KEY["4"]}`,
+  "0-endings": `/lesson/${PUBLIC_LESSON_ID_BY_KEY["5"]}`,
+  "0-complete": `/lesson/${PUBLIC_LESSON_ID_BY_KEY["6"]}`,
 };
 
 function LevelCard({ level, language, completedLessons, completedLevels, t }: { level: PathLevel; language: "fr" | "en"; completedLessons: Set<string>; completedLevels: Set<string>; t: (key: string) => string }) {
