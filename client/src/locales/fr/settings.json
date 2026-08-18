@@ -5,6 +5,8 @@
   "language": "Langue",
   "theme": "Thème",
   "deleteAccount": "Supprimer mon compte",
+  "dangerZone": "Zone de danger",
+  "dangerZoneDescription": "La suppression de votre compte efface définitivement vos données de progression. Cette action ne peut pas être annulée.",
   "deleteAccountTitle": "Supprimer définitivement votre compte ?",
   "deleteAccountDescription": "Cette action supprime votre compte et vos données de progression. Elle est définitive et ne peut pas être annulée.",
   "confirmDeleteAccount": "Supprimer définitivement",
