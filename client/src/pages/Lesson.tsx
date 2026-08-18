@@ -11,6 +11,7 @@ import { Card } from "@/components/ui/card";
 import { useParams } from "wouter";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/lib/supabase";
+import { PUBLIC_LESSON_ID_BY_KEY, toLessonKey } from "@/lib/lessonIds";
 
 type LessonStep = { from: string; to: string; san: string; answer: string; idea: string; reply: string; replySan: string };
 type LessonDefinition = { number: string; title: string; kicker: string; headline: string; steps: LessonStep[] };
@@ -83,10 +84,12 @@ function CoachingPanel({ mistake }: { mistake: PedagogicalMistake }) {
 }
 
 export default function Lesson() {
-  const { id = "1" } = useParams<{ id: string }>();
-  const lesson = lessonCatalog[id] ?? lessonCatalog["1"];
+  const { id } = useParams<{ id: string }>();
+  const lessonKey = toLessonKey(id) ?? "1";
+  const publicLessonId = PUBLIC_LESSON_ID_BY_KEY[lessonKey];
+  const lesson = lessonCatalog[lessonKey];
   const lessonSteps = lesson.steps;
-  const nextLessonId = id === "1" ? "2" : id === "2" ? "3" : null;
+  const nextLessonId = lessonKey === "1" ? PUBLIC_LESSON_ID_BY_KEY["2"] : lessonKey === "2" ? PUBLIC_LESSON_ID_BY_KEY["3"] : null;
   const { t, language } = useLanguage();
   const [position, setPosition] = useState(() => new Chess().fen());
   const [currentStep, setCurrentStep] = useState(0);
@@ -122,18 +125,18 @@ export default function Lesson() {
       if (!user || !active) return;
       const { data } = await supabase
         .from("lesson_progress")
-        .select("completed_step, completed")
+        .select("completed_steps, completed")
         .eq("user_id", user.id)
-        .eq("lesson_id", id)
+        .eq("lesson_id", publicLessonId)
         .maybeSingle();
-      if (!active || !data || !Number.isFinite(data.completed_step)) return;
-      const restoredStep = Math.min(lessonSteps.length, data.completed_step);
+      if (!active || !data || !Number.isFinite(data.completed_steps)) return;
+      const restoredStep = Math.min(lessonSteps.length, data.completed_steps);
       setCurrentStep(restoredStep);
       setPosition(reconstructPosition(lessonSteps, restoredStep));
       if (data.completed) setFeedback("complete");
     }).catch(() => undefined);
     return () => { active = false; };
-  }, [id, lessonSteps.length]);
+  }, [publicLessonId, lessonSteps.length]);
 
   useEffect(() => {
     if (currentStep === 0) return;
@@ -141,18 +144,18 @@ export default function Lesson() {
       if (!user) return;
       await supabase.from("lesson_progress").upsert({
         user_id: user.id,
-        lesson_id: id,
-        completed_step: currentStep,
+        lesson_id: publicLessonId,
+        completed_steps: currentStep,
         completed,
         updated_at: new Date().toISOString(),
       }, { onConflict: "user_id,lesson_id" });
     }).catch(() => undefined);
-  }, [completed, currentStep, id]);
+  }, [completed, currentStep, publicLessonId]);
 
   useEffect(() => {
-    document.title = `${t("inline_646141d3f2")} ${lesson.number} — ${language === "fr" ? lesson.title : id === "1" ? "The center" : id === "2" ? "Development" : "King safety"} | Call of Chess`;
+    document.title = `${t("inline_646141d3f2")} ${lesson.number} — ${language === "fr" ? lesson.title : lessonKey === "1" ? "The center" : lessonKey === "2" ? "Development" : "King safety"} | Call of Chess`;
     return () => { document.title = "Call of Chess — Apprendre les échecs simplement"; };
-  }, [id, language, lesson.number, lesson.title]);
+  }, [lessonKey, language, lesson.number, lesson.title]);
 
   const resetLesson = () => {
     clearReplyTimer();
@@ -244,7 +247,7 @@ export default function Lesson() {
       <header className="lesson-header paper-texture border-b border-[#c9bb96]">
         <div className="mx-auto flex min-h-[76px] max-w-[1440px] items-center justify-between px-5 sm:px-8 lg:px-12">
           <a href="/" className="flex items-center gap-3" aria-label="Retour à l’accueil Call of Chess"><BrandMark /><div className="leading-none"><span className="display-font block text-[1.55rem] tracking-[-.04em]">Call of Chess</span><span className="block pt-1 text-[.58rem] font-extrabold uppercase tracking-[.16em] text-[#766d57]">{t("guidedLesson")}</span></div></a>
-          <div className="hidden items-center gap-3 sm:flex"><span className="font-mono text-[.64rem] font-bold tracking-[.1em] text-[#9a6b18]">{t("lesson").toUpperCase()} {lesson.number} / 03</span><span className="h-px w-10 bg-[#c5b58f]" /><span className="text-xs font-bold uppercase tracking-[.12em] text-[#59655e]">{language === "fr" ? lesson.title : id === "1" ? "The center" : id === "2" ? "Development" : "King safety"}</span></div><LanguageToggle />
+          <div className="hidden items-center gap-3 sm:flex"><span className="font-mono text-[.64rem] font-bold tracking-[.1em] text-[#9a6b18]">{t("lesson").toUpperCase()} {lesson.number} / 03</span><span className="h-px w-10 bg-[#c5b58f]" /><span className="text-xs font-bold uppercase tracking-[.12em] text-[#59655e]">{language === "fr" ? lesson.title : lessonKey === "1" ? "The center" : lessonKey === "2" ? "Development" : "King safety"}</span></div><LanguageToggle />
           <div className="flex items-center gap-4"><AccountMenu /><a href="/" className="inline-flex items-center gap-2 text-[.68rem] font-extrabold uppercase tracking-[.11em] text-[#173e37] transition-colors hover:text-[#a87416]"><ArrowLeft size={16} /> {t("back")}</a></div>
         </div>
       </header>

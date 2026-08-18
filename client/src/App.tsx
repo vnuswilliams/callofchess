@@ -10,6 +10,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import PageMeta from "./components/PageMeta";
+import { toPublicLessonId } from "./lib/lessonIds";
 
 const Home = lazy(() => import("./pages/Home"));
 const Lesson = lazy(() => import("./pages/Lesson"));
@@ -26,9 +27,16 @@ function LegacyRedirect({ to }: { to: string }) {
   return null;
 }
 
+function LessonRoute() {
+  const { id } = useParams<{ id: string }>();
+  const canonicalId = toPublicLessonId(id);
+  return canonicalId ? <Lesson /> : <NotFound />;
+}
+
 function LegacyLessonRedirect() {
-  const { id = "1" } = useParams<{ id: string }>();
-  return <LegacyRedirect to={`/lesson/${id}`} />;
+  const { id } = useParams<{ id: string }>();
+  const canonicalId = toPublicLessonId(id);
+  return canonicalId ? <LegacyRedirect to={`/lesson/${canonicalId}`} /> : <NotFound />;
 }
 
 function RouteLoading() {
@@ -42,7 +50,7 @@ function Router() {
       <Suspense fallback={<RouteLoading />}>
       <Switch>
       <Route path={"/"} component={Home} />
-      <Route path={"/lesson/:id"} component={Lesson} />
+      <Route path={"/lesson/:id"}><LessonRoute /></Route>
       <Route path={"/account"} component={Account} />
       <Route path={"/profile"} component={Profile} />
       <Route path={"/path"} component={Path} />

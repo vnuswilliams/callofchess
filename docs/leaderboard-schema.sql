@@ -45,7 +45,7 @@ as $$
       lp.user_id,
       lp.display_name,
       count(distinct progress.lesson_id) filter (where progress.completed) as completed_lessons,
-      coalesce(sum(progress.completed_step), 0)::bigint as total_steps
+      coalesce(sum(progress.completed_steps), 0)::bigint as total_steps
     from public.leaderboard_profiles lp
     left join public.lesson_progress progress on progress.user_id = lp.user_id
     where lp.public_opt_in = true

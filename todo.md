@@ -322,3 +322,10 @@ Constat final du diagnostic autonome : l’incident officiel GitHub du 17 août 
 - [x] Vérifier dans le projet Vercel `callofchess` que le domaine de production affiché et fonctionnel est `https://www.callofchess.online`.
 - [x] Aligner la Site URL et une redirection Supabase sur `https://www.callofchess.online` sans configurer de SMTP.
 - [x] Remplacer les liens canoniques et les redirections d’authentification actifs de l’application par le domaine vérifié.
+
+## Alignement UUID du code et de Supabase — 2026-08-18
+- [x] Remplacer les URLs de leçons numériques par les UUID publics canoniques.
+- [x] Ajouter la migration `20260818000000_convert_curriculum_ids_to_uuid.sql` pour les niveaux, leçons, exercices et progressions existantes.
+- [x] Typer le client Supabase avec le schéma UUID et corriger `completed_steps` dans le code et le SQL du classement.
+- [x] Vérifier Supabase après migration : 18 niveaux, 27 leçons, 23 exercices et 0 progression.
+- [ ] Publier le code et vérifier le déploiement Vercel ; le test d’intégration Supabase local reste dépendant des variables `VITE_SUPABASE_URL` et `VITE_SUPABASE_ANON_KEY`.

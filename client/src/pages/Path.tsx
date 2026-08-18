@@ -6,11 +6,12 @@ import { Progress } from "@/components/ui/progress";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/lib/supabase";
 import { isLevelUnlocked, learningPath, type PathLevel } from "@/lib/learningPath";
+import { PUBLIC_LESSON_ID_BY_KEY } from "@/lib/lessonIds";
 
-type ProgressRow = { lesson_id: string; completed: boolean; completed_step: number };
+type ProgressRow = { lesson_id: string; completed: boolean; completed_steps: number };
 
 const lessonIdsByLevel: Record<number, string[]> = {
-  0: ["1", "2", "3"],
+  0: Object.values(PUBLIC_LESSON_ID_BY_KEY),
 };
 
 function levelCompletion(level: PathLevel, completedLessons: Set<string>) {
@@ -19,9 +20,9 @@ function levelCompletion(level: PathLevel, completedLessons: Set<string>) {
 }
 
 const playableLessonForExercise: Record<string, string> = {
-  "0-center": "/lesson/1",
-  "0-development": "/lesson/2",
-  "0-safety": "/lesson/3",
+  "0-center": `/lesson/${PUBLIC_LESSON_ID_BY_KEY["1"]}`,
+  "0-development": `/lesson/${PUBLIC_LESSON_ID_BY_KEY["2"]}`,
+  "0-safety": `/lesson/${PUBLIC_LESSON_ID_BY_KEY["3"]}`,
 };
 
 function LevelCard({ level, language, completedLessons, completedLevels, t }: { level: PathLevel; language: "fr" | "en"; completedLessons: Set<string>; completedLevels: Set<string>; t: (key: string) => string }) {
@@ -29,7 +30,7 @@ function LevelCard({ level, language, completedLessons, completedLevels, t }: { 
   const unlocked = isLevelUnlocked(level, completedLevels);
   const completed = levelCompletion(level, completedLessons);
   const progress = Math.round((completed / level.exercises.length) * 100);
-  const lessonLink = level.id === 0 ? "/lesson/1" : null;
+  const lessonLink = level.id === 0 ? `/lesson/${PUBLIC_LESSON_ID_BY_KEY["1"]}` : null;
 
   return (
     <Card className={`relative overflow-hidden rounded-xl p-0 transition-all ${unlocked ? "border-[#cbbd99] bg-[#fffaf0] hover:-translate-y-1 hover:border-[#d69024]" : "border-[#d7ccb0] bg-[#eee8d8]/70"}`}>
@@ -69,7 +70,7 @@ export default function Path() {
       if (!active) return;
       setSignedIn(Boolean(auth.user));
       if (!auth.user) { setLoading(false); return; }
-      const { data } = await supabase.from("lesson_progress").select("lesson_id, completed, completed_step").eq("user_id", auth.user.id).limit(100);
+      const { data } = await supabase.from("lesson_progress").select("lesson_id, completed, completed_steps").eq("user_id", auth.user.id).limit(100);
       if (active) { setRows((data ?? []) as ProgressRow[]); setLoading(false); }
     }
     load().catch(() => { if (active) setLoading(false); });

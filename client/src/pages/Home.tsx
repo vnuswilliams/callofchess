@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Link } from "wouter";
+import { PUBLIC_LESSON_ID_BY_KEY } from "@/lib/lessonIds";
 
 function Mark() {
   return <img className="h-10 w-10 object-contain" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663890875436/WMeJhgIGICmYOuIM.png" alt="Symbole Call of Chess" />;
@@ -48,9 +49,9 @@ export default function Home() {
 
   const closeMenu = () => setMenuOpen(false);
   const pathItems = [
-    { n: "01", title: t("common.landing.path.basicsTitle"), text: t("common.landing.path.basicsText"), tag: t("common.landing.path.basicsTag"), href: "/lesson/1" },
-    { n: "02", title: t("common.landing.path.threatsTitle"), text: t("common.landing.path.threatsText"), tag: t("common.landing.path.threatsTag"), href: "/lesson/2" },
-    { n: "03", title: t("common.landing.path.thinkingTitle"), text: t("common.landing.path.thinkingText"), tag: t("common.landing.path.thinkingTag"), href: "/lesson/3" },
+    { n: "01", title: t("common.landing.path.basicsTitle"), text: t("common.landing.path.basicsText"), tag: t("common.landing.path.basicsTag"), href: `/lesson/${PUBLIC_LESSON_ID_BY_KEY["1"]}` },
+    { n: "02", title: t("common.landing.path.threatsTitle"), text: t("common.landing.path.threatsText"), tag: t("common.landing.path.threatsTag"), href: `/lesson/${PUBLIC_LESSON_ID_BY_KEY["2"]}` },
+    { n: "03", title: t("common.landing.path.thinkingTitle"), text: t("common.landing.path.thinkingText"), tag: t("common.landing.path.thinkingTag"), href: `/lesson/${PUBLIC_LESSON_ID_BY_KEY["3"]}` },
   ];
   const puzzlePoints = [t("common.landing.puzzle.adapted"), t("common.landing.puzzle.hints"), t("common.landing.puzzle.explanation")];
   const methodSteps = [
@@ -72,7 +73,7 @@ export default function Home() {
             <a className="transition-colors hover:text-[#8b6217]" href="#methode">{t("inline_3667a3f751")}</a>
             <a className="transition-colors hover:text-[#8b6217]" href="#puzzle">{t("inline_ad229869c0")}</a>
           </nav>
-          <div className="hidden items-center gap-3 lg:flex"><LanguageToggle /><ThemeToggle /><AccountMenu /><Button asChild size="lg" className="landing-cta landing-cta-primary rounded-lg bg-[#173e37] text-[#fffaf0] hover:bg-[#285448]"><Link href="/lesson/1">{t("tryFirstMove")} <ArrowUpRight size={15} /></Link></Button></div>
+          <div className="hidden items-center gap-3 lg:flex"><LanguageToggle /><ThemeToggle /><AccountMenu /><Button asChild size="lg" className="landing-cta landing-cta-primary rounded-lg bg-[#173e37] text-[#fffaf0] hover:bg-[#285448]"><Link href={`/lesson/${PUBLIC_LESSON_ID_BY_KEY["1"]}`}>{t("tryFirstMove")} <ArrowUpRight size={15} /></Link></Button></div>
           <div className="flex items-center gap-2 lg:hidden"><LanguageToggle /><ThemeToggle /><button className="grid h-11 w-11 place-items-center border border-[#b8aa86]" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label={t("inline_c3e6876683")}>{menuOpen ? <X size={22} /> : <Menu size={22} />}</button></div>
         </div>
         {menuOpen && <div className="echequier-mobile-menu absolute inset-x-0 top-full border-b border-[#cbc09f] bg-[#fbf6e9] px-5 py-5 shadow-xl lg:hidden"><nav className="flex flex-col gap-4 text-sm font-extrabold"><Link onClick={closeMenu} href="/path">{t("inline_8ce4187b64")}</Link><a onClick={closeMenu} href="#methode">{t("inline_3667a3f751")}</a><a onClick={closeMenu} href="#puzzle">{t("inline_ad229869c0")}</a><AccountMenu className="w-full justify-start border-0 px-0" /></nav></div>}
@@ -86,7 +87,7 @@ export default function Home() {
               <div className="mb-7 flex items-center gap-3"><span className="h-px w-10 bg-[#d69024]" /><span className="eyebrow">{t("inline_6d6d6de479")}</span></div>
               <h1 className="display-font max-w-[11ch] text-[clamp(3.8rem,7.2vw,7rem)] leading-[.88] tracking-[-.06em] text-[#173e37]">{t("inline_f0c5e2a158")}</h1>
               <p className="mt-8 max-w-[48ch] text-[1rem] leading-8 text-[#5d594d] sm:text-[1.08rem]">{t("inline_1395ed1bf4")}</p>
-              <div className="landing-actions mt-9 flex flex-wrap items-center gap-3"><Link href="/lesson/1" className="button-ink landing-cta landing-cta-primary">{t("startLesson")} <ArrowUpRight size={16} /></Link><a href="#methode" className="landing-cta landing-cta-secondary">{t("viewMethod")} <ArrowDown size={16} /></a></div>
+              <div className="landing-actions mt-9 flex flex-wrap items-center gap-3"><Link href={`/lesson/${PUBLIC_LESSON_ID_BY_KEY["1"]}`} className="button-ink landing-cta landing-cta-primary">{t("startLesson")} <ArrowUpRight size={16} /></Link><a href="#methode" className="landing-cta landing-cta-secondary">{t("viewMethod")} <ArrowDown size={16} /></a></div>
               <div className="mt-16 flex gap-8 border-l border-[#b6a985] pl-5"><div><span className="display-font block text-3xl leading-none text-[#173e37]">12 min</span><span className="mt-2 block text-[.62rem] font-extrabold uppercase tracking-[.13em] text-[#756d58]">{t("inline_ce28f4a1fc")}</span></div><div><span className="display-font block text-3xl leading-none text-[#173e37]">1 coup</span><span className="mt-2 block text-[.62rem] font-extrabold uppercase tracking-[.13em] text-[#756d58]">{t("inline_5274f4e408")}</span></div></div>
             </div>
             <div className="rise-in-delay relative flex min-h-[390px] items-center justify-center pb-6 pt-9 sm:min-h-[510px] lg:justify-end lg:pb-10">
@@ -122,13 +123,13 @@ export default function Home() {
         <section id="puzzle" className="echequier-puzzle relative bg-[#e9dcc0] py-24 sm:py-32">
           <div className="mx-auto grid max-w-[1440px] items-center gap-14 px-5 sm:px-8 lg:grid-cols-[1.06fr_.94fr] lg:px-12">
             <div className="relative min-h-[360px] overflow-hidden border border-[#bba980] bg-[#f8f0df] sm:min-h-[510px]"><img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663890875436/VzXMIXHeEnedAtWF.png" alt={t("common.landing.boardAlt")} className="absolute inset-0 h-full w-full object-cover" /><div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#163d36] via-[#163d36]/70 to-transparent p-7 pt-24 text-[#fffaf0] sm:p-10"><p className="eyebrow !text-[#e6b95e]">{t("inline_808e39469f")}</p><p className="display-font mt-3 text-3xl leading-tight">{t("common.landing.boardQuestion")}</p></div></div>
-            <div className="lg:pl-8"><div className="flex items-center gap-3"><Sparkles size={16} className="text-[#a87416]" /><span className="eyebrow">{t("inline_d6656fbf87")}</span></div><h2 className="display-font mt-5 max-w-[8ch] text-5xl leading-[.93] tracking-[-.045em] text-[#173e37] sm:text-6xl">{t("inline_6cfa615832")}</h2><p className="mt-7 max-w-md leading-7 text-[#635d4d]">{t("inline_eed1871812")}</p><div className="mt-9 space-y-3">{puzzlePoints.map((line) => <div key={line} className="flex items-center gap-3 text-sm font-semibold text-[#39362d]"><span className="grid h-6 w-6 place-items-center rounded-full bg-[#d69024] text-[#173e37]"><Check size={14} strokeWidth={3} /></span>{line}</div>)}</div><Button asChild size="lg" className="landing-cta landing-cta-primary mt-10 rounded-lg bg-[#173e37] text-[#fffaf0] hover:bg-[#285448]"><Link href="/lesson/1">{t("inline_7289dbe9db")} <ChevronRight size={16} /></Link></Button></div>
+            <div className="lg:pl-8"><div className="flex items-center gap-3"><Sparkles size={16} className="text-[#a87416]" /><span className="eyebrow">{t("inline_d6656fbf87")}</span></div><h2 className="display-font mt-5 max-w-[8ch] text-5xl leading-[.93] tracking-[-.045em] text-[#173e37] sm:text-6xl">{t("inline_6cfa615832")}</h2><p className="mt-7 max-w-md leading-7 text-[#635d4d]">{t("inline_eed1871812")}</p><div className="mt-9 space-y-3">{puzzlePoints.map((line) => <div key={line} className="flex items-center gap-3 text-sm font-semibold text-[#39362d]"><span className="grid h-6 w-6 place-items-center rounded-full bg-[#d69024] text-[#173e37]"><Check size={14} strokeWidth={3} /></span>{line}</div>)}</div><Button asChild size="lg" className="landing-cta landing-cta-primary mt-10 rounded-lg bg-[#173e37] text-[#fffaf0] hover:bg-[#285448]"><Link href={`/lesson/${PUBLIC_LESSON_ID_BY_KEY["1"]}`}>{t("inline_7289dbe9db")} <ChevronRight size={16} /></Link></Button></div>
           </div>
           <div className="absolute right-[6%] top-[12%] hidden h-16 w-16 rotate-45 border border-[#b9a477] lg:block" />
         </section>
 
         <section className="echequier-cta bg-[#fffaf0] py-20 sm:py-28">
-          <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12"><div className="relative overflow-hidden bg-[#173e37] px-7 py-12 text-[#fffaf0] sm:px-12 sm:py-16 lg:flex lg:items-end lg:justify-between"><div className="absolute right-0 top-0 h-full w-[35%] checker-line opacity-10" /><div className="relative"><p className="eyebrow !text-[#e6b95e]">{t("inline_c2cf36369b")}</p><h2 className="display-font mt-5 max-w-[11ch] text-5xl leading-[.92] tracking-[-.045em] sm:text-6xl">{t("inline_ddb078b94c")}</h2></div><Link href="/lesson/1" className="button-paper landing-cta landing-cta-paper relative mt-9 lg:mt-0">{t("inline_90820d6897")} <ArrowUpRight size={16} /></Link></div></div>
+          <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12"><div className="relative overflow-hidden bg-[#173e37] px-7 py-12 text-[#fffaf0] sm:px-12 sm:py-16 lg:flex lg:items-end lg:justify-between"><div className="absolute right-0 top-0 h-full w-[35%] checker-line opacity-10" /><div className="relative"><p className="eyebrow !text-[#e6b95e]">{t("inline_c2cf36369b")}</p><h2 className="display-font mt-5 max-w-[11ch] text-5xl leading-[.92] tracking-[-.045em] sm:text-6xl">{t("inline_ddb078b94c")}</h2></div><Link href={`/lesson/${PUBLIC_LESSON_ID_BY_KEY["1"]}`} className="button-paper landing-cta landing-cta-paper relative mt-9 lg:mt-0">{t("inline_90820d6897")} <ArrowUpRight size={16} /></Link></div></div>
         </section>
       </main>
 
