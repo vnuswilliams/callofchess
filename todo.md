@@ -353,8 +353,8 @@ Constat final du diagnostic autonome : l’incident officiel GitHub du 17 août 
 - [x] Ajouter le repli textarea lorsque la permission Clipboard API est refusée.
 - [x] Remplacer le message « appareil » par un message d’erreur neutre, en français et en anglais.
 - [x] Ajouter les tests Vitest du partage natif, du repli après échec et de la copie de secours.
-- [ ] Pousser le correctif et vérifier qu’il est servi sur https://www.callofchess.online.
+- [x] Pousser le correctif et vérifier qu’il est servi sur https://www.callofchess.online.
 
-Les tests ciblés du partage, le contrôle TypeScript et le build de production passent localement. La suite complète reste conditionnée par les variables publiques Supabase locales, absentes de cette session ; le test `supabaseHealth.test.ts` échoue uniquement sur cette configuration manquante.
+Le commit `2c31a5a` est poussé sur `main` avec l’auteur `payongvenus@gmail.com`. Le domaine `https://callofchess.online/profile` répond correctement et le bundle public contient le nouveau message neutre ainsi que le code du partage avec repli vers la copie. La validation du bouton lui-même avec un badge débloqué reste une action manuelle nécessitant une session authentifiée.
 
 La correction ne nécessite pas de migration Supabase ni de modification de données utilisateur.
