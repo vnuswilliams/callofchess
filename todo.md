@@ -345,3 +345,16 @@ Constat final du diagnostic autonome : l’incident officiel GitHub du 17 août 
 - [x] Étendre la restauration et la sauvegarde de `lesson_progress` aux six leçons.
 - [x] Seed Supabase avec une migration idempotente : `20260818010000_seed_level_zero_curriculum.sql`.
 - [x] Tester la légalité de toutes les séquences avec chess.js et vérifier le rendu local du parcours et de deux leçons.
+
+
+## Correctif partage des badges — 2026-08-18
+
+- [x] Remplacer le partage natif dépendant d’une cible disponible par un partage avec repli automatique vers la copie du lien.
+- [x] Ajouter le repli textarea lorsque la permission Clipboard API est refusée.
+- [x] Remplacer le message « appareil » par un message d’erreur neutre, en français et en anglais.
+- [x] Ajouter les tests Vitest du partage natif, du repli après échec et de la copie de secours.
+- [ ] Pousser le correctif et vérifier qu’il est servi sur https://www.callofchess.online.
+
+Les tests ciblés du partage, le contrôle TypeScript et le build de production passent localement. La suite complète reste conditionnée par les variables publiques Supabase locales, absentes de cette session ; le test `supabaseHealth.test.ts` échoue uniquement sur cette configuration manquante.
+
+La correction ne nécessite pas de migration Supabase ni de modification de données utilisateur.
