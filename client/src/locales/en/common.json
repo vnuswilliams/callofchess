@@ -235,6 +235,18 @@
   "inline_0aca06fe69": "Serious danger",
   "inline_3141ceb11f": "The position is close to balanced. The best move is mainly the one that improves your pieces and keeps a simple plan.",
   "inline_b0535f021e": "Before your next move, which piece is least active and which threat should you check?",
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page you are looking for does not exist or has moved.",
+    "home": "Back to home"
+  },
+  "profileNav": {
+    "home": "Home",
+    "path": "Learning path",
+    "ranking": "Leaderboard",
+    "account": "Manage account",
+    "current": "Profile"
+  },
   "landing": {
     "path": {
       "basicsTitle": "The basics",

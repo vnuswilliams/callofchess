@@ -323,3 +323,163 @@ html.dark .echequier-method { background: #0b201b !important; }
 
 html.dark .landing-cta-secondary { color: var(--coc-ink); border-color: var(--coc-line-strong); }
 html.dark .landing-cta-secondary:hover { color: var(--coc-ink); background: var(--coc-saffron-soft); }
+
+/* Contrast and surface corrections — dark panels must keep light copy in both themes. */
+@layer components {
+  .echequier-method h2,
+  .echequier-cta h2,
+  .echequier-method .bg-\[\#173e37\] h3,
+  .echequier-cta .eyebrow { color: #f8faf6 !important; }
+  .echequier-method p:not(.eyebrow),
+  .echequier-cta p:not(.eyebrow) { color: #d2ddd3 !important; }
+  .echequier-method .eyebrow,
+  .echequier-cta .eyebrow { color: #e6b95e !important; }
+  .echequier-method .grid.gap-px,
+  .echequier-puzzle > div > div:first-child,
+  .echequier-cta > div > div { border-radius: 1rem; overflow: hidden; }
+  .echequier-path article { border-radius: 1rem; }
+  .echequier-puzzle h2 { color: var(--coc-ink) !important; }
+  .echequier-puzzle p:not(.eyebrow),
+  .echequier-puzzle .text-\[\#39362d\] { color: var(--coc-text) !important; }
+}
+
+html.dark .echequier-site .echequier-path,
+html.dark .echequier-site .echequier-puzzle,
+html.dark .echequier-site .echequier-cta,
+html.dark .echequier-site .echequier-hero { background: var(--coc-surface) !important; }
+html.dark .echequier-site .echequier-path article { background: var(--coc-surface-raised) !important; color: var(--coc-text) !important; }
+html.dark .echequier-site .echequier-path article h3 { color: var(--coc-ink) !important; }
+html.dark .echequier-site .echequier-path article p,
+html.dark .echequier-site .echequier-path article .text-\[\.65rem\] { color: var(--coc-muted) !important; }
+html.dark .echequier-site .echequier-puzzle { background: #172f29 !important; }
+html.dark .echequier-site .echequier-puzzle h2 { color: #f4f8f2 !important; }
+html.dark .echequier-site .echequier-puzzle p:not(.eyebrow),
+html.dark .echequier-site .echequier-puzzle .text-\[\#39362d\] { color: #d7e4d9 !important; }
+html.dark .echequier-site .echequier-cta { background: #0e211c !important; }
+html.dark .echequier-site .echequier-cta > div > div { background: #16352d !important; }
+html.dark .echequier-site .echequier-cta h2,
+html.dark .echequier-site .echequier-cta p:not(.eyebrow) { color: #f3f8f1 !important; }
+
+@layer components {
+  .profile-shell { background: var(--coc-surface) !important; color: var(--coc-text) !important; }
+  .profile-topbar { border-bottom: 1px solid var(--coc-line); padding-bottom: 1rem; }
+  .profile-brand { color: var(--coc-ink) !important; }
+  .profile-nav-link { color: var(--coc-muted); min-height: 2.5rem; display: inline-flex; align-items: center; border-bottom: 2px solid transparent; }
+  .profile-nav-link:hover, .profile-nav-link:focus-visible { color: var(--coc-ink); border-color: var(--coc-saffron); }
+  .profile-language { border-radius: .65rem; border-color: var(--coc-line-strong) !important; color: var(--coc-ink); }
+  .profile-shell section,
+  .profile-shell article { border-radius: var(--coc-radius); }
+  .profile-shell .bg-\[\#fffaf0\] { background: var(--coc-surface-raised) !important; }
+  .profile-shell .text-\[\#173e37\] { color: var(--coc-ink) !important; }
+  .profile-shell .text-\[\#625d50\],
+  .profile-shell .text-\[\#756c58\] { color: var(--coc-muted) !important; }
+  .profile-shell .border-\[\#cbbd99\],
+  .profile-shell .border-\[\#d7ccb0\] { border-color: var(--coc-line-strong) !important; }
+  .profile-shell .bg-\[\#eee8d8\]\/70 { background: color-mix(in srgb, var(--coc-surface-raised) 76%, var(--coc-surface)) !important; }
+}
+
+html.dark .profile-shell .bg-\[\#173e37\] { background: #16352d !important; }
+html.dark .profile-shell .text-\[\#fffaf0\] { color: #f3f8f1 !important; }
+html.dark .profile-shell .bg-\[\#f7f0df\] { background: var(--coc-surface) !important; }
+
+html.dark .echequier-site .button-ink,
+html.dark .echequier-site .landing-cta-primary {
+  background: #e6b95e !important;
+  color: #102f2a !important;
+  box-shadow: 0 5px 0 #8f671e, 0 10px 20px rgba(0,0,0,.2);
+}
+html.dark .echequier-site .button-ink:hover,
+html.dark .echequier-site .landing-cta-primary:hover {
+  background: #f0c978 !important;
+  color: #102f2a !important;
+}
+
+@layer components {
+  .page-shell { background: var(--coc-surface) !important; color: var(--coc-text) !important; }
+  .page-shell .text-\[\#173e37\] { color: var(--coc-ink) !important; }
+  .page-shell .text-\[\#625d50\],
+  .page-shell .text-\[\#5f5b4e\],
+  .page-shell .text-\[\#756c58\],
+  .page-shell .text-\[\#756d58\] { color: var(--coc-muted) !important; }
+  .page-shell .bg-\[\#fffaf0\] { background: var(--coc-surface-raised) !important; }
+  .page-shell .border-\[\#cbbd99\],
+  .page-shell .border-\[\#d7ccb0\],
+  .page-shell .border-\[\#bcae88\],
+  .page-shell .border-\[\#e2d8be\],
+  .page-shell .border-\[\#e7ddc4\] { border-color: var(--coc-line-strong) !important; }
+  .page-shell section, .page-shell article, .page-shell [data-slot="card"] { border-radius: var(--coc-radius); }
+  .account-shell input { border-radius: .7rem; }
+  .path-shell > div > section:first-of-type { overflow: hidden; border-radius: var(--coc-radius); }
+  .path-shell > div > section:first-of-type > div { background: var(--coc-surface-raised) !important; }
+  .leaderboard-shell section, .leaderboard-shell [data-slot="card"] { overflow: hidden; }
+  .leaderboard-shell section > div:first-child { border-radius: 0; }
+}
+
+html.dark .page-shell .bg-\[\#f7f0df\],
+html.dark .page-shell .bg-\[\#fffaf0\] { background: var(--coc-surface-raised) !important; }
+html.dark .page-shell .bg-\[\#eee8d8\]\/70 { background: #1b3a31 !important; }
+html.dark .page-shell .text-\[\#fffaf0\] { color: #f3f8f1 !important; }
+html.dark .page-shell .border-\[\#cbbd99\],
+html.dark .page-shell .border-\[\#d7ccb0\],
+html.dark .page-shell .border-\[\#bcae88\],
+html.dark .page-shell .border-\[\#e2d8be\],
+html.dark .page-shell .border-\[\#e7ddc4\] { border-color: var(--coc-line) !important; }
+html.dark .leaderboard-shell .bg-\[\#173e37\] { background: #16352d !important; }
+
+@layer components {
+  .lesson-shell { background: var(--coc-surface) !important; color: var(--coc-text) !important; }
+  .lesson-header { background: color-mix(in srgb, var(--coc-surface-raised) 92%, transparent) !important; border-color: var(--coc-line) !important; }
+  .lesson-shell .lesson-paper,
+  .lesson-shell .lesson-history,
+  .lesson-shell .lesson-feedback,
+  .lesson-shell .lesson-notes,
+  .lesson-shell .lesson-coaching,
+  .lesson-shell .lesson-analysis { background: var(--coc-surface-raised) !important; border-color: var(--coc-line-strong) !important; color: var(--coc-text) !important; border-radius: var(--coc-radius) !important; }
+  .lesson-shell h1, .lesson-shell h2, .lesson-shell h3 { color: var(--coc-ink) !important; }
+  .lesson-shell .lesson-paper p,
+  .lesson-shell .lesson-history p,
+  .lesson-shell .lesson-feedback p,
+  .lesson-shell .lesson-notes p,
+  .lesson-shell .lesson-coaching p,
+  .lesson-shell .lesson-analysis p { color: var(--coc-muted) !important; }
+  .lesson-board-card { border-radius: var(--coc-radius); }
+}
+
+html.dark .lesson-shell .lesson-paper,
+html.dark .lesson-shell .lesson-history,
+html.dark .lesson-shell .lesson-feedback,
+html.dark .lesson-shell .lesson-notes,
+html.dark .lesson-shell .lesson-coaching,
+html.dark .lesson-shell .lesson-analysis { background: #18332c !important; color: #edf4ed !important; }
+html.dark .lesson-shell .lesson-paper p,
+html.dark .lesson-shell .lesson-history p,
+html.dark .lesson-shell .lesson-feedback p,
+html.dark .lesson-shell .lesson-notes p,
+html.dark .lesson-shell .lesson-coaching p,
+html.dark .lesson-shell .lesson-analysis p { color: #cbd9ce !important; }
+
+html.dark .account-shell .bg-\[\#173e37\] { background: #16352d !important; color: #f3f8f1 !important; }
+html.dark .account-shell .bg-\[\#173e37\] .text-\[\#d2d8ca\],
+html.dark .account-shell .bg-\[\#173e37\] .text-\[\#fffaf0\] { color: #d7e4d9 !important; }
+html.dark .page-shell .text-\[\#3c4c43\],
+html.dark .page-shell .text-\[\#8d846f\],
+html.dark .echequier-site .text-\[\#3c4c43\],
+html.dark .echequier-site .text-\[\#8d846f\] { color: var(--coc-muted) !important; }
+html.dark .page-shell .text-\[\#987019\],
+html.dark .page-shell .text-\[\#9a6b18\],
+html.dark .echequier-site .text-\[\#987019\],
+html.dark .echequier-site .text-\[\#9a6b18\] { color: var(--coc-saffron) !important; }
+
+html.dark .page-shell.account-shell [data-slot="card"].bg-\[\#173e37\] {
+  background-color: #16352d !important;
+  background-image: none !important;
+  color: #f3f8f1 !important;
+}
+
+.account-form-panel { background: var(--coc-ink) !important; color: var(--coc-surface-raised) !important; }
+.account-form-panel input { background: #21473e !important; color: #fffaf0 !important; border-color: #66857c !important; }
+html.dark .account-form-panel { background: #16352d !important; color: #f3f8f1 !important; }
+html.dark .account-form-panel input { background: #21473e !important; color: #f3f8f1 !important; border-color: #66857c !important; }
+
+:root { --coc-account-panel: #173e37; }
+html.dark { --coc-account-panel: #16352d; }

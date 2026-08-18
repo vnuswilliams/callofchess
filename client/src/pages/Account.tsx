@@ -34,10 +34,6 @@ export default function Account() {
 
     supabase.auth.getUser().then(({ data }) => {
       if (!active) return;
-      if (data.user && !isRecovery) {
-        setLocation("/profile");
-        return;
-      }
       setUser(data.user ? { id: data.user.id, email: data.user.email } : null);
     });
 
@@ -125,7 +121,7 @@ export default function Account() {
   const formMode = mode === "update" ? "update" : mode;
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-[#f7f0df] px-4 py-5 text-[#173e37] sm:px-6 sm:py-8 lg:px-10 lg:py-12">
+    <main className="page-shell account-shell min-h-screen overflow-x-hidden bg-[#f7f0df] px-4 py-5 text-[#173e37] sm:px-6 sm:py-8 lg:px-10 lg:py-12">
       <div className="mx-auto flex w-full max-w-6xl justify-between gap-4 pb-5 sm:pb-8">
         <a href="/" className="self-center text-xs font-extrabold uppercase tracking-[.14em] text-[#987019]">← {t("inline_1632735855")}</a>
         <button type="button" onClick={toggleLanguage} className="rounded-md border border-[#cbbd99] px-3 py-2 text-[.68rem] font-extrabold uppercase tracking-[.12em] transition-colors hover:border-[#a87416]" aria-label={t("inline_e0aa42db72")}>{t("inline_43d5c6585d")}</button>
@@ -145,7 +141,7 @@ export default function Account() {
           </CardContent>
         </Card>
 
-        <Card className="min-w-0 rounded-2xl border-[#496d61] bg-[#173e37] text-[#fffaf0] shadow-sm">
+        <Card className="account-form-panel min-w-0 rounded-2xl border-[#496d61] bg-[#173e37] text-[#fffaf0] shadow-sm" style={{ backgroundColor: "var(--coc-account-panel)" }}>
           {user && mode !== "update" ? (
             <>
               <CardHeader className="p-6 sm:p-8 lg:p-10">

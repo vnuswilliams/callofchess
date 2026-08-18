@@ -38,7 +38,7 @@ export default function Leaderboard() {
     return () => { active = false; };
   }, []);
 
-  return <main className="min-h-screen bg-[#f7f0df] px-5 py-10 text-[#173e37] sm:px-8 lg:px-12">
+  return <main className="page-shell leaderboard-shell min-h-screen bg-[#f7f0df] px-5 py-10 text-[#173e37] sm:px-8 lg:px-12">
     <div className="mx-auto flex max-w-6xl items-center justify-between">
       <Link href="/profile" className="inline-flex items-center gap-2 text-[.7rem] font-extrabold uppercase tracking-[.14em] text-[#987019]"><ArrowLeft size={14} /> {t("inline_15df63a1c9")}</Link>
       <button type="button" onClick={toggleLanguage} className="border border-[#cbbd99] px-3 py-2 text-[.68rem] font-extrabold uppercase tracking-[.12em]" aria-label={t("inline_e0aa42db72")}>{t("inline_43d5c6585d")}</button>
