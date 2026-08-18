@@ -9,24 +9,27 @@ import { isLevelUnlocked, learningPath, type PathLevel } from "@/lib/learningPat
 
 type ProgressRow = { lesson_id: string; completed: boolean; completed_step: number };
 
+const lessonIdsByLevel: Record<number, string[]> = {
+  0: ["1", "2", "3"],
+};
+
 function levelCompletion(level: PathLevel, completedLessons: Set<string>) {
-  if (level.id === 0) return Math.min(level.exercises.length, completedLessons.has("1") ? 1 : 0);
-  if (level.id === 1) return Math.min(level.exercises.length, ["1", "2", "3"].filter((id) => completedLessons.has(id)).length);
-  return 0;
+  const lessonIds = lessonIdsByLevel[level.id] ?? [];
+  return Math.min(level.exercises.length, lessonIds.filter((id) => completedLessons.has(id)).length);
 }
 
 const playableLessonForExercise: Record<string, string> = {
-  "1-center": "/lesson/1",
-  "1-development": "/lesson/2",
-  "1-safety": "/lesson/3",
+  "0-center": "/lesson/1",
+  "0-development": "/lesson/2",
+  "0-safety": "/lesson/3",
 };
 
-function LevelCard({ level, language, completedLessons, t }: { level: PathLevel; language: "fr" | "en"; completedLessons: Set<string>; t: (key: string) => string }) {
+function LevelCard({ level, language, completedLessons, completedLevels, t }: { level: PathLevel; language: "fr" | "en"; completedLessons: Set<string>; completedLevels: Set<string>; t: (key: string) => string }) {
   const copy = level[language];
-  const unlocked = isLevelUnlocked(level, completedLessons);
+  const unlocked = isLevelUnlocked(level, completedLevels);
   const completed = levelCompletion(level, completedLessons);
   const progress = Math.round((completed / level.exercises.length) * 100);
-  const lessonLink = level.id === 1 ? "/lesson/1" : level.id === 2 ? "/lesson/2" : level.id === 3 ? "/lesson/3" : null;
+  const lessonLink = level.id === 0 ? "/lesson/1" : null;
 
   return (
     <Card className={`relative overflow-hidden rounded-xl p-0 transition-all ${unlocked ? "border-[#cbbd99] bg-[#fffaf0] hover:-translate-y-1 hover:border-[#d69024]" : "border-[#d7ccb0] bg-[#eee8d8]/70"}`}>
@@ -74,7 +77,8 @@ export default function Path() {
   }, []);
 
   const completedLessons = useMemo(() => new Set(rows.filter((row) => row.completed).map((row) => row.lesson_id)), [rows]);
-  const unlockedCount = useMemo(() => learningPath.filter((level) => isLevelUnlocked(level, completedLessons)).length, [completedLessons]);
+  const completedLevels = useMemo(() => new Set(learningPath.filter((level) => levelCompletion(level, completedLessons) === level.exercises.length).map((level) => `level-${level.id}`)), [completedLessons]);
+  const unlockedCount = useMemo(() => learningPath.filter((level) => isLevelUnlocked(level, completedLevels)).length, [completedLevels]);
 
   useEffect(() => {
     const title = t("inline_5026e76f67");
@@ -86,5 +90,5 @@ export default function Path() {
     return () => { document.title = "Échiquier — Apprendre les échecs simplement"; previous.forEach(({ element, content }) => { if (element && content !== undefined) element.content = content; }); };
   }, [fr]);
 
-  return <main className="min-h-screen bg-[#f7f0df] px-5 py-10 text-[#173e37] sm:px-8 lg:px-12"><div className="mx-auto max-w-6xl"><div className="flex items-center justify-between"><Link href="/" className="inline-flex items-center gap-2 text-[.7rem] font-extrabold uppercase tracking-[.14em] text-[#987019]"><ArrowLeft size={15} />{t("inline_fa503a5668")}</Link><button type="button" onClick={toggleLanguage} className="border border-[#cbbd99] px-3 py-2 text-[.68rem] font-extrabold uppercase tracking-[.12em] hover:border-[#a87416]" aria-label={t("inline_e0aa42db72")}>{t("inline_43d5c6585d")}</button></div><header className="mt-14 max-w-4xl"><p className="eyebrow">{t("inline_0209d32c54")}</p><h1 className="display-font mt-4 text-6xl leading-[.88] sm:text-8xl">{t("inline_c466d21aa6")}</h1><p className="mt-6 max-w-2xl text-base leading-8 text-[#625d50]">{t("inline_5990220220")}</p></header><section className="mt-10 grid gap-px border border-[#cbbd99] bg-[#cbbd99] sm:grid-cols-3"><div className="bg-[#fffaf0] p-5"><Trophy className="text-[#a87416]" size={18} /><p className="mt-4 font-mono text-3xl font-bold">18</p><p className="mt-2 text-[.65rem] font-extrabold uppercase tracking-[.12em] text-[#756c58]">{t("inline_3f50f56a9d")}</p></div><div className="bg-[#fffaf0] p-5"><BookOpen className="text-[#a87416]" size={18} /><p className="mt-4 font-mono text-3xl font-bold">{learningPath.reduce((total, level) => total + level.exercises.length, 0)}</p><p className="mt-2 text-[.65rem] font-extrabold uppercase tracking-[.12em] text-[#756c58]">{t("inline_5df6582ce4")}</p></div><div className="bg-[#fffaf0] p-5"><CheckCircle2 className="text-[#a87416]" size={18} /><p className="mt-4 font-mono text-3xl font-bold">{loading ? "—" : `${unlockedCount}/18`}</p><p className="mt-2 text-[.65rem] font-extrabold uppercase tracking-[.12em] text-[#756c58]">{t("inline_b00728a93d")}</p></div></section>{!signedIn && !loading && <p className="mt-5 text-sm text-[#756c58]">{t("inline_96ad6ff41d")} <Link href="/account" className="font-bold text-[#987019] underline">{t("inline_b1b675116c")}</Link></p>}<section className="mt-12 space-y-5" aria-label={t("inline_ba27f65ddd")}>{learningPath.map((level) => <LevelCard key={level.id} level={level} language={language} completedLessons={completedLessons} t={t} />)}</section></div></main>;
+  return <main className="min-h-screen bg-[#f7f0df] px-5 py-10 text-[#173e37] sm:px-8 lg:px-12"><div className="mx-auto max-w-6xl"><div className="flex items-center justify-between"><Link href="/" className="inline-flex items-center gap-2 text-[.7rem] font-extrabold uppercase tracking-[.14em] text-[#987019]"><ArrowLeft size={15} />{t("inline_fa503a5668")}</Link><button type="button" onClick={toggleLanguage} className="border border-[#cbbd99] px-3 py-2 text-[.68rem] font-extrabold uppercase tracking-[.12em] hover:border-[#a87416]" aria-label={t("inline_e0aa42db72")}>{t("inline_43d5c6585d")}</button></div><header className="mt-14 max-w-4xl"><p className="eyebrow">{t("inline_0209d32c54")}</p><h1 className="display-font mt-4 text-6xl leading-[.88] sm:text-8xl">{t("inline_c466d21aa6")}</h1><p className="mt-6 max-w-2xl text-base leading-8 text-[#625d50]">{t("inline_5990220220")}</p></header><section className="mt-10 grid gap-px border border-[#cbbd99] bg-[#cbbd99] sm:grid-cols-3"><div className="bg-[#fffaf0] p-5"><Trophy className="text-[#a87416]" size={18} /><p className="mt-4 font-mono text-3xl font-bold">18</p><p className="mt-2 text-[.65rem] font-extrabold uppercase tracking-[.12em] text-[#756c58]">{t("inline_3f50f56a9d")}</p></div><div className="bg-[#fffaf0] p-5"><BookOpen className="text-[#a87416]" size={18} /><p className="mt-4 font-mono text-3xl font-bold">{learningPath.reduce((total, level) => total + level.exercises.length, 0)}</p><p className="mt-2 text-[.65rem] font-extrabold uppercase tracking-[.12em] text-[#756c58]">{t("inline_5df6582ce4")}</p></div><div className="bg-[#fffaf0] p-5"><CheckCircle2 className="text-[#a87416]" size={18} /><p className="mt-4 font-mono text-3xl font-bold">{loading ? "—" : `${unlockedCount}/18`}</p><p className="mt-2 text-[.65rem] font-extrabold uppercase tracking-[.12em] text-[#756c58]">{t("inline_b00728a93d")}</p></div></section>{!signedIn && !loading && <p className="mt-5 text-sm text-[#756c58]">{t("inline_96ad6ff41d")} <Link href="/account" className="font-bold text-[#987019] underline">{t("inline_b1b675116c")}</Link></p>}<section className="mt-12 space-y-5" aria-label={t("inline_ba27f65ddd")}>{learningPath.map((level) => <LevelCard key={level.id} level={level} language={language} completedLessons={completedLessons} completedLevels={completedLevels} t={t} />)}</section></div></main>;
 }
