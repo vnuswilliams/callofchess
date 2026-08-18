@@ -2,5 +2,12 @@
   "settings": "Settings",
   "appearance": "Appearance",
   "language": "Language",
-  "theme": "Theme"
+  "theme": "Theme",
+  "deleteAccount": "Delete my account",
+  "deleteAccountTitle": "Delete your account permanently?",
+  "deleteAccountDescription": "This action deletes your account and progress data. It is permanent and cannot be undone.",
+  "confirmDeleteAccount": "Delete permanently",
+  "deleteAccountLoading": "Deleting…",
+  "deleteAccountError": "The account could not be deleted. Check that the Supabase deletion function is configured, then try again.",
+  "cancel": "Cancel"
 }

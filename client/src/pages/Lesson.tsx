@@ -4,6 +4,7 @@ import { Chess, type Square } from "chess.js";
 import { Chessboard } from "react-chessboard";
 import { ArrowLeft, Check, ChevronRight, CircleHelp, Cpu, Lightbulb, Loader2, RotateCcw, Sparkles, SquareArrowOutUpRight, Trophy } from "lucide-react";
 import { useStockfish } from "@/hooks/useStockfish";
+import AccountDeletion from "@/components/AccountDeletion";
 import { classifyMistake, enrichMistakeWithEngine, explainEngineForBeginner, formatEngineMove, formatPrincipalVariation, formatUciAsSan, type PedagogicalMistake } from "@/lib/pedagogicalFeedback";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -224,7 +225,7 @@ export default function Lesson() {
         <div className="mx-auto flex min-h-[76px] max-w-[1440px] items-center justify-between px-5 sm:px-8 lg:px-12">
           <a href="/" className="flex items-center gap-3" aria-label="Retour à l’accueil Échiquier"><BrandMark /><div className="leading-none"><span className="display-font block text-[1.55rem] tracking-[-.04em]">Échiquier</span><span className="block pt-1 text-[.58rem] font-extrabold uppercase tracking-[.16em] text-[#766d57]">{t("guidedLesson")}</span></div></a>
           <div className="hidden items-center gap-3 sm:flex"><span className="font-mono text-[.64rem] font-bold tracking-[.1em] text-[#9a6b18]">{t("lesson").toUpperCase()} {lesson.number} / 03</span><span className="h-px w-10 bg-[#c5b58f]" /><span className="text-xs font-bold uppercase tracking-[.12em] text-[#59655e]">{language === "fr" ? lesson.title : id === "1" ? "The center" : id === "2" ? "Development" : "King safety"}</span></div><LanguageToggle />
-          <div className="flex items-center gap-4"><a href="/account" className="text-[.66rem] font-extrabold uppercase tracking-[.11em] text-[#173e37] transition-colors hover:text-[#a87416]">{t("account")}</a><a href="/" className="inline-flex items-center gap-2 text-[.68rem] font-extrabold uppercase tracking-[.11em] text-[#173e37] transition-colors hover:text-[#a87416]"><ArrowLeft size={16} /> {t("back")}</a></div>
+          <div className="flex items-center gap-4"><a href="/account" className="text-[.66rem] font-extrabold uppercase tracking-[.11em] text-[#173e37] transition-colors hover:text-[#a87416]">{t("account")}</a><AccountDeletion className="hidden sm:inline-flex" /><a href="/" className="inline-flex items-center gap-2 text-[.68rem] font-extrabold uppercase tracking-[.11em] text-[#173e37] transition-colors hover:text-[#a87416]"><ArrowLeft size={16} /> {t("back")}</a></div>
         </div>
       </header>
 

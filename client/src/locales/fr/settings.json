@@ -2,5 +2,12 @@
   "settings": "Réglages",
   "appearance": "Apparence",
   "language": "Langue",
-  "theme": "Thème"
+  "theme": "Thème",
+  "deleteAccount": "Supprimer mon compte",
+  "deleteAccountTitle": "Supprimer définitivement votre compte ?",
+  "deleteAccountDescription": "Cette action supprime votre compte et vos données de progression. Elle est définitive et ne peut pas être annulée.",
+  "confirmDeleteAccount": "Supprimer définitivement",
+  "deleteAccountLoading": "Suppression…",
+  "deleteAccountError": "La suppression n’a pas pu être effectuée. Vérifiez que la fonction de suppression Supabase est configurée, puis réessayez.",
+  "cancel": "Annuler"
 }

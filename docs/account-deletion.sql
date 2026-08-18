@@ -1,0 +1,19 @@
+-- Run this migration in the Supabase SQL editor before enabling account deletion.
+-- The function can only delete the currently authenticated user.
+create or replace function public.delete_current_user()
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if auth.uid() is null then
+    raise exception 'not authenticated';
+  end if;
+
+  delete from auth.users where id = auth.uid();
+end;
+$$;
+
+revoke all on function public.delete_current_user() from public;
+grant execute on function public.delete_current_user() to authenticated;
