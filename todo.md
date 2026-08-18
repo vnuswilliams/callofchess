@@ -363,3 +363,11 @@ La correction ne nécessite pas de migration Supabase ni de modification de donn
 ## Test réel du partage de badge — 2026-08-18
 
 Le test a été effectué depuis une session utilisateur connectée sur `https://callofchess.online/profile`. Le badge `Premier pas` a été partagé avec succès : le bouton est devenu `Lien copié`, puis l’URL publique `https://callofchess.online/profile?badge=first-step` a chargé correctement la page Profil. Aucun message lié à un appareil indisponible n’est apparu. Le comportement validé est le repli vers la copie du lien lorsque le partage natif n’est pas disponible dans le navigateur de test.
+
+## Correctif mission et échiquier mobile — 18 août 2026
+
+- [x] Rendre la mission active sticky et compacte sur mobile, sans modifier la composition desktop.
+- [x] Dimensionner l’échiquier à la largeur disponible et prévenir les débordements horizontaux.
+- [x] Ajouter un test Vitest du contrat de layout responsive.
+- [x] Valider le typecheck, le test ciblé, le build et les aperçus mobile/desktop locaux.
+- [ ] Confirmer que ce commit est servi sur `https://callofchess.online`.

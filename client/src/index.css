@@ -264,6 +264,17 @@ html.dark .lesson-notes p, html.dark .lesson-notes .text-\[\#615d50\] { color: #
   .echequier-hero > div { gap: 2.5rem; }
   .echequier-path, .echequier-method, .echequier-puzzle { padding-top: 4.5rem !important; padding-bottom: 4.5rem !important; }
   .echequier-path article { min-height: 250px; }
+
+  /* Keep the learner's objective in view while the board is being played. */
+  .lesson-workspace { min-width: 0; }
+  .lesson-workspace > .lesson-mission {
+    border-top: 3px solid var(--coc-saffron) !important;
+    box-shadow: var(--coc-shadow-md);
+  }
+  .lesson-workspace > .lesson-board-card,
+  .lesson-workspace > .lesson-feedback,
+  .lesson-workspace > .lesson-history { min-width: 0; }
+  .lesson-board-wrap { width: 100%; max-width: 100%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
