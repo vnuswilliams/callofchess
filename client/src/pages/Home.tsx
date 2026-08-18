@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { ArrowDown, ArrowUpRight, Check, ChevronRight, Menu, Moon, Sparkles, Sun, X } from "lucide-react";
 import LandingChessboard from "@/components/LandingChessboard";
-import AccountDeletion from "@/components/AccountDeletion";
+import AccountMenu from "@/components/AccountMenu";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -61,10 +61,10 @@ export default function Home() {
             <a className="transition-colors hover:text-[#8b6217]" href="#methode">{t("inline_3667a3f751")}</a>
             <a className="transition-colors hover:text-[#8b6217]" href="#puzzle">{t("inline_ad229869c0")}</a>
           </nav>
-          <div className="hidden items-center gap-3 lg:flex"><LanguageToggle /><ThemeToggle /><a href="/account" className="text-[.65rem] font-extrabold uppercase tracking-[.12em] text-[#173e37] hover:text-[#8b6217]">{t("account")}</a><AccountDeletion /><Button asChild size="lg" className="rounded-lg bg-[#173e37] text-[#fffaf0] hover:bg-[#285448]"><Link href="/lesson/1">{t("tryFirstMove")} <ArrowUpRight size={15} /></Link></Button></div>
+          <div className="hidden items-center gap-3 lg:flex"><LanguageToggle /><ThemeToggle /><AccountMenu /><Button asChild size="lg" className="rounded-lg bg-[#173e37] text-[#fffaf0] hover:bg-[#285448]"><Link href="/lesson/1">{t("tryFirstMove")} <ArrowUpRight size={15} /></Link></Button></div>
           <div className="flex items-center gap-2 lg:hidden"><LanguageToggle /><ThemeToggle /><button className="grid h-11 w-11 place-items-center border border-[#b8aa86]" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label={t("inline_c3e6876683")}>{menuOpen ? <X size={22} /> : <Menu size={22} />}</button></div>
         </div>
-        {menuOpen && <div className="echequier-mobile-menu absolute inset-x-0 top-full border-b border-[#cbc09f] bg-[#fbf6e9] px-5 py-5 shadow-xl lg:hidden"><nav className="flex flex-col gap-4 text-sm font-extrabold"><a onClick={closeMenu} href="/path">{t("inline_8ce4187b64")}</a><a onClick={closeMenu} href="#methode">{t("inline_3667a3f751")}</a><a onClick={closeMenu} href="#puzzle">{t("inline_ad229869c0")}</a><a onClick={closeMenu} href="/account">{t("account")}</a><AccountDeletion className="pt-1 text-left" /></nav></div>}
+        {menuOpen && <div className="echequier-mobile-menu absolute inset-x-0 top-full border-b border-[#cbc09f] bg-[#fbf6e9] px-5 py-5 shadow-xl lg:hidden"><nav className="flex flex-col gap-4 text-sm font-extrabold"><a onClick={closeMenu} href="/path">{t("inline_8ce4187b64")}</a><a onClick={closeMenu} href="#methode">{t("inline_3667a3f751")}</a><a onClick={closeMenu} href="#puzzle">{t("inline_ad229869c0")}</a><AccountMenu className="w-full justify-start border-0 px-0" /></nav></div>}
       </header>
 
       <main id="top">

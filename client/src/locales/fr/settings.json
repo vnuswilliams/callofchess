@@ -1,5 +1,6 @@
 {
   "settings": "Réglages",
+  "accountMenu": "Mon compte",
   "appearance": "Apparence",
   "language": "Langue",
   "theme": "Thème",
@@ -9,5 +10,8 @@
   "confirmDeleteAccount": "Supprimer définitivement",
   "deleteAccountLoading": "Suppression…",
   "deleteAccountError": "La suppression n’a pas pu être effectuée. Vérifiez que la fonction de suppression Supabase est configurée, puis réessayez.",
-  "cancel": "Annuler"
+  "cancel": "Annuler",
+  "signOut": "Se déconnecter",
+  "signOutLoading": "Déconnexion…",
+  "signOutError": "La déconnexion a échoué. Veuillez réessayer."
 }

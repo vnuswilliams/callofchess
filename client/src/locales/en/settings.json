@@ -1,5 +1,6 @@
 {
   "settings": "Settings",
+  "accountMenu": "My account",
   "appearance": "Appearance",
   "language": "Language",
   "theme": "Theme",
@@ -9,5 +10,8 @@
   "confirmDeleteAccount": "Delete permanently",
   "deleteAccountLoading": "Deleting…",
   "deleteAccountError": "The account could not be deleted. Check that the Supabase deletion function is configured, then try again.",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "signOut": "Sign out",
+  "signOutLoading": "Signing out…",
+  "signOutError": "Sign out failed. Please try again."
 }
