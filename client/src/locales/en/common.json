@@ -236,6 +236,12 @@
   "inline_3141ceb11f": "The position is close to balanced. The best move is mainly the one that improves your pieces and keeps a simple plan.",
   "inline_b0535f021e": "Before your next move, which piece is least active and which threat should you check?",
   "notFound": {
+    "eyebrow": "A path detour",
+    "pathLabel": "Position off path",
+    "notationCaption": "The next move starts here",
+    "puzzleLabel": "Automatic mate in one",
+    "puzzleThinking": "The next move is forming…",
+    "puzzleCheckmate": "Checkmate",
     "title": "Page not found",
     "description": "The page you are looking for does not exist or has moved.",
     "home": "Back to home"

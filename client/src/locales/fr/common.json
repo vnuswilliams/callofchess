@@ -236,6 +236,12 @@
   "inline_3141ceb11f": "La position reste proche de l’équilibre. Le bon coup est surtout celui qui améliore vos pièces et garde un plan simple.",
   "inline_b0535f021e": "Avant votre prochain coup, quelle pièce est la moins active et quelle menace devez-vous vérifier?",
   "notFound": {
+    "eyebrow": "Détour de parcours",
+    "pathLabel": "Position hors parcours",
+    "notationCaption": "Le prochain coup commence ici",
+    "puzzleLabel": "Mat en 1 coup automatique",
+    "puzzleThinking": "Le prochain coup se prépare…",
+    "puzzleCheckmate": "Échec et mat",
     "title": "Page introuvable",
     "description": "La page que vous cherchez n’existe pas ou a été déplacée.",
     "home": "Retour à l’accueil"
