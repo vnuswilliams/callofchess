@@ -3,11 +3,11 @@ import { authRedirect, authRedirectOrigin } from "@/lib/authRedirects";
 
 describe("authentication redirects", () => {
   it("uses the production Call of Chess origin by default", () => {
-    expect(authRedirectOrigin).toBe("https://callofchess.vercel.app");
+    expect(authRedirectOrigin).toBe("https://www.callofchess.online");
   });
 
   it("normalizes paths without exposing a local origin", () => {
-    expect(authRedirect("/account")).toBe("https://callofchess.vercel.app/account");
-    expect(authRedirect("account?reset=1")).toBe("https://callofchess.vercel.app/account?reset=1");
+    expect(authRedirect("/account")).toBe("https://www.callofchess.online/account");
+    expect(authRedirect("account?reset=1")).toBe("https://www.callofchess.online/account?reset=1");
   });
 });

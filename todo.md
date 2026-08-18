@@ -316,3 +316,9 @@ Constat final du diagnostic autonome : l’incident officiel GitHub du 17 août 
 - [x] Forcer les liens de confirmation d’inscription et de récupération vers l’origine canonique de production dans le client.
 - [x] Préparer le modèle HTML responsive et contrasté Call of Chess dans `docs/email-template-confirm-signup.html`.
 - [ ] Configurer un SMTP personnalisé avec une adresse d’envoi vérifiée afin de remplacer l’expéditeur par défaut Supabase Auth et activer le modèle personnalisé.
+
+## Domaine Vercel confirmé
+
+- [x] Vérifier dans le projet Vercel `callofchess` que le domaine de production affiché et fonctionnel est `https://www.callofchess.online`.
+- [x] Aligner la Site URL et une redirection Supabase sur `https://www.callofchess.online` sans configurer de SMTP.
+- [x] Remplacer les liens canoniques et les redirections d’authentification actifs de l’application par le domaine vérifié.

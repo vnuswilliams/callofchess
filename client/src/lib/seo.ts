@@ -5,7 +5,7 @@ export type PageMeta = {
   language?: 'fr' | 'en';
 };
 
-const productionOrigin = 'https://callofchess.vercel.app';
+const productionOrigin = 'https://www.callofchess.online';
 
 function upsertMeta(attribute: 'name' | 'property', key: string, content: string) {
   let element = document.querySelector(`meta[${attribute}="${key}"]`) as HTMLMetaElement | null;

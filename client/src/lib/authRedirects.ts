@@ -6,6 +6,6 @@
  * It can be replaced later with VITE_PUBLIC_SITE_URL without changing the
  * authentication flow.
  */
-export const authRedirectOrigin = (import.meta.env.VITE_PUBLIC_SITE_URL as string | undefined)?.replace(/\/$/, "") || "https://callofchess.vercel.app";
+export const authRedirectOrigin = (import.meta.env.VITE_PUBLIC_SITE_URL as string | undefined)?.replace(/\/$/, "") || "https://www.callofchess.online";
 
 export const authRedirect = (path: string) => `${authRedirectOrigin}${path.startsWith("/") ? path : `/${path}`}`;
