@@ -933,3 +933,11 @@ html.dark .not-found-puzzle-status { color: #fffaf0; }
   .not-found-puzzle-label { left: 1.5rem; right: auto; top: 3rem; }
   .not-found-notation-caption { bottom: 3.2rem; right: 1.5rem; }
 }
+
+/* The 404 board stays grounded like the landing composition; only the chess move animates. */
+@media (prefers-reduced-motion: no-preference) {
+  .not-found-board-frame {
+    animation: none !important;
+    transform: rotate(-5deg);
+  }
+}
