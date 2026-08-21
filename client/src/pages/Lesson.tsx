@@ -8,6 +8,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/lib/supabase";
 import { PUBLIC_LESSON_ID_BY_KEY, toLessonKey } from "@/lib/lessonIds";
 import { getFirstIncompleteLessonDestination, LESSON_MOVE_ANIMATION_MS, LESSON_STEP_TRANSITION_DELAY_MS, LESSON_SUCCESS_ANIMATION_MS } from "@/lib/lessonTransition";
+import { mergeLessonProgress, normalizeProgressLessonIds, type LearningPathProgressRow } from "@/lib/learningPathProgress";
 import { getNextStepPosition, lessonCatalog, reconstructPosition, type LessonDefinition } from "@/lib/levelZeroLessons";
 import TheoryLesson from "@/pages/TheoryLesson";
 import DrawsLesson from "@/pages/DrawsLesson";
@@ -45,6 +46,7 @@ function GuidedLesson() {
   const [isCelebrating, setIsCelebrating] = useState(false);
   const replyTimer = useRef<number | null>(null);
   const completedLessonIdsRef = useRef<Set<string>>(new Set());
+  const completedProgressRef = useRef<LearningPathProgressRow | null>(null);
   const completionTransitionStartedRef = useRef(false);
   const completed = currentStep >= lesson.steps.length;
   const activeStep = lesson.steps[Math.min(currentStep, lesson.steps.length - 1)];
@@ -60,6 +62,7 @@ function GuidedLesson() {
   useEffect(() => {
     clearReplyTimer();
     completionTransitionStartedRef.current = false;
+    completedProgressRef.current = null;
     setIsCelebrating(false);
     setPosition(lesson.steps[0]?.positionFen ?? lesson.startingFen);
     setCurrentStep(0);
@@ -74,8 +77,10 @@ function GuidedLesson() {
       if (!user || !active) return;
       const { data } = await supabase.from("lesson_progress").select("lesson_id, completed_steps, completed, current_fen").eq("user_id", user.id).limit(Object.keys(PUBLIC_LESSON_ID_BY_KEY).length);
       if (!active || !data) return;
-      completedLessonIdsRef.current = new Set(data.filter((row) => row.completed && typeof row.lesson_id === "string").map((row) => row.lesson_id));
-      const currentProgress = data.find((row) => row.lesson_id === publicLessonId);
+      const progressRows = normalizeProgressLessonIds(data as LearningPathProgressRow[]);
+      completedLessonIdsRef.current = new Set(progressRows.filter((row) => row.completed).map((row) => row.lesson_id));
+      const currentProgress = progressRows.find((row) => row.lesson_id === publicLessonId);
+      completedProgressRef.current = currentProgress ?? null;
       if (!currentProgress || !Number.isFinite(currentProgress.completed_steps)) return;
       const restoredStep = Math.min(lesson.steps.length, currentProgress.completed_steps);
       setCurrentStep(restoredStep);
@@ -92,13 +97,20 @@ function GuidedLesson() {
     if (currentStep === 0) return;
     supabase.auth.getUser().then(async ({ data: { user } }) => {
       if (!user) return;
+      const progress = mergeLessonProgress(completedProgressRef.current, {
+        lesson_id: publicLessonId,
+        completed_steps: currentStep,
+        completed,
+      });
+      completedProgressRef.current = progress;
+      if (progress.completed) completedLessonIdsRef.current = new Set(completedLessonIdsRef.current).add(publicLessonId);
       await supabase.from("lesson_progress").upsert({
         user_id: user.id,
         lesson_id: publicLessonId,
-        completed_steps: currentStep,
+        completed_steps: progress.completed_steps,
         current_fen: position,
         move_history: history,
-        completed,
+        completed: progress.completed,
         updated_at: new Date().toISOString(),
       }, { onConflict: "user_id,lesson_id" });
     }).catch(() => undefined);
