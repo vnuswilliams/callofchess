@@ -17,3 +17,21 @@ La troisième séquence d1–h5 a été validée localement. La page affiche 04 
 Après le clic final h5–f7, la carte temporaire de réussite est apparue immédiatement au-dessus de la page avec « Leçon terminée », « Très bien joué. » et « La prochaine leçon arrive… ». L’état sous-jacent affiche `4. Dxf7#` et « Objectif rempli », confirmant que l’animation est déclenchée au bon moment et n’efface pas le résultat pédagogique.
 
 Une capture headless en 390×844 confirme le rendu mobile : l’en-tête reste lisible, la mission apparaît avant l’échiquier selon le layout mobile existant, les contrôles conservent une taille utilisable et aucun débordement horizontal n’est visible dans le premier viewport. La capture source est conservée comme artefact de vérification local.
+
+## Ajustement de l’animation — 21 août 2026
+
+La durée de transition est passée de 1,2 seconde à 2,4 secondes. Le test interactif local de la séquence complète atteint bien l’état « Leçon terminée » avant la navigation ; à environ 450 ms après le coup final, l’URL reste encore sur la leçon et 18 particules de confettis sont présentes dans la surcouche. Les confettis utilisent les couleurs de Call of Chess — vert encre, safran, or clair, vert succès et terre cuite — et sont masqués avec `prefers-reduced-motion`.
+
+Une seconde vérification interactive locale s’arrête à 300 ms après le mat final : l’URL reste sur la leçon, la surcouche `.lesson-success-overlay` est active et les 18 confettis sont présents. La redirection n’intervient donc pas avant l’affichage de la célébration.
+
+La capture mobile 390×844 après l’ajustement conserve l’ordre mission puis échiquier, les textes lisibles et aucun débordement horizontal dans le premier viewport. La couche de confettis reste hors du flux normal et ne modifie pas la géométrie de la page.
+
+La route publique `https://callofchess.online/lesson/bc8a719d-d4e6-5d3e-90c1-58292c6fe8f4` répond correctement après le push du correctif. Le contenu du bundle public reste à contrôler pour confirmer la durée `2400` et les styles de confettis.
+
+## Redirection intelligente — 21 août 2026
+
+La destination de fin de leçon ne suit plus simplement l’UUID suivant. `getFirstIncompleteLessonDestination` parcourt les six leçons publiques dans leur ordre canonique, ignore les lignes `completed = true` de l’utilisateur authentifié, puis ouvre la première leçon restante. La leçon tout juste terminée est ajoutée immédiatement au jeu local et la requête Supabase est rafraîchie après la célébration ; si toutes les leçons sont terminées ou si aucune progression ne peut être lue, la destination est `/path`.
+
+Le schéma Supabase vérifié expose `lesson_progress` avec la clé primaire `(user_id, lesson_id)`, les colonnes `completed_steps`, `completed`, `current_fen` et `updated_at`, et l’accès reste filtré par l’utilisateur authentifié. La lecture est bornée à six lignes et aucune migration n’est nécessaire.
+
+Après propagation du dernier push, `callofchess.online` sert l’index `index-6HzymxZi.js` et le chunk `Lesson-bJwSMAMF.js`. Ce chunk contient `2400`, `lesson-confetti`, `lesson_progress` et `/path`, confirmant que la redirection intelligente et le retour vers le parcours sont présents dans la version publique.

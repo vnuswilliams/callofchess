@@ -7,7 +7,7 @@ import { useLocation, useParams } from "wouter";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/lib/supabase";
 import { PUBLIC_LESSON_ID_BY_KEY, toLessonKey } from "@/lib/lessonIds";
-import { getLessonCompletionDestination, LESSON_SUCCESS_ANIMATION_MS } from "@/lib/lessonTransition";
+import { getFirstIncompleteLessonDestination, LESSON_SUCCESS_ANIMATION_MS } from "@/lib/lessonTransition";
 import { lessonCatalog, reconstructPosition, type LessonDefinition } from "@/lib/levelZeroLessons";
 import TheoryLesson from "@/pages/TheoryLesson";
 import DrawsLesson from "@/pages/DrawsLesson";
@@ -43,6 +43,7 @@ function GuidedLesson() {
   const [isComputerReplying, setIsComputerReplying] = useState(false);
   const [isCelebrating, setIsCelebrating] = useState(false);
   const replyTimer = useRef<number | null>(null);
+  const completedLessonIdsRef = useRef<Set<string>>(new Set());
   const completionTransitionStartedRef = useRef(false);
   const completed = currentStep >= lesson.steps.length;
   const activeStep = lesson.steps[Math.min(currentStep, lesson.steps.length - 1)];
@@ -70,12 +71,15 @@ function GuidedLesson() {
     let active = true;
     supabase.auth.getUser().then(async ({ data: { user } }) => {
       if (!user || !active) return;
-      const { data } = await supabase.from("lesson_progress").select("completed_steps, completed, current_fen").eq("user_id", user.id).eq("lesson_id", publicLessonId).maybeSingle();
-      if (!active || !data || !Number.isFinite(data.completed_steps)) return;
-      const restoredStep = Math.min(lesson.steps.length, data.completed_steps);
+      const { data } = await supabase.from("lesson_progress").select("lesson_id, completed_steps, completed, current_fen").eq("user_id", user.id).limit(Object.keys(PUBLIC_LESSON_ID_BY_KEY).length);
+      if (!active || !data) return;
+      completedLessonIdsRef.current = new Set(data.filter((row) => row.completed && typeof row.lesson_id === "string").map((row) => row.lesson_id));
+      const currentProgress = data.find((row) => row.lesson_id === publicLessonId);
+      if (!currentProgress || !Number.isFinite(currentProgress.completed_steps)) return;
+      const restoredStep = Math.min(lesson.steps.length, currentProgress.completed_steps);
       setCurrentStep(restoredStep);
       setPosition(reconstructPosition(lesson.steps, restoredStep, lesson.startingFen));
-      if (data.completed) setFeedback("complete");
+      if (currentProgress.completed) setFeedback("complete");
     }).catch(() => undefined);
     return () => { active = false; };
   }, [lessonKey, publicLessonId]);
@@ -101,9 +105,27 @@ function GuidedLesson() {
 
   useEffect(() => {
     if (!isCelebrating) return;
-    const timer = window.setTimeout(() => setLocation(getLessonCompletionDestination(lessonKey)), LESSON_SUCCESS_ANIMATION_MS);
-    return () => window.clearTimeout(timer);
-  }, [isCelebrating, lessonKey, setLocation]);
+    let active = true;
+    const timer = window.setTimeout(() => {
+      const redirectToFirstIncompleteLesson = async () => {
+        let completedIds = new Set(completedLessonIdsRef.current);
+        try {
+          const { data: { user } } = await supabase.auth.getUser();
+          if (user) {
+            const { data } = await supabase.from("lesson_progress").select("lesson_id, completed").eq("user_id", user.id).limit(Object.keys(PUBLIC_LESSON_ID_BY_KEY).length);
+            if (data) completedIds = new Set(data.filter((row) => row.completed && typeof row.lesson_id === "string").map((row) => row.lesson_id));
+          }
+        } catch {
+          // Keep the locally known completion set when the optional refresh is unavailable.
+        }
+        completedIds.add(publicLessonId);
+        completedLessonIdsRef.current = completedIds;
+        if (active) setLocation(getFirstIncompleteLessonDestination(completedIds));
+      };
+      void redirectToFirstIncompleteLesson();
+    }, LESSON_SUCCESS_ANIMATION_MS);
+    return () => { active = false; window.clearTimeout(timer); };
+  }, [isCelebrating, publicLessonId, setLocation]);
 
   useEffect(() => {
     document.title = `${lessonTitle(lesson, copy)} — Call of Chess`;
@@ -137,6 +159,7 @@ function GuidedLesson() {
     const startCompletionTransition = () => {
       if (!isFinalStep || completionTransitionStartedRef.current) return;
       completionTransitionStartedRef.current = true;
+      completedLessonIdsRef.current = new Set(completedLessonIdsRef.current).add(publicLessonId);
       setIsCelebrating(true);
     };
     if (!reply) {
@@ -206,7 +229,7 @@ function GuidedLesson() {
 
   return (
     <div className="lesson-shell min-h-screen bg-[#f7f0df] text-[#203830]">
-      {isCelebrating && <div className="lesson-success-overlay pointer-events-none fixed inset-0 z-50 grid place-items-center bg-[#173e37]/25 px-5" role="status" aria-live="assertive" aria-atomic="true"><div className="lesson-success-card w-full max-w-sm border border-[#6f977c] bg-[#e9f0e6] p-6 text-center shadow-[12px_14px_0_rgba(42,50,41,.16)] sm:p-8"><div className="lesson-success-medallion mx-auto grid h-16 w-16 place-items-center rounded-full bg-[#d69024] text-[#173e37]" aria-hidden="true"><Trophy size={28} /></div><p className="display-font mt-5 text-3xl leading-none tracking-[-.04em] text-[#173e37]">{t("lessonSuccessTitle")}</p><p className="mt-3 text-sm leading-6 text-[#4e5146]">{t("inline_db305833f7")}</p><p className="mt-4 text-[.65rem] font-extrabold uppercase tracking-[.13em] text-[#467a5d]">{t("lessonSuccessNext")}</p></div></div>}
+      {isCelebrating && <div className="lesson-success-overlay pointer-events-none fixed inset-0 z-50 grid place-items-center bg-[#173e37]/25 px-5" role="status" aria-live="assertive" aria-atomic="true"><div className="lesson-confetti" aria-hidden="true">{Array.from({ length: 18 }, (_, index) => <span key={index} />)}</div><div className="lesson-success-card w-full max-w-sm border border-[#6f977c] bg-[#e9f0e6] p-6 text-center shadow-[12px_14px_0_rgba(42,50,41,.16)] sm:p-8"><div className="lesson-success-medallion mx-auto grid h-16 w-16 place-items-center rounded-full bg-[#d69024] text-[#173e37]" aria-hidden="true"><Trophy size={28} /></div><p className="display-font mt-5 text-3xl leading-none tracking-[-.04em] text-[#173e37]">{t("lessonSuccessTitle")}</p><p className="mt-3 text-sm leading-6 text-[#4e5146]">{t("inline_db305833f7")}</p><p className="mt-4 text-[.65rem] font-extrabold uppercase tracking-[.13em] text-[#467a5d]">{t("lessonSuccessNext")}</p></div></div>}
       <header className="lesson-header paper-texture border-b border-[#c9bb96]">
         <div className="mx-auto flex min-h-[76px] max-w-[1440px] items-center justify-between gap-4 px-5 sm:px-8 lg:px-12">
           <a href="/" className="flex items-center gap-3" aria-label={t("back")}><BrandMark /><div className="leading-none"><span className="display-font block text-[1.45rem] tracking-[-.04em]">Call of Chess</span><span className="block pt-1 text-[.58rem] font-extrabold uppercase tracking-[.16em] text-[#766d57]">{t("guidedLesson")}</span></div></a>

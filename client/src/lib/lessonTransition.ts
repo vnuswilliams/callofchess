@@ -1,10 +1,9 @@
-import { PUBLIC_LESSON_ID_BY_KEY, type PublicLessonKey } from "./lessonIds";
+import { PUBLIC_LESSON_ID_BY_KEY } from "./lessonIds";
 
-export const LESSON_SUCCESS_ANIMATION_MS = 1200;
+export const LESSON_SUCCESS_ANIMATION_MS = 2400;
 
-export function getLessonCompletionDestination(lessonKey: PublicLessonKey): string {
-  const nextKey = String(Number(lessonKey) + 1) as PublicLessonKey;
-  const nextLessonId = PUBLIC_LESSON_ID_BY_KEY[nextKey];
+export function getFirstIncompleteLessonDestination(completedLessonIds: ReadonlySet<string>): string {
+  const firstIncompleteLessonId = Object.values(PUBLIC_LESSON_ID_BY_KEY).find((lessonId) => !completedLessonIds.has(lessonId));
 
-  return nextLessonId ? `/lesson/${nextLessonId}` : "/path";
+  return firstIncompleteLessonId ? `/lesson/${firstIncompleteLessonId}` : "/path";
 }

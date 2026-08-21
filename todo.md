@@ -385,7 +385,6 @@ La transition utilise une durée de 1,2 seconde. Elle ne se déclenche qu’apr�
 
 Le commit `da52a268d552258d03af7b7048289ceec5b6783c` a été poussé sur `main` avec l’auteur `Payong Venus <payongvenus@gmail.com>`. Le domaine `https://callofchess.online/lesson/bc8a719d-d4e6-5d3e-90c1-58292c6fe8f4` sert le chunk dynamique `Lesson-Ch1vqSWF.js`, qui contient la durée `1200`, la destination `/path` et la surcouche `lesson-success-overlay`. L’inventaire Vercel via le connecteur retourne toutefois zéro projet et le slug direct `callofchess` renvoie 404 ; la preuve de production retenue est donc la route publique et le bundle effectivement servi.
 
-
 ## Refonte approfondie du Niveau 0 — 21 août 2026
 
 - [x] Remplacer la première leçon par une lecture théorique sans échiquier : matériel, 64 cases, coordonnées, orientation, pièces, valeurs approximatives et classement Elo.
@@ -399,3 +398,25 @@ Le commit `da52a268d552258d03af7b7048289ceec5b6783c` a été poussé sur `main` 
 - [x] Vérifier localement `pnpm check`, `pnpm test -- --run` avec les variables Supabase publiques injectées et `pnpm build`.
 - [x] Vérifier avant publication que `https://callofchess.online/lesson/f3a1c235-5531-4c1c-845b-6d684808259b` sert encore l’ancienne version sans 404.
 - [ ] Pousser le commit avec `Payong Venus <payongvenus@gmail.com>` et contrôler que le nouveau contenu est effectivement servi sur `https://www.callofchess.online`.
+
+## Ajustement de la célébration de victoire — 21 août 2026
+
+- [x] Prolonger l’affichage de la réussite à 2,4 secondes avant la redirection.
+- [x] Ajouter un jet de 18 confettis avec les couleurs du site Call of Chess.
+- [x] Conserver une annonce accessible et masquer les confettis lorsque `prefers-reduced-motion` est actif.
+- [x] Vérifier localement que la carte et les confettis sont encore présents à 300–450 ms après le coup final, puis que la navigation arrive après la séquence complète.
+- [x] Pousser cette nouvelle version et confirmer le bundle servi sur `https://callofchess.online`.
+
+Le commit `cc966a6780426c1ee438c4a92fff0d2d29a9bd2a` a été poussé sur `main` avec l’identité `Payong Venus <payongvenus@gmail.com>`. Le bundle de leçon public `Lesson-CpgFF8YL.js` contient la temporisation `2400`, le markup `lesson-confetti` et la destination `/path`. Le connecteur Vercel retourne encore zéro projet dans l’équipe accessible, mais la route publique et le chunk servi confirment la version active sur `callofchess.online`.
+
+## Redirection intelligente après réussite — 21 août 2026
+
+- [x] Ne plus rediriger mécaniquement vers l’UUID immédiatement suivant.
+- [x] Rechercher les progressions complétées de l’utilisateur authentifié et choisir la première leçon publique non terminée.
+- [x] Ajouter la leçon réussie au jeu local avant la navigation afin de ne pas la reproposer.
+- [x] Rafraîchir la lecture Supabase à la fin de la célébration et limiter la requête aux six leçons publiques.
+- [x] Revenir à `/path` si toutes les leçons disponibles sont terminées, pour laisser le choix de rejouer une leçon.
+- [x] Tester la première leçon manquante, la reprise à la leçon 1 après une complétion isolée et le cas « tout terminé ».
+- [x] Pousser le comportement sur `main` avec `payongvenus@gmail.com` et vérifier le chunk public de `callofchess.online` après propagation Vercel.
+
+Le commit `1a556372134a36562a43598b3f940f4f770cd21f` est publié avec l’identité `Payong Venus <payongvenus@gmail.com>`. La production sert `Lesson-bJwSMAMF.js`, qui contient la temporisation de 2,4 secondes, les confettis, la lecture de `lesson_progress` et le fallback `/path`.
