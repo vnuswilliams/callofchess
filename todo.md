@@ -473,3 +473,13 @@ La sauvegarde des leçons guidées fusionne maintenant l’état courant avec l�
 - [x] Couvrir la dérivation de l’état de liste par un test Vitest.
 - [x] Vérifier le typecheck, les 54 tests Vitest et le build de production.
 - [x] Pousser et vérifier cette interface sur `https://callofchess.online`.
+
+
+## Correctif navigation finale leçon 08 — 21 août 2026
+
+- [x] Identifier la cause de la 404 : la page 08/08 utilisait encore un seuil codé en dur à la leçon 6.
+- [x] Ajouter une fonction pure de calcul de destination et un test de régression pour les leçons 07 et 08.
+- [x] Vérifier le test ciblé, `pnpm check` et `pnpm build`.
+- [ ] Pousser le correctif avec l’identité Git `payongvenus@gmail.com` et confirmer le déploiement sur `https://callofchess.online`.
+
+La suite Vitest passe pour les 16 fichiers applicatifs sauf `supabaseHealth.test.ts`, qui nécessite les variables publiques `VITE_SUPABASE_URL` et `VITE_SUPABASE_ANON_KEY` absentes de l’environnement local courant. Le correctif ne nécessite aucune migration Supabase ni modification des données utilisateur.
