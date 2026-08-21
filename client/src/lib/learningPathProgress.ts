@@ -6,6 +6,12 @@ export type LearningPathProgressRow = {
   completed_steps: number;
 };
 
+export type LessonListState = "completed" | "available";
+
+export function getLessonListState(completedLessons: ReadonlySet<string>, lessonId: string): LessonListState {
+  return completedLessons.has(lessonId) ? "completed" : "available";
+}
+
 export function mergeLessonProgress(
   previous: LearningPathProgressRow | null | undefined,
   next: LearningPathProgressRow,

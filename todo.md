@@ -463,3 +463,13 @@ Le chapitre 0 refondu est publié par le commit `60b1a6b9acd1ac508a4ced1d5e71e1b
 - [x] Pousser et vérifier cette correction sur `https://callofchess.online`.
 
 La sauvegarde des leçons guidées fusionne maintenant l’état courant avec l’état déjà enregistré. Une leçon validée reste donc terminée et son avancement ne redescend plus lorsqu’elle est rejouée. La correction ne nécessite aucune migration Supabase ni modification directe des données existantes.
+
+
+## Indicateurs de leçons et niveaux terminés — 21 août 2026
+
+- [x] Afficher une coche et le libellé bilingue de complétion sur chaque leçon déjà terminée.
+- [x] Remplacer l’action « Jouer » par « Rejouer la leçon » lorsque la leçon est terminée, sans retirer l’accès à la relecture.
+- [x] Afficher un badge de niveau terminé lorsque toutes ses leçons publiées sont validées.
+- [x] Couvrir la dérivation de l’état de liste par un test Vitest.
+- [x] Vérifier le typecheck, les 54 tests Vitest et le build de production.
+- [ ] Pousser et vérifier cette interface sur `https://callofchess.online`.

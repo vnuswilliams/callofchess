@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { PUBLIC_LESSON_IDS } from "./lessonIds";
-import { mergeLessonProgress, normalizeProgressLessonIds } from "./learningPathProgress";
+import { getLessonListState, mergeLessonProgress, normalizeProgressLessonIds } from "./learningPathProgress";
 
 describe("learning path progress identifiers", () => {
   it("normalizes legacy lesson identifiers to the public UUID used by the path", () => {
@@ -15,6 +15,16 @@ describe("learning path progress identifiers", () => {
       PUBLIC_LESSON_IDS.board,
       PUBLIC_LESSON_IDS.board,
     ]);
+  });
+});
+
+describe("lesson list completion state", () => {
+  it("marks a completed lesson for the path list without changing replay access", () => {
+    expect(getLessonListState(new Set([PUBLIC_LESSON_IDS.board]), PUBLIC_LESSON_IDS.board)).toBe("completed");
+  });
+
+  it("keeps an unfinished lesson available", () => {
+    expect(getLessonListState(new Set(), PUBLIC_LESSON_IDS.board)).toBe("available");
   });
 });
 
