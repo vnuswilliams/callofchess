@@ -391,4 +391,6 @@ Le commit `da52a268d552258d03af7b7048289ceec5b6783c` a été poussé sur `main` 
 - [x] Ajouter un jet de 18 confettis avec les couleurs du site Call of Chess.
 - [x] Conserver une annonce accessible et masquer les confettis lorsque `prefers-reduced-motion` est actif.
 - [x] Vérifier localement que la carte et les confettis sont encore présents à 300–450 ms après le coup final, puis que la navigation arrive après la séquence complète.
-- [ ] Pousser cette nouvelle version et confirmer le bundle servi sur `https://callofchess.online`.
+- [x] Pousser cette nouvelle version et confirmer le bundle servi sur `https://callofchess.online`.
+
+Le commit `cc966a6780426c1ee438c4a92fff0d2d29a9bd2a` a été poussé sur `main` avec l’identité `Payong Venus <payongvenus@gmail.com>`. Le bundle de leçon public `Lesson-CpgFF8YL.js` contient la temporisation `2400`, le markup `lesson-confetti` et la destination `/path`. Le connecteur Vercel retourne encore zéro projet dans l’équipe accessible, mais la route publique et le chunk servi confirment la version active sur `callofchess.online`.
