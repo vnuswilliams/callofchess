@@ -1,9 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { getFirstIncompleteLessonDestination, LESSON_SUCCESS_ANIMATION_MS } from "./lessonTransition";
+import { getFirstIncompleteLessonDestination, LESSON_MOVE_ANIMATION_MS, LESSON_STEP_TRANSITION_DELAY_MS, LESSON_SUCCESS_ANIMATION_MS } from "./lessonTransition";
 
 describe("lesson completion destination", () => {
   it("keeps the success animation visible before redirecting", () => {
     expect(LESSON_SUCCESS_ANIMATION_MS).toBeGreaterThanOrEqual(2000);
+  });
+
+  it("keeps piece arrivals and next-step loading visibly separated", () => {
+    expect(LESSON_MOVE_ANIMATION_MS).toBeGreaterThanOrEqual(500);
+    expect(LESSON_STEP_TRANSITION_DELAY_MS).toBeGreaterThan(LESSON_MOVE_ANIMATION_MS);
   });
 
   it("opens the first incomplete canonical lesson instead of always using the next lesson", () => {

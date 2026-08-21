@@ -7,7 +7,7 @@ import { useLocation, useParams } from "wouter";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/lib/supabase";
 import { PUBLIC_LESSON_ID_BY_KEY, toLessonKey } from "@/lib/lessonIds";
-import { getFirstIncompleteLessonDestination, LESSON_SUCCESS_ANIMATION_MS } from "@/lib/lessonTransition";
+import { getFirstIncompleteLessonDestination, LESSON_MOVE_ANIMATION_MS, LESSON_STEP_TRANSITION_DELAY_MS, LESSON_SUCCESS_ANIMATION_MS } from "@/lib/lessonTransition";
 import { getNextStepPosition, lessonCatalog, reconstructPosition, type LessonDefinition } from "@/lib/levelZeroLessons";
 import TheoryLesson from "@/pages/TheoryLesson";
 import DrawsLesson from "@/pages/DrawsLesson";
@@ -164,9 +164,17 @@ function GuidedLesson() {
       setIsCelebrating(true);
     };
     if (!reply) {
-      setPosition(getNextStepPosition(lesson.steps, nextStep, afterUserMove.fen()));
+      const afterUserMoveFen = afterUserMove.fen();
+      const nextPosition = getNextStepPosition(lesson.steps, nextStep, afterUserMoveFen);
+      setPosition(afterUserMoveFen);
       setCurrentStep(nextStep);
-      setFeedback("complete");
+      setFeedback(isFinalStep ? "complete" : "correct");
+      if (nextPosition !== afterUserMoveFen) {
+        replyTimer.current = window.setTimeout(() => {
+          setPosition(nextPosition);
+          replyTimer.current = null;
+        }, LESSON_STEP_TRANSITION_DELAY_MS);
+      }
       startCompletionTransition();
       return;
     }
@@ -185,7 +193,7 @@ function GuidedLesson() {
         setIsComputerReplying(false);
         replyTimer.current = null;
       }
-    }, 220);
+    }, LESSON_STEP_TRANSITION_DELAY_MS);
   };
 
   const handlePieceDrop = (sourceSquare: string, targetSquare: string | null) => {
@@ -249,7 +257,7 @@ function GuidedLesson() {
           <section className={`${lessonWorkspaceLayout.mobile.boardClass} relative overflow-hidden border border-[#bdaF83] bg-[#173e37] p-3 shadow-[15px_18px_0_rgba(42,50,41,.12)] sm:p-5`}>
             <div className="pointer-events-none absolute inset-x-0 top-0 h-1.5 checker-line opacity-90" />
             <div className="mb-4 flex items-center justify-between px-1 text-[#fffaf0]"><div><p className="text-[.6rem] font-extrabold uppercase tracking-[.16em] text-[#e7ba61]">{t("chess.board")}</p><p className="display-font mt-1 text-2xl">{completed ? t("completed") : t("whiteToMove")}</p></div><div className="grid h-10 w-10 place-items-center border border-[#759287] text-[#e7ba61]"><Sparkles size={17} /></div></div>
-            <div className="lesson-board-wrap mx-auto w-full max-w-[680px] bg-[#153d36] p-2 sm:p-3"><Chessboard options={{ id: `level-zero-${lessonKey}`, position, boardOrientation: "white", showNotation: true, allowDragging: !completed && !isComputerReplying, allowDrawingArrows: false, animationDurationInMs: 220, darkSquareStyle: { backgroundColor: "#3a6658" }, lightSquareStyle: { backgroundColor: "#f0dfb9" }, squareStyles: highlightedSquares, canDragPiece: ({ piece }) => piece.pieceType.startsWith("w") && !completed && !isComputerReplying, onPieceDrop: ({ sourceSquare, targetSquare }) => handlePieceDrop(sourceSquare, targetSquare), onPieceClick: ({ square, piece }) => { if (piece.pieceType.startsWith("w") && square && !isComputerReplying) setSelectedSquare(square); }, onSquareClick: ({ square }) => handleSquareClick(square) }} /></div>
+            <div className="lesson-board-wrap mx-auto w-full max-w-[680px] bg-[#153d36] p-2 sm:p-3"><Chessboard options={{ id: `level-zero-${lessonKey}`, position, boardOrientation: "white", showNotation: true, allowDragging: !completed && !isComputerReplying, allowDrawingArrows: false, animationDurationInMs: LESSON_MOVE_ANIMATION_MS, darkSquareStyle: { backgroundColor: "#3a6658" }, lightSquareStyle: { backgroundColor: "#f0dfb9" }, squareStyles: highlightedSquares, canDragPiece: ({ piece }) => piece.pieceType.startsWith("w") && !completed && !isComputerReplying, onPieceDrop: ({ sourceSquare, targetSquare }) => handlePieceDrop(sourceSquare, targetSquare), onPieceClick: ({ square, piece }) => { if (piece.pieceType.startsWith("w") && square && !isComputerReplying) setSelectedSquare(square); }, onSquareClick: ({ square }) => handleSquareClick(square) }} /></div>
             <div className="mt-4 grid grid-cols-2 gap-2 border-t border-[#66857c] pt-4 text-[#d9e0d6] sm:grid-cols-4" aria-label={t("chess.position")}><div><span className="block text-[.58rem] font-extrabold uppercase tracking-[.12em] text-[#9cb4a9]">{t("chess.position")}</span><strong className="mt-1 block font-mono text-sm text-[#fffaf0]">{String(Math.min(currentStep + 1, lesson.steps.length)).padStart(2, "0")} / {String(lesson.steps.length).padStart(2, "0")}</strong></div><div><span className="block text-[.58rem] font-extrabold uppercase tracking-[.12em] text-[#9cb4a9]">{t("chess.move")}</span><strong className="mt-1 block font-mono text-sm text-[#fffaf0]">{history.at(-1) ?? "—"}</strong></div><div><span className="block text-[.58rem] font-extrabold uppercase tracking-[.12em] text-[#9cb4a9]">{t("chess.board")}</span><strong className="mt-1 block font-mono text-sm text-[#fffaf0]">a–h · 1–8</strong></div><div><span className="block text-[.58rem] font-extrabold uppercase tracking-[.12em] text-[#9cb4a9]">{t("chess.white")}</span><strong className="mt-1 block text-sm text-[#fffaf0]">{isComputerReplying ? "…" : t("whiteToMove")}</strong></div></div>
             <div className="mt-5 flex flex-wrap items-center justify-between gap-3 px-1"><div className="flex items-center gap-2 text-xs text-[#d9e0d6]"><span className={`h-2 w-2 rounded-full ${isComputerReplying ? "animate-pulse bg-[#e7ba61]" : "bg-[#d69024]"}`} /> {isComputerReplying ? t("chess.computerReplying") : t("dragHint")}</div><Button variant="outline" size="sm" onClick={resetLesson} className="min-h-11 rounded-[.65rem] border-[#66857c] bg-transparent text-[.66rem] font-extrabold uppercase tracking-[.1em] text-[#fffaf0] hover:bg-[#284d43] hover:text-[#fffaf0]"><RotateCcw size={14} /> {t("reset")}</Button></div>
           </section>

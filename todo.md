@@ -430,3 +430,13 @@ Le chapitre 0 refondu est publié par le commit `60b1a6b9acd1ac508a4ced1d5e71e1b
 - [x] Ajouter un test de régression couvrant la transition roi → dame et le repli de dernière étape.
 - [x] Vérifier `pnpm check`, les 43 tests Vitest et `pnpm build`.
 - [ ] Pousser et vérifier le correctif sur `https://callofchess.online`.
+
+
+## Cadence lisible des mouvements — 21 août 2026
+
+- [x] Constater que l’animation de 220 ms et le chargement immédiat de l’exercice suivant masquaient l’arrivée de la pièce.
+- [x] Porter l’animation du plateau à 650 ms.
+- [x] Attendre 950 ms avant de charger la position dédiée de l’exercice suivant.
+- [x] Couvrir les constantes de cadence par un test Vitest.
+- [x] Vérifier `pnpm check`, les 46 tests Vitest et `pnpm build`.
+- [ ] Pousser et vérifier le nouveau rythme sur `https://callofchess.online`.
