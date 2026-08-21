@@ -283,6 +283,9 @@
   "stopGame": "Leave the game",
   "positionResult": "Position result",
   "drawTypes": "The four draws to recognize",
+  "drawDefinition": "What it means",
+  "drawCondition": "How to recognize it",
+  "drawExample": "Example on the board",
   "landing": {
     "path": {
       "basicsTitle": "The basics",

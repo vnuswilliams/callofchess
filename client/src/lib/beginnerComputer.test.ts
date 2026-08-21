@@ -1,8 +1,23 @@
 import { describe, expect, it } from "vitest";
 import { Chess } from "chess.js";
-import { chooseBeginnerMove, describeGameResult } from "./beginnerComputer";
+import { BEGINNER_COMPUTER_ELO, chooseBeginnerMove, createHumanMove, describeGameResult } from "./beginnerComputer";
 
 describe("beginner computer", () => {
+  it("declares the accessible training target near 500 Elo", () => {
+    expect(BEGINNER_COMPUTER_ELO).toBe(500);
+  });
+
+  it("accepts a legal white move from the starting position", () => {
+    const result = createHumanMove(new Chess().fen(), "e2", "e4");
+    expect(result?.san).toBe("e4");
+    expect(result?.game.get("e4")?.type).toBe("p");
+  });
+
+  it("rejects a human move when it is not White's turn", () => {
+    const game = new Chess();
+    game.move("e4");
+    expect(createHumanMove(game.fen(), "e7", "e5")).toBeNull();
+  });
   it("returns a legal black move from the current position", () => {
     const game = new Chess();
     game.move("e4");

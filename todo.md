@@ -440,3 +440,15 @@ Le chapitre 0 refondu est publié par le commit `60b1a6b9acd1ac508a4ced1d5e71e1b
 - [x] Couvrir les constantes de cadence par un test Vitest.
 - [x] Vérifier `pnpm check`, les 46 tests Vitest et `pnpm build`.
 - [x] Pousser et vérifier le nouveau rythme sur `https://callofchess.online`.
+
+
+## Nulles détaillées, roque cliquable et partie ordinateur accessible — 21 août 2026
+
+- [x] Remplacer le résumé unique des nulles par une définition, une condition de reconnaissance et un exemple pour le pat, la répétition, la règle des 50 coups et le matériel insuffisant.
+- [x] Ajouter les traductions françaises et anglaises des trois libellés pédagogiques.
+- [x] Corriger la FEN du cas matériel insuffisant et vérifier les quatre positions avec chess.js.
+- [x] Permettre le roque court et le roque long par sélection du roi puis de la case d’arrivée, en plus du glisser-déposer.
+- [x] Permettre les coups de la partie contre ordinateur par clic-clic et conserver le glisser-déposer.
+- [x] Déclarer une difficulté d’entraînement proche de 500 Elo pour l’adversaire débutant.
+- [x] Vérifier `pnpm check`, les 50 tests Vitest dans 16 fichiers et `pnpm build`.
+- [ ] Pousser et vérifier les trois parcours sur `https://callofchess.online`.

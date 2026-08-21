@@ -283,6 +283,9 @@
   "stopGame": "Abandonner la partie",
   "positionResult": "Résultat de la position",
   "drawTypes": "Les quatre nulles à reconnaître",
+  "drawDefinition": "Ce que cela signifie",
+  "drawCondition": "Comment la reconnaître",
+  "drawExample": "Exemple sur l’échiquier",
   "landing": {
     "path": {
       "basicsTitle": "Les bases",

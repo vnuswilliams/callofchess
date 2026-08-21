@@ -54,6 +54,18 @@ describe("lesson catalogue", () => {
     expect(text).toContain("Pion");
   });
 
+  it("gives each draw type a definition, condition and concrete example", () => {
+    const draws = lessonCatalog["5"];
+    for (const position of draws.drawPositions) {
+      expect(position.definition.fr.length).toBeGreaterThan(30);
+      expect(position.condition.fr.length).toBeGreaterThan(30);
+      expect(position.example.fr.length).toBeGreaterThan(30);
+      expect(position.definition.en.length).toBeGreaterThan(30);
+      expect(position.condition.en.length).toBeGreaterThan(30);
+      expect(position.example.en.length).toBeGreaterThan(30);
+    }
+  });
+
   it("keeps the draw lesson explicit and interactive", () => {
     const draws = lessonCatalog["5"];
     const text = draws.drawPositions.map((position) => `${position.title.fr} ${position.explanation.fr}`).join(" ").toLocaleLowerCase("fr");

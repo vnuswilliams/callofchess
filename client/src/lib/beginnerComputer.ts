@@ -1,6 +1,8 @@
-import { Chess, type Move } from "chess.js";
+import { Chess, type Move, type Square } from "chess.js";
 
 export type GameResult = "playing" | "checkmate" | "stalemate" | "draw";
+
+export const BEGINNER_COMPUTER_ELO = 500;
 
 const pieceValues: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 const gentleOpening = [
@@ -18,6 +20,17 @@ const gentleOpening = [
 
 function moveKey(move: Move) {
   return `${move.from}${move.to}${move.promotion ?? ""}`;
+}
+
+export function createHumanMove(fen: string, from: string, to: string) {
+  const game = new Chess(fen);
+  if (game.turn() !== "w") return null;
+  try {
+    const move = game.move({ from: from as Square, to: to as Square, promotion: "q" });
+    return { game, san: move.san };
+  } catch {
+    return null;
+  }
 }
 
 export function chooseBeginnerMove(game: Chess): Move | null {
