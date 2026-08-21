@@ -394,3 +394,12 @@ Le commit `da52a268d552258d03af7b7048289ceec5b6783c` a été poussé sur `main` 
 - [x] Pousser cette nouvelle version et confirmer le bundle servi sur `https://callofchess.online`.
 
 Le commit `cc966a6780426c1ee438c4a92fff0d2d29a9bd2a` a été poussé sur `main` avec l’identité `Payong Venus <payongvenus@gmail.com>`. Le bundle de leçon public `Lesson-CpgFF8YL.js` contient la temporisation `2400`, le markup `lesson-confetti` et la destination `/path`. Le connecteur Vercel retourne encore zéro projet dans l’équipe accessible, mais la route publique et le chunk servi confirment la version active sur `callofchess.online`.
+
+## Redirection intelligente après réussite — 21 août 2026
+
+- [x] Ne plus rediriger mécaniquement vers l’UUID immédiatement suivant.
+- [x] Rechercher les progressions complétées de l’utilisateur authentifié et choisir la première leçon publique non terminée.
+- [x] Ajouter la leçon réussie au jeu local avant la navigation afin de ne pas la reproposer.
+- [x] Rafraîchir la lecture Supabase à la fin de la célébration et limiter la requête aux six leçons publiques.
+- [x] Revenir à `/path` si toutes les leçons disponibles sont terminées, pour laisser le choix de rejouer une leçon.
+- [x] Tester la première leçon manquante, la reprise à la leçon 1 après une complétion isolée et le cas « tout terminé ».

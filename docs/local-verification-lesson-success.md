@@ -27,3 +27,9 @@ Une seconde vérification interactive locale s’arrête à 300 ms après le mat
 La capture mobile 390×844 après l’ajustement conserve l’ordre mission puis échiquier, les textes lisibles et aucun débordement horizontal dans le premier viewport. La couche de confettis reste hors du flux normal et ne modifie pas la géométrie de la page.
 
 La route publique `https://callofchess.online/lesson/bc8a719d-d4e6-5d3e-90c1-58292c6fe8f4` répond correctement après le push du correctif. Le contenu du bundle public reste à contrôler pour confirmer la durée `2400` et les styles de confettis.
+
+## Redirection intelligente — 21 août 2026
+
+La destination de fin de leçon ne suit plus simplement l’UUID suivant. `getFirstIncompleteLessonDestination` parcourt les six leçons publiques dans leur ordre canonique, ignore les lignes `completed = true` de l’utilisateur authentifié, puis ouvre la première leçon restante. La leçon tout juste terminée est ajoutée immédiatement au jeu local et la requête Supabase est rafraîchie après la célébration ; si toutes les leçons sont terminées ou si aucune progression ne peut être lue, la destination est `/path`.
+
+Le schéma Supabase vérifié expose `lesson_progress` avec la clé primaire `(user_id, lesson_id)`, les colonnes `completed_steps`, `completed`, `current_fen` et `updated_at`, et l’accès reste filtré par l’utilisateur authentifié. La lecture est bornée à six lignes et aucune migration n’est nécessaire.

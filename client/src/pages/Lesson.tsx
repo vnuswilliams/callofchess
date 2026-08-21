@@ -7,7 +7,7 @@ import { useLocation, useParams } from "wouter";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/lib/supabase";
 import { PUBLIC_LESSON_ID_BY_KEY, toLessonKey } from "@/lib/lessonIds";
-import { getLessonCompletionDestination, LESSON_SUCCESS_ANIMATION_MS } from "@/lib/lessonTransition";
+import { getFirstIncompleteLessonDestination, LESSON_SUCCESS_ANIMATION_MS } from "@/lib/lessonTransition";
 import { lessonCatalog, reconstructPosition, type LessonDefinition } from "@/lib/levelZeroLessons";
 import { lessonWorkspaceLayout } from "@/lib/lessonLayout";
 
@@ -40,6 +40,7 @@ export default function Lesson() {
   const [isComputerReplying, setIsComputerReplying] = useState(false);
   const [isCelebrating, setIsCelebrating] = useState(false);
   const replyTimer = useRef<number | null>(null);
+  const completedLessonIdsRef = useRef<Set<string>>(new Set());
   const completionTransitionStartedRef = useRef(false);
   const completed = currentStep >= lesson.steps.length;
   const activeStep = lesson.steps[Math.min(currentStep, lesson.steps.length - 1)];
@@ -67,12 +68,15 @@ export default function Lesson() {
     let active = true;
     supabase.auth.getUser().then(async ({ data: { user } }) => {
       if (!user || !active) return;
-      const { data } = await supabase.from("lesson_progress").select("completed_steps, completed, current_fen").eq("user_id", user.id).eq("lesson_id", publicLessonId).maybeSingle();
-      if (!active || !data || !Number.isFinite(data.completed_steps)) return;
-      const restoredStep = Math.min(lesson.steps.length, data.completed_steps);
+      const { data } = await supabase.from("lesson_progress").select("lesson_id, completed_steps, completed, current_fen").eq("user_id", user.id).limit(Object.keys(PUBLIC_LESSON_ID_BY_KEY).length);
+      if (!active || !data) return;
+      completedLessonIdsRef.current = new Set(data.filter((row) => row.completed && typeof row.lesson_id === "string").map((row) => row.lesson_id));
+      const currentProgress = data.find((row) => row.lesson_id === publicLessonId);
+      if (!currentProgress || !Number.isFinite(currentProgress.completed_steps)) return;
+      const restoredStep = Math.min(lesson.steps.length, currentProgress.completed_steps);
       setCurrentStep(restoredStep);
       setPosition(reconstructPosition(lesson.steps, restoredStep, lesson.startingFen));
-      if (data.completed) setFeedback("complete");
+      if (currentProgress.completed) setFeedback("complete");
     }).catch(() => undefined);
     return () => { active = false; };
   }, [lessonKey, publicLessonId]);
@@ -98,9 +102,27 @@ export default function Lesson() {
 
   useEffect(() => {
     if (!isCelebrating) return;
-    const timer = window.setTimeout(() => setLocation(getLessonCompletionDestination(lessonKey)), LESSON_SUCCESS_ANIMATION_MS);
-    return () => window.clearTimeout(timer);
-  }, [isCelebrating, lessonKey, setLocation]);
+    let active = true;
+    const timer = window.setTimeout(() => {
+      const redirectToFirstIncompleteLesson = async () => {
+        let completedIds = new Set(completedLessonIdsRef.current);
+        try {
+          const { data: { user } } = await supabase.auth.getUser();
+          if (user) {
+            const { data } = await supabase.from("lesson_progress").select("lesson_id, completed").eq("user_id", user.id).limit(Object.keys(PUBLIC_LESSON_ID_BY_KEY).length);
+            if (data) completedIds = new Set(data.filter((row) => row.completed && typeof row.lesson_id === "string").map((row) => row.lesson_id));
+          }
+        } catch {
+          // Keep the locally known completion set when the optional refresh is unavailable.
+        }
+        completedIds.add(publicLessonId);
+        completedLessonIdsRef.current = completedIds;
+        if (active) setLocation(getFirstIncompleteLessonDestination(completedIds));
+      };
+      void redirectToFirstIncompleteLesson();
+    }, LESSON_SUCCESS_ANIMATION_MS);
+    return () => { active = false; window.clearTimeout(timer); };
+  }, [isCelebrating, publicLessonId, setLocation]);
 
   useEffect(() => {
     document.title = `${lessonTitle(lesson, copy)} — Call of Chess`;
@@ -134,6 +156,7 @@ export default function Lesson() {
     const startCompletionTransition = () => {
       if (!isFinalStep || completionTransitionStartedRef.current) return;
       completionTransitionStartedRef.current = true;
+      completedLessonIdsRef.current = new Set(completedLessonIdsRef.current).add(publicLessonId);
       setIsCelebrating(true);
     };
     if (!reply) {
