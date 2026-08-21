@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, BookOpenCheck, Check, ChevronRight, CircleDot, Trophy } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/lib/supabase";
 import { PUBLIC_LESSON_ID_BY_KEY } from "@/lib/lessonIds";
-import { getLessonCompletionDestination, LESSON_SUCCESS_ANIMATION_MS } from "@/lib/lessonTransition";
+import { getFirstIncompleteLessonDestination, LESSON_SUCCESS_ANIMATION_MS } from "@/lib/lessonTransition";
 import type { LessonDefinition } from "@/lib/levelZeroLessons";
 
 function BrandMark() {
@@ -16,6 +16,7 @@ export default function TheoryLesson({ lesson }: { lesson: LessonDefinition }) {
   const { language, toggleLanguage, t } = useLanguage();
   const [completed, setCompleted] = useState(false);
   const [celebrating, setCelebrating] = useState(false);
+  const completedLessonIdsRef = useRef<Set<string>>(new Set());
   const copy = language === "fr" ? "fr" : "en";
 
   useEffect(() => {
@@ -31,12 +32,30 @@ export default function TheoryLesson({ lesson }: { lesson: LessonDefinition }) {
 
   useEffect(() => {
     if (!celebrating) return;
-    const timer = window.setTimeout(() => setLocation(getLessonCompletionDestination("1")), LESSON_SUCCESS_ANIMATION_MS);
+    const timer = window.setTimeout(() => {
+      const redirectToFirstIncompleteLesson = async () => {
+        let completedIds = new Set(completedLessonIdsRef.current);
+        try {
+          const { data: { user } } = await supabase.auth.getUser();
+          if (user) {
+            const { data } = await supabase.from("lesson_progress").select("lesson_id, completed").eq("user_id", user.id).limit(6);
+            if (data) completedIds = new Set(data.filter((row) => row.completed && typeof row.lesson_id === "string").map((row) => row.lesson_id));
+          }
+        } catch {
+          // Keep the locally known completion set when the optional refresh is unavailable.
+        }
+        completedIds.add(PUBLIC_LESSON_ID_BY_KEY["1"]);
+        completedLessonIdsRef.current = completedIds;
+        setLocation(getFirstIncompleteLessonDestination(completedIds));
+      };
+      void redirectToFirstIncompleteLesson();
+    }, LESSON_SUCCESS_ANIMATION_MS);
     return () => window.clearTimeout(timer);
   }, [celebrating, setLocation]);
 
   const completeTheory = async () => {
     setCompleted(true);
+    completedLessonIdsRef.current = new Set(completedLessonIdsRef.current).add(PUBLIC_LESSON_ID_BY_KEY["1"]);
     setCelebrating(true);
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;

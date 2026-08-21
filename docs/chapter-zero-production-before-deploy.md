@@ -31,3 +31,18 @@ La route locale `/lesson/bc8a719d-d4e6-5d3e-90c1-58292c6fe8f4` charge la partie 
 ## Test local de sélection par clic
 
 Sur la leçon 02 locale, le clic sur la pièce en e4 puis le clic sur la case d5 ont été acceptés. La progression est passée de `1 / 6` à `2 / 6`, la feuille affiche `1. Rd5` et la mission suivante est apparue. Cela confirme le parcours tactile/souris distinct du glisser-déposer pour une étape de déplacement.
+
+
+## Contrôle après publication du merge
+
+Le commit `d1872b19e2205faf11f70e8737425da6fbad983c` est confirmé sur `origin/main` et via l’API GitHub avec l’identité `Payong Venus <payongvenus@gmail.com>`. Le domaine `https://callofchess.online/lesson/f3a1c235-5531-4c1c-845b-6d684808259b` répond toujours sans 404, mais son contenu reste l’ancienne leçon interactive « Le repère des 64 cases » avec échiquier et mission `e2–e4`. La nouvelle version locale est validée, tandis que la propagation ou le raccordement Vercel n’est pas encore visible sur le domaine canonique.
+
+
+## Contrôle anti-cache
+
+La route production avec `?v=d1872b1` ne révèle pas le nouveau bundle : le premier chargement reste ancien et la variante versionnée affiche ensuite une page blanche sans élément détecté. Cela confirme que la publication effective sur `callofchess.online` n’est pas validée et que l’invalidation/propagation Vercel doit être traitée séparément du push GitHub.
+
+
+## Identification du projet Vercel
+
+L’URL de projet supposée `https://vercel.com/vnuswilliams/callofchess` renvoie 404 car l’équipe utilise le slug `vnuswilliams1`. Le tableau d’équipe `https://vercel.com/vnuswilliams1` affiche bien le projet `callofchess`, le domaine `callofchess.online`, le dépôt `vnuswilliams/callofchess` et le dernier déploiement visible `Document smart lesson redirect production`, daté d’environ une heure. Le connecteur Vercel utilisé en lecture avait donc interrogé le mauvais périmètre ou ne remontait pas ce projet malgré son existence dans l’interface web.
