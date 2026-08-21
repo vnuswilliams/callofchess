@@ -73,3 +73,8 @@ Le projet Vercel affiche le déploiement `7UpZSiTj29WJTFwDRJ9kXrYQ2bjR` en statu
 ## Validation finale du domaine custom
 
 Après propagation, `https://callofchess.online/lesson/f3a1c235-5531-4c1c-845b-6d684808259b?deploy=60b1a6b` sert correctement le nouveau chapitre 0. La page affiche « Le matériel et le classement Elo », cinq cartes théoriques, les 64 cases, coordonnées, colonnes/rangées/diagonales, les six pièces, valeurs `1 · 3 · 5 · 9`, sécurité du roi et principe Elo, sans échiquier d’exercice. Le bouton « J’ai compris, continuer » est présent. La version est donc visible sur le domaine custom demandé ; le paramètre de requête a servi à forcer la vérification après propagation CDN.
+
+
+## Validation production sans cache-buster
+
+Le tableau Vercel affiche maintenant le déploiement `73NXshxfhFV6cetQVy17iT1BUQft` en **Ready**, construit à partir du commit `e72c1bb Documenter la publication du chapitre 0`, sur `main`, avec `callofchess.online` associé. La route propre `https://callofchess.online/lesson/f3a1c235-5531-4c1c-845b-6d684808259b` sert désormais la page théorique complète sans paramètre : titre « Le matériel et le classement Elo », cartes du matériel et bouton « J’ai compris, continuer ». La production sur le domaine demandé est donc vérifiée.
