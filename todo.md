@@ -371,3 +371,14 @@ Le test a été effectué depuis une session utilisateur connectée sur `https:/
 - [x] Ajouter un test Vitest du contrat de layout responsive.
 - [x] Valider le typecheck, le test ciblé, le build et les aperçus mobile/desktop locaux.
 - [ ] Confirmer que ce commit est servi sur `https://callofchess.online`.
+
+## Animation de réussite et passage automatique — 21 août 2026
+
+- [x] Afficher une animation courte et accessible après la réussite d’une leçon.
+- [x] Rediriger automatiquement vers la leçon canonique suivante après la fin de l’animation.
+- [x] Retourner vers `/path` après la dernière leçon, sans inventer d’identifiant.
+- [x] Maintenir les messages français et anglais et respecter `prefers-reduced-motion`.
+- [x] Vérifier le parcours interactif desktop, le rendu mobile 390×844, `pnpm check`, Vitest et `pnpm build`.
+- [ ] Pousser avec l’identité Git `payongvenus@gmail.com` et confirmer le déploiement réellement servi sur `https://callofchess.online`.
+
+La transition utilise une durée de 1,2 seconde. Elle ne se déclenche qu’après une nouvelle complétion, pas lors de la restauration d’une leçon déjà terminée, afin d’éviter une redirection inattendue au rechargement.

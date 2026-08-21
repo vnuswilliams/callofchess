@@ -3,10 +3,11 @@ import { Chess, type Square } from "chess.js";
 import { Chessboard } from "react-chessboard";
 import { ArrowLeft, Check, ChevronRight, CircleHelp, Lightbulb, RotateCcw, Sparkles, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useParams } from "wouter";
+import { useLocation, useParams } from "wouter";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/lib/supabase";
 import { PUBLIC_LESSON_ID_BY_KEY, toLessonKey } from "@/lib/lessonIds";
+import { getLessonCompletionDestination, LESSON_SUCCESS_ANIMATION_MS } from "@/lib/lessonTransition";
 import { lessonCatalog, reconstructPosition, type LessonDefinition } from "@/lib/levelZeroLessons";
 import { lessonWorkspaceLayout } from "@/lib/lessonLayout";
 
@@ -25,6 +26,7 @@ function lessonTitle(lesson: LessonDefinition, language: "fr" | "en") {
 
 export default function Lesson() {
   const { id } = useParams<{ id: string }>();
+  const [, setLocation] = useLocation();
   const lessonKey = toLessonKey(id) ?? "1";
   const lesson = lessonCatalog[lessonKey] ?? lessonCatalog["1"];
   const publicLessonId = PUBLIC_LESSON_ID_BY_KEY[lessonKey];
@@ -36,7 +38,9 @@ export default function Lesson() {
   const [feedback, setFeedback] = useState<"idle" | "wrong" | "correct" | "complete">("idle");
   const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
   const [isComputerReplying, setIsComputerReplying] = useState(false);
+  const [isCelebrating, setIsCelebrating] = useState(false);
   const replyTimer = useRef<number | null>(null);
+  const completionTransitionStartedRef = useRef(false);
   const completed = currentStep >= lesson.steps.length;
   const activeStep = lesson.steps[Math.min(currentStep, lesson.steps.length - 1)];
 
@@ -50,6 +54,8 @@ export default function Lesson() {
 
   useEffect(() => {
     clearReplyTimer();
+    completionTransitionStartedRef.current = false;
+    setIsCelebrating(false);
     setPosition(lesson.startingFen);
     setCurrentStep(0);
     setShowHint(false);
@@ -91,6 +97,12 @@ export default function Lesson() {
   }, [completed, currentStep, historySignature, position, publicLessonId]);
 
   useEffect(() => {
+    if (!isCelebrating) return;
+    const timer = window.setTimeout(() => setLocation(getLessonCompletionDestination(lessonKey)), LESSON_SUCCESS_ANIMATION_MS);
+    return () => window.clearTimeout(timer);
+  }, [isCelebrating, lessonKey, setLocation]);
+
+  useEffect(() => {
     document.title = `${lessonTitle(lesson, copy)} — Call of Chess`;
     return () => { document.title = "Call of Chess — Apprendre les échecs simplement"; };
   }, [lesson, copy]);
@@ -106,6 +118,8 @@ export default function Lesson() {
 
   const resetLesson = () => {
     clearReplyTimer();
+    completionTransitionStartedRef.current = false;
+    setIsCelebrating(false);
     setPosition(lesson.startingFen);
     setCurrentStep(0);
     setShowHint(false);
@@ -115,11 +129,18 @@ export default function Lesson() {
 
   const completeStep = (afterUserMove: Chess) => {
     const nextStep = currentStep + 1;
+    const isFinalStep = nextStep === lesson.steps.length;
     const reply = activeStep.reply;
+    const startCompletionTransition = () => {
+      if (!isFinalStep || completionTransitionStartedRef.current) return;
+      completionTransitionStartedRef.current = true;
+      setIsCelebrating(true);
+    };
     if (!reply) {
       setPosition(afterUserMove.fen());
       setCurrentStep(nextStep);
       setFeedback("complete");
+      startCompletionTransition();
       return;
     }
     setIsComputerReplying(true);
@@ -129,7 +150,8 @@ export default function Lesson() {
         afterReply.move(reply);
         setPosition(afterReply.fen());
         setCurrentStep(nextStep);
-        setFeedback(nextStep === lesson.steps.length ? "complete" : "correct");
+        setFeedback(isFinalStep ? "complete" : "correct");
+        startCompletionTransition();
       } catch {
         setFeedback("correct");
       } finally {
@@ -181,6 +203,7 @@ export default function Lesson() {
 
   return (
     <div className="lesson-shell min-h-screen bg-[#f7f0df] text-[#203830]">
+      {isCelebrating && <div className="lesson-success-overlay pointer-events-none fixed inset-0 z-50 grid place-items-center bg-[#173e37]/25 px-5" role="status" aria-live="assertive" aria-atomic="true"><div className="lesson-success-card w-full max-w-sm border border-[#6f977c] bg-[#e9f0e6] p-6 text-center shadow-[12px_14px_0_rgba(42,50,41,.16)] sm:p-8"><div className="lesson-success-medallion mx-auto grid h-16 w-16 place-items-center rounded-full bg-[#d69024] text-[#173e37]" aria-hidden="true"><Trophy size={28} /></div><p className="display-font mt-5 text-3xl leading-none tracking-[-.04em] text-[#173e37]">{t("lessonSuccessTitle")}</p><p className="mt-3 text-sm leading-6 text-[#4e5146]">{t("inline_db305833f7")}</p><p className="mt-4 text-[.65rem] font-extrabold uppercase tracking-[.13em] text-[#467a5d]">{t("lessonSuccessNext")}</p></div></div>}
       <header className="lesson-header paper-texture border-b border-[#c9bb96]">
         <div className="mx-auto flex min-h-[76px] max-w-[1440px] items-center justify-between gap-4 px-5 sm:px-8 lg:px-12">
           <a href="/" className="flex items-center gap-3" aria-label={t("back")}><BrandMark /><div className="leading-none"><span className="display-font block text-[1.45rem] tracking-[-.04em]">Call of Chess</span><span className="block pt-1 text-[.58rem] font-extrabold uppercase tracking-[.16em] text-[#766d57]">{t("guidedLesson")}</span></div></a>
