@@ -460,6 +460,6 @@ Le chapitre 0 refondu est publié par le commit `60b1a6b9acd1ac508a4ced1d5e71e1b
 - [x] Conserver le plus grand nombre d’étapes validées pour une même leçon.
 - [x] Ajouter un test Vitest couvrant une leçon terminée rejouée depuis une étape antérieure.
 - [x] Vérifier le typecheck, les 52 tests Vitest et le build de production.
-- [ ] Pousser et vérifier cette correction sur `https://callofchess.online`.
+- [x] Pousser et vérifier cette correction sur `https://callofchess.online`.
 
 La sauvegarde des leçons guidées fusionne maintenant l’état courant avec l’état déjà enregistré. Une leçon validée reste donc terminée et son avancement ne redescend plus lorsqu’elle est rejouée. La correction ne nécessite aucune migration Supabase ni modification directe des données existantes.
