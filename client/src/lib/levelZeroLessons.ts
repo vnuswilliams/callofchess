@@ -225,6 +225,49 @@ export const lessonCatalog: Record<string, LessonDefinition> = {
       { title: { fr: "Conclure", en: "Finish" }, text: { fr: "Jouez jusqu’au mat ou à la nulle.", en: "Play to checkmate or a draw." } },
     ],
   },
+  "7": {
+    key: "7",
+    number: "07",
+    mode: "guided",
+    title: { fr: "Prendre le centre", en: "Claim the center" },
+    kicker: { fr: "Ouverture · Le centre", en: "Opening · The center" },
+    headline: { fr: "Commencez par e4.", en: "Start with e4." },
+    objective: { fr: "Contrôler le centre ouvre les lignes et donne de l’espace.", en: "Controlling the center opens lines and gains space." },
+    solution: { fr: "Le centre, le développement et la sécurité du roi se renforcent mutuellement.", en: "Center, development and king safety reinforce one another." },
+    startingFen: standardFen,
+    theorySections: emptyTheory,
+    drawPositions: emptyDraws,
+    steps: [
+      { from: "e2", to: "e4", san: "e4", answer: { fr: "Avancez le pion du roi de deux cases.", en: "Move the king pawn two squares." }, idea: { fr: "e4 ouvre la diagonale du fou et donne de l’espace à la dame.", en: "e4 opens the bishop diagonal and gives the queen room." }, reply: "e5", replySan: "e5" },
+    ],
+    keyPoints: [
+      { title: { fr: "Espace", en: "Space" }, text: { fr: "Un pion central avance pour contrôler des cases importantes.", en: "A central pawn advances to control important squares." } },
+      { title: { fr: "Lignes", en: "Lines" }, text: { fr: "Une poussée centrale libère les diagonales des pièces.", en: "A central pawn push opens lines for the pieces." } },
+      { title: { fr: "Réflexe", en: "Reflex" }, text: { fr: "Avant de chercher une attaque, demandez comment gagner de l’espace.", en: "Before seeking an attack, ask how to gain space." } },
+    ],
+  },
+  "8": {
+    key: "8",
+    number: "08",
+    mode: "guided",
+    title: { fr: "Développer avec intention", en: "Develop with purpose" },
+    kicker: { fr: "Ouverture · Les pièces", en: "Opening · The pieces" },
+    headline: { fr: "Sortez les pièces mineures sans perdre de temps.", en: "Develop minor pieces without losing time." },
+    objective: { fr: "Jouer d4, Cf3 puis Cc3 avant de chercher une attaque.", en: "Play d4, Nf3 and Nc3 before seeking an attack." },
+    solution: { fr: "Évitez de déplacer plusieurs fois la même pièce et de sortir la dame trop tôt sans raison.", en: "Avoid moving the same piece repeatedly or bringing the queen out early without a reason." },
+    startingFen: standardFen,
+    theorySections: emptyTheory,
+    drawPositions: emptyDraws,
+    steps: [
+      { from: "d2", to: "d4", san: "d4", answer: { fr: "Ouvrez la ligne du pion dame.", en: "Open the queen-pawn line." }, idea: { fr: "d4 prend le centre et libère le fou c1.", en: "d4 claims the center and frees the c1 bishop." }, reply: "d5", replySan: "d5" },
+      { from: "g1", to: "f3", san: "Cf3", answer: { fr: "Développez le cavalier roi.", en: "Develop the king knight." }, idea: { fr: "Cf3 contrôle le centre et prépare le roque.", en: "Nf3 controls the center and prepares castling." }, reply: "Nf6", replySan: "Cf6" },
+    ],
+    keyPoints: [
+      { title: { fr: "Développement", en: "Development" }, text: { fr: "Les cavaliers et les fous doivent entrer en jeu avant une attaque.", en: "Knights and bishops should enter the game before an attack." } },
+      { title: { fr: "Temps", en: "Time" }, text: { fr: "Évitez de rejouer la même pièce sans nécessité.", en: "Avoid moving the same piece again without a reason." } },
+      { title: { fr: "Sécurité", en: "Safety" }, text: { fr: "Le développement prépare la mise à l’abri du roi.", en: "Development prepares the king’s safety." } },
+    ],
+  },
 };
 
 export function getNextStepPosition(steps: LessonStep[], nextStepIndex: number, afterUserMoveFen: string) {

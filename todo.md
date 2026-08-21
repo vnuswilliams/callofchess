@@ -409,17 +409,15 @@ Le commit `da52a268d552258d03af7b7048289ceec5b6783c` a été poussé sur `main` 
 
 Le commit `cc966a6780426c1ee438c4a92fff0d2d29a9bd2a` a été poussé sur `main` avec l’identité `Payong Venus <payongvenus@gmail.com>`. Le bundle de leçon public `Lesson-CpgFF8YL.js` contient la temporisation `2400`, le markup `lesson-confetti` et la destination `/path`. Le connecteur Vercel retourne encore zéro projet dans l’équipe accessible, mais la route publique et le chunk servi confirment la version active sur `callofchess.online`.
 
-## Redirection intelligente après réussite — 21 août 2026
+## Redirection intelligente et déblocage du niveau 1 — 21 août 2026
 
-- [x] Ne plus rediriger mécaniquement vers l’UUID immédiatement suivant.
-- [x] Rechercher les progressions complétées de l’utilisateur authentifié et choisir la première leçon publique non terminée.
-- [x] Ajouter la leçon réussie au jeu local avant la navigation afin de ne pas la reproposer.
-- [x] Rafraîchir la lecture Supabase à la fin de la célébration et limiter la requête aux six leçons publiques.
-- [x] Revenir à `/path` si toutes les leçons disponibles sont terminées, pour laisser le choix de rejouer une leçon.
-- [x] Tester la première leçon manquante, la reprise à la leçon 1 après une complétion isolée et le cas « tout terminé ».
-- [x] Pousser le comportement sur `main` avec `payongvenus@gmail.com` et vérifier le chunk public de `callofchess.online` après propagation Vercel.
-
-Le commit `1a556372134a36562a43598b3f940f4f770cd21f` est publié avec l’identité `Payong Venus <payongvenus@gmail.com>`. La production sert `Lesson-bJwSMAMF.js`, qui contient la temporisation de 2,4 secondes, les confettis, la lecture de `lesson_progress` et le fallback `/path`.
+- [x] Ne plus rediriger mécaniquement vers l’UUID immédiatement suivant ; choisir la première leçon publique non terminée.
+- [x] Ajouter la leçon réussie au jeu local avant la navigation et rafraîchir la lecture Supabase à la fin de la célébration.
+- [x] Normaliser dans `/path` les identifiants historiques de `lesson_progress` vers les UUID publics canoniques.
+- [x] Revenir à `/path` lorsque les huit leçons jouables publiées sont terminées.
+- [x] Relier les deux leçons de niveau 1 déjà publiées (`Prendre le centre` et `Développer avec intention`) aux exercices et aux routes `/lesson/:id`.
+- [x] Vérifier les tests ciblés, la suite Vitest, le typecheck, le build, la parité des locales et le rendu local des routes 07/08.
+- [x] Pousser et vérifier le déploiement de cette correction sur `https://callofchess.online`.
 
 Le chapitre 0 refondu est publié par le commit `60b1a6b9acd1ac508a4ced1d5e71e1bd9bf2d194` après correction du build Vercel. Le déploiement Ready `7UpZSiTj29WJTFwDRJ9kXrYQ2bjR` sert la leçon théorique sur `https://callofchess.online` ; la route a été recontrôlée avec un paramètre de cache après propagation CDN.
 

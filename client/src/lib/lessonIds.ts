@@ -5,6 +5,8 @@ export const PUBLIC_LESSON_IDS = {
   special: "32ffa48c-fa82-5825-9d6c-7ffb79a60781",
   endings: "358114a7-8876-588e-bd0d-3fbcbfeecb14",
   complete: "bc8a719d-d4e6-5d3e-90c1-58292c6fe8f4",
+  center: "a116805b-1c51-4578-b66c-5c1d437c0cd6",
+  development: "fbdc9b42-1e39-44fc-8f3c-d4910ec99fc6",
 } as const;
 
 export const PUBLIC_LESSON_ID_BY_KEY = {
@@ -14,6 +16,8 @@ export const PUBLIC_LESSON_ID_BY_KEY = {
   "4": PUBLIC_LESSON_IDS.special,
   "5": PUBLIC_LESSON_IDS.endings,
   "6": PUBLIC_LESSON_IDS.complete,
+  "7": PUBLIC_LESSON_IDS.center,
+  "8": PUBLIC_LESSON_IDS.development,
 } as const;
 
 export type PublicLessonKey = keyof typeof PUBLIC_LESSON_ID_BY_KEY;

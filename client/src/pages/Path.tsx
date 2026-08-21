@@ -7,11 +7,20 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/lib/supabase";
 import { isLevelUnlocked, learningPath, type PathLevel } from "@/lib/learningPath";
 import { PUBLIC_LESSON_ID_BY_KEY } from "@/lib/lessonIds";
+import { normalizeProgressLessonIds } from "@/lib/learningPathProgress";
 
 type ProgressRow = { lesson_id: string; completed: boolean; completed_steps: number };
 
 const lessonIdsByLevel: Record<number, string[]> = {
-  0: Object.values(PUBLIC_LESSON_ID_BY_KEY),
+  0: [
+    PUBLIC_LESSON_ID_BY_KEY["1"],
+    PUBLIC_LESSON_ID_BY_KEY["2"],
+    PUBLIC_LESSON_ID_BY_KEY["3"],
+    PUBLIC_LESSON_ID_BY_KEY["4"],
+    PUBLIC_LESSON_ID_BY_KEY["5"],
+    PUBLIC_LESSON_ID_BY_KEY["6"],
+  ],
+  1: [PUBLIC_LESSON_ID_BY_KEY["7"], PUBLIC_LESSON_ID_BY_KEY["8"]],
 };
 
 function levelCompletion(level: PathLevel, completedLessons: Set<string>) {
@@ -26,6 +35,8 @@ const playableLessonForExercise: Record<string, string> = {
   "0-checkmate": `/lesson/${PUBLIC_LESSON_ID_BY_KEY["4"]}`,
   "0-special": `/lesson/${PUBLIC_LESSON_ID_BY_KEY["5"]}`,
   "0-complete": `/lesson/${PUBLIC_LESSON_ID_BY_KEY["6"]}`,
+  "1-center": `/lesson/${PUBLIC_LESSON_ID_BY_KEY["7"]}`,
+  "1-development": `/lesson/${PUBLIC_LESSON_ID_BY_KEY["8"]}`,
 };
 
 function LevelCard({ level, language, completedLessons, completedLevels, t }: { level: PathLevel; language: "fr" | "en"; completedLessons: Set<string>; completedLevels: Set<string>; t: (key: string) => string }) {
@@ -33,7 +44,7 @@ function LevelCard({ level, language, completedLessons, completedLevels, t }: { 
   const unlocked = isLevelUnlocked(level, completedLevels);
   const completed = levelCompletion(level, completedLessons);
   const progress = Math.round((completed / level.exercises.length) * 100);
-  const lessonLink = level.id === 0 ? `/lesson/${PUBLIC_LESSON_ID_BY_KEY["1"]}` : null;
+  const lessonLink = level.exercises.map((item) => playableLessonForExercise[item.id]).find(Boolean) ?? null;
 
   return (
     <Card className={`relative overflow-hidden rounded-xl p-0 transition-all ${unlocked ? "border-[#cbbd99] bg-[#fffaf0] hover:-translate-y-1 hover:border-[#d69024]" : "border-[#d7ccb0] bg-[#eee8d8]/70"}`}>
@@ -53,7 +64,7 @@ function LevelCard({ level, language, completedLessons, completedLevels, t }: { 
       <div className="mt-7 space-y-2">
         {level.exercises.map((item) => { const itemCopy = item[language]; const playableHref = playableLessonForExercise[item.id]; return <div key={item.id} className="flex items-start justify-between gap-3 border-t border-[#e2d8be] pt-3"><div className="flex min-w-0 items-start gap-3"><span className="mt-0.5 shrink-0 text-[#a87416]"><ChevronRight size={15} /></span><div><p className="text-sm font-bold text-[#173e37]">{itemCopy.title}</p><p className="mt-1 text-xs leading-5 text-[#756c58]">{itemCopy.goal}</p></div></div>{playableHref && unlocked ? <Link href={playableHref} className="shrink-0 text-[.62rem] font-extrabold uppercase tracking-[.1em] text-[#987019] underline decoration-[#d69024] underline-offset-4">{t("inline_b6adb83e63")}</Link> : null}</div>; })}
       </div>
-      {lessonLink && unlocked ? <Link href={lessonLink} className="button-ink mt-7 inline-flex !min-h-10 !px-4">{t("inline_2f76b760cc")}<ArrowUpRight size={15} /></Link> : !unlocked ? <p className="mt-7 flex items-center gap-2 text-xs font-bold text-[#8d846f]"><LockKeyhole size={14} />{language === "fr" ? `Terminez le niveau ${level.prerequisite} pour continuer.` : `Complete level ${level.prerequisite} to continue.`}</p> : null}
+      {lessonLink && unlocked ? <Link href={lessonLink} className="button-ink mt-7 inline-flex !min-h-10 !px-4">{t("inline_2f76b760cc")}<ArrowUpRight size={15} /></Link> : !unlocked ? <p className="mt-7 flex items-center gap-2 text-xs font-bold text-[#8d846f]"><LockKeyhole size={14} />{language === "fr" ? `Terminez le niveau ${level.prerequisite} pour continuer.` : `Complete level ${level.prerequisite} to continue.`}</p> : <p className="mt-7 flex items-center gap-2 text-xs font-bold text-[#756c58]"><BookOpen size={14} />{t("pathLevelComingSoon")}</p>}
       </CardContent>
     </Card>
   );
@@ -74,7 +85,7 @@ export default function Path() {
       setSignedIn(Boolean(auth.user));
       if (!auth.user) { setLoading(false); return; }
       const { data } = await supabase.from("lesson_progress").select("lesson_id, completed, completed_steps").eq("user_id", auth.user.id).limit(100);
-      if (active) { setRows((data ?? []) as ProgressRow[]); setLoading(false); }
+      if (active) { setRows(normalizeProgressLessonIds((data ?? []) as ProgressRow[])); setLoading(false); }
     }
     load().catch(() => { if (active) setLoading(false); });
     return () => { active = false; };

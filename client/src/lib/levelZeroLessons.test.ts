@@ -2,13 +2,14 @@ import { describe, expect, it } from "vitest";
 import { Chess } from "chess.js";
 import { createDrawPosition, getNextStepPosition, lessonCatalog } from "./levelZeroLessons";
 
-describe("level zero lesson catalogue", () => {
-  it("contains six bilingual lessons with a theory-first opening", () => {
-    expect(Object.keys(lessonCatalog)).toEqual(["1", "2", "3", "4", "5", "6"]);
+describe("lesson catalogue", () => {
+  it("contains the six level-zero and two published level-one lessons", () => {
+    expect(Object.keys(lessonCatalog)).toEqual(["1", "2", "3", "4", "5", "6", "7", "8"]);
     expect(lessonCatalog["1"].mode).toBe("theory");
-    expect(lessonCatalog["1"].steps).toHaveLength(0);
     expect(lessonCatalog["5"].mode).toBe("draws");
     expect(lessonCatalog["6"].mode).toBe("computer");
+    expect(lessonCatalog["7"].title.fr).toBe("Prendre le centre");
+    expect(lessonCatalog["8"].title.fr).toBe("Développer avec intention");
 
     for (const lesson of Object.values(lessonCatalog)) {
       expect(lesson.title.fr.length).toBeGreaterThan(0);
