@@ -17,3 +17,11 @@ La troisième séquence d1–h5 a été validée localement. La page affiche 04 
 Après le clic final h5–f7, la carte temporaire de réussite est apparue immédiatement au-dessus de la page avec « Leçon terminée », « Très bien joué. » et « La prochaine leçon arrive… ». L’état sous-jacent affiche `4. Dxf7#` et « Objectif rempli », confirmant que l’animation est déclenchée au bon moment et n’efface pas le résultat pédagogique.
 
 Une capture headless en 390×844 confirme le rendu mobile : l’en-tête reste lisible, la mission apparaît avant l’échiquier selon le layout mobile existant, les contrôles conservent une taille utilisable et aucun débordement horizontal n’est visible dans le premier viewport. La capture source est conservée comme artefact de vérification local.
+
+## Ajustement de l’animation — 21 août 2026
+
+La durée de transition est passée de 1,2 seconde à 2,4 secondes. Le test interactif local de la séquence complète atteint bien l’état « Leçon terminée » avant la navigation ; à environ 450 ms après le coup final, l’URL reste encore sur la leçon et 18 particules de confettis sont présentes dans la surcouche. Les confettis utilisent les couleurs de Call of Chess — vert encre, safran, or clair, vert succès et terre cuite — et sont masqués avec `prefers-reduced-motion`.
+
+Une seconde vérification interactive locale s’arrête à 300 ms après le mat final : l’URL reste sur la leçon, la surcouche `.lesson-success-overlay` est active et les 18 confettis sont présents. La redirection n’intervient donc pas avant l’affichage de la célébration.
+
+La capture mobile 390×844 après l’ajustement conserve l’ordre mission puis échiquier, les textes lisibles et aucun débordement horizontal dans le premier viewport. La couche de confettis reste hors du flux normal et ne modifie pas la géométrie de la page.

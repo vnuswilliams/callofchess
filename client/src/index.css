@@ -126,6 +126,7 @@
   .lesson-success-overlay { animation: lesson-success-overlay-in .18s ease-out both; }
   .lesson-success-card { animation: lesson-success-card-in .42s cubic-bezier(.23,1,.32,1) both; }
   .lesson-success-medallion { animation: lesson-success-medallion-pop .68s cubic-bezier(.23,1,.32,1) .08s both; }
+  .lesson-confetti > span { animation: lesson-confetti-burst 1.9s cubic-bezier(.2,.75,.25,1) var(--confetti-delay) both; background: var(--confetti-color); height: 14px; left: 50%; position: absolute; top: 50%; transform-origin: center; width: 7px; }
 }
 
 @keyframes badge-pop-in { from { opacity: 0; transform: translateY(-14px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
@@ -134,6 +135,26 @@
 @keyframes lesson-success-overlay-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes lesson-success-card-in { from { opacity: 0; transform: translateY(14px) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes lesson-success-medallion-pop { 0% { transform: scale(.72) rotate(-8deg); } 60% { transform: scale(1.08) rotate(3deg); } 100% { transform: scale(1) rotate(0); } }
+@keyframes lesson-confetti-burst { 0% { opacity: 0; transform: translate3d(0, 0, 0) rotate(0) scale(.5); } 12% { opacity: 1; } 72% { opacity: 1; } 100% { opacity: 0; transform: translate3d(var(--confetti-x), calc(var(--confetti-y) + 2.5rem), 0) rotate(var(--confetti-rotate)) scale(.9); } }
+
+.lesson-confetti > span:nth-child(1) { --confetti-color: #d69024; --confetti-delay: 0ms; --confetti-x: -10rem; --confetti-y: -7rem; --confetti-rotate: -34deg; }
+.lesson-confetti > span:nth-child(2) { --confetti-color: #173e37; --confetti-delay: 40ms; --confetti-x: -7rem; --confetti-y: -10rem; --confetti-rotate: 26deg; }
+.lesson-confetti > span:nth-child(3) { --confetti-color: #e7ba61; --confetti-delay: 80ms; --confetti-x: -4rem; --confetti-y: -8rem; --confetti-rotate: -18deg; }
+.lesson-confetti > span:nth-child(4) { --confetti-color: #467a5d; --confetti-delay: 120ms; --confetti-x: -1rem; --confetti-y: -11rem; --confetti-rotate: 42deg; }
+.lesson-confetti > span:nth-child(5) { --confetti-color: #c96442; --confetti-delay: 160ms; --confetti-x: 3rem; --confetti-y: -9rem; --confetti-rotate: -28deg; }
+.lesson-confetti > span:nth-child(6) { --confetti-color: #d69024; --confetti-delay: 200ms; --confetti-x: 6rem; --confetti-y: -11rem; --confetti-rotate: 24deg; }
+.lesson-confetti > span:nth-child(7) { --confetti-color: #173e37; --confetti-delay: 240ms; --confetti-x: 10rem; --confetti-y: -7rem; --confetti-rotate: -42deg; }
+.lesson-confetti > span:nth-child(8) { --confetti-color: #e7ba61; --confetti-delay: 280ms; --confetti-x: 12rem; --confetti-y: -4rem; --confetti-rotate: 18deg; }
+.lesson-confetti > span:nth-child(9) { --confetti-color: #467a5d; --confetti-delay: 320ms; --confetti-x: -12rem; --confetti-y: -3rem; --confetti-rotate: 32deg; }
+.lesson-confetti > span:nth-child(10) { --confetti-color: #c96442; --confetti-delay: 360ms; --confetti-x: -9rem; --confetti-y: 1rem; --confetti-rotate: -24deg; }
+.lesson-confetti > span:nth-child(11) { --confetti-color: #d69024; --confetti-delay: 400ms; --confetti-x: -5rem; --confetti-y: 3rem; --confetti-rotate: 38deg; }
+.lesson-confetti > span:nth-child(12) { --confetti-color: #173e37; --confetti-delay: 440ms; --confetti-x: 5rem; --confetti-y: 3rem; --confetti-rotate: -36deg; }
+.lesson-confetti > span:nth-child(13) { --confetti-color: #e7ba61; --confetti-delay: 480ms; --confetti-x: 9rem; --confetti-y: 1rem; --confetti-rotate: 22deg; }
+.lesson-confetti > span:nth-child(14) { --confetti-color: #467a5d; --confetti-delay: 520ms; --confetti-x: 12rem; --confetti-y: 4rem; --confetti-rotate: -30deg; }
+.lesson-confetti > span:nth-child(15) { --confetti-color: #c96442; --confetti-delay: 560ms; --confetti-x: -9rem; --confetti-y: 7rem; --confetti-rotate: 28deg; }
+.lesson-confetti > span:nth-child(16) { --confetti-color: #d69024; --confetti-delay: 600ms; --confetti-x: -4rem; --confetti-y: 8rem; --confetti-rotate: -16deg; }
+.lesson-confetti > span:nth-child(17) { --confetti-color: #173e37; --confetti-delay: 640ms; --confetti-x: 4rem; --confetti-y: 8rem; --confetti-rotate: 34deg; }
+.lesson-confetti > span:nth-child(18) { --confetti-color: #e7ba61; --confetti-delay: 680ms; --confetti-x: 9rem; --confetti-y: 7rem; --confetti-rotate: -22deg; }
 
 /* Dark theme — a low-luminance reading surface that preserves the Atelier’s green ink, tactile texture and saffron cues. */
 html.dark { color-scheme: dark; }
@@ -286,6 +307,7 @@ html.dark .lesson-notes p, html.dark .lesson-notes .text-\[\#615d50\] { color: #
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
   .hero-board { animation: none !important; }
+  .lesson-confetti { display: none; }
 }
 
 html.dark {

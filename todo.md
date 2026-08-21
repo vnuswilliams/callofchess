@@ -384,3 +384,11 @@ Le test a été effectué depuis une session utilisateur connectée sur `https:/
 La transition utilise une durée de 1,2 seconde. Elle ne se déclenche qu’après une nouvelle complétion, pas lors de la restauration d’une leçon déjà terminée, afin d’éviter une redirection inattendue au rechargement.
 
 Le commit `da52a268d552258d03af7b7048289ceec5b6783c` a été poussé sur `main` avec l’auteur `Payong Venus <payongvenus@gmail.com>`. Le domaine `https://callofchess.online/lesson/bc8a719d-d4e6-5d3e-90c1-58292c6fe8f4` sert le chunk dynamique `Lesson-Ch1vqSWF.js`, qui contient la durée `1200`, la destination `/path` et la surcouche `lesson-success-overlay`. L’inventaire Vercel via le connecteur retourne toutefois zéro projet et le slug direct `callofchess` renvoie 404 ; la preuve de production retenue est donc la route publique et le bundle effectivement servi.
+
+## Ajustement de la célébration de victoire — 21 août 2026
+
+- [x] Prolonger l’affichage de la réussite à 2,4 secondes avant la redirection.
+- [x] Ajouter un jet de 18 confettis avec les couleurs du site Call of Chess.
+- [x] Conserver une annonce accessible et masquer les confettis lorsque `prefers-reduced-motion` est actif.
+- [x] Vérifier localement que la carte et les confettis sont encore présents à 300–450 ms après le coup final, puis que la navigation arrive après la séquence complète.
+- [ ] Pousser cette nouvelle version et confirmer le bundle servi sur `https://callofchess.online`.
