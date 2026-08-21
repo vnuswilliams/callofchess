@@ -18,7 +18,7 @@ describe("computeProfileStats", () => {
       completed: 2,
       activeLessons: 2,
       totalSteps: 6,
-      completionRate: 33,
+      completionRate: 25,
       averageSteps: 2,
       recentActivity: [
         { lessonId: FIRST_LESSON_ID, steps: 2, completed: true },

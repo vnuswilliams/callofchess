@@ -32,6 +32,7 @@ function GuidedLesson() {
   const [, setLocation] = useLocation();
   const lessonKey = toLessonKey(id) ?? "1";
   const lesson = lessonCatalog[lessonKey] ?? lessonCatalog["1"];
+  const lessonCount = Object.keys(lessonCatalog).length;
   const publicLessonId = PUBLIC_LESSON_ID_BY_KEY[lessonKey];
   const { t, language } = useLanguage();
   const copy = language === "fr" ? "fr" : "en";
@@ -233,7 +234,7 @@ function GuidedLesson() {
       <header className="lesson-header paper-texture border-b border-[#c9bb96]">
         <div className="mx-auto flex min-h-[76px] max-w-[1440px] items-center justify-between gap-4 px-5 sm:px-8 lg:px-12">
           <a href="/" className="flex items-center gap-3" aria-label={t("back")}><BrandMark /><div className="leading-none"><span className="display-font block text-[1.45rem] tracking-[-.04em]">Call of Chess</span><span className="block pt-1 text-[.58rem] font-extrabold uppercase tracking-[.16em] text-[#766d57]">{t("guidedLesson")}</span></div></a>
-          <div className="hidden items-center gap-3 sm:flex"><span className="font-mono text-[.64rem] font-bold tracking-[.1em] text-[#9a6b18]">{t("lesson").toUpperCase()} {lesson.number} / 06</span><span className="h-px w-10 bg-[#c5b58f]" /><span className="text-xs font-bold uppercase tracking-[.12em] text-[#59655e]">{lessonTitle(lesson, copy)}</span></div>
+          <div className="hidden items-center gap-3 sm:flex"><span className="font-mono text-[.64rem] font-bold tracking-[.1em] text-[#9a6b18]">{t("lesson").toUpperCase()} {lesson.number} / {String(lessonCount).padStart(2, "0")}</span><span className="h-px w-10 bg-[#c5b58f]" /><span className="text-xs font-bold uppercase tracking-[.12em] text-[#59655e]">{lessonTitle(lesson, copy)}</span></div>
           <div className="flex items-center gap-3"><LanguageToggle /><a href="/path" className="hidden items-center gap-2 text-[.68rem] font-extrabold uppercase tracking-[.11em] text-[#173e37] transition-colors hover:text-[#a87416] sm:inline-flex"><ArrowLeft size={16} /> {t("back")}</a></div>
         </div>
       </header>
