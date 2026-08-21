@@ -417,6 +417,6 @@ Le commit `cc966a6780426c1ee438c4a92fff0d2d29a9bd2a` a été poussé sur `main` 
 - [x] Revenir à `/path` lorsque les huit leçons jouables publiées sont terminées.
 - [x] Relier les deux leçons de niveau 1 déjà publiées (`Prendre le centre` et `Développer avec intention`) aux exercices et aux routes `/lesson/:id`.
 - [x] Vérifier les tests ciblés, la suite Vitest, le typecheck, le build, la parité des locales et le rendu local des routes 07/08.
-- [ ] Pousser et vérifier le déploiement de cette correction sur `https://callofchess.online`.
+- [x] Pousser et vérifier le déploiement de cette correction sur `https://callofchess.online`.
 
 Le chapitre 0 refondu est publié par le commit `60b1a6b9acd1ac508a4ced1d5e71e1bd9bf2d194` après correction du build Vercel. Le déploiement Ready `7UpZSiTj29WJTFwDRJ9kXrYQ2bjR` sert la leçon théorique sur `https://callofchess.online` ; la route a été recontrôlée avec un paramètre de cache après propagation CDN.
