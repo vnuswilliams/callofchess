@@ -379,6 +379,8 @@ Le test a été effectué depuis une session utilisateur connectée sur `https:/
 - [x] Retourner vers `/path` après la dernière leçon, sans inventer d’identifiant.
 - [x] Maintenir les messages français et anglais et respecter `prefers-reduced-motion`.
 - [x] Vérifier le parcours interactif desktop, le rendu mobile 390×844, `pnpm check`, Vitest et `pnpm build`.
-- [ ] Pousser avec l’identité Git `payongvenus@gmail.com` et confirmer le déploiement réellement servi sur `https://callofchess.online`.
+- [x] Pousser avec l’identité Git `payongvenus@gmail.com` et confirmer le déploiement réellement servi sur `https://callofchess.online`.
 
 La transition utilise une durée de 1,2 seconde. Elle ne se déclenche qu’après une nouvelle complétion, pas lors de la restauration d’une leçon déjà terminée, afin d’éviter une redirection inattendue au rechargement.
+
+Le commit `da52a268d552258d03af7b7048289ceec5b6783c` a été poussé sur `main` avec l’auteur `Payong Venus <payongvenus@gmail.com>`. Le domaine `https://callofchess.online/lesson/bc8a719d-d4e6-5d3e-90c1-58292c6fe8f4` sert le chunk dynamique `Lesson-Ch1vqSWF.js`, qui contient la durée `1200`, la destination `/path` et la surcouche `lesson-success-overlay`. L’inventaire Vercel via le connecteur retourne toutefois zéro projet et le slug direct `callofchess` renvoie 404 ; la preuve de production retenue est donc la route publique et le bundle effectivement servi.
