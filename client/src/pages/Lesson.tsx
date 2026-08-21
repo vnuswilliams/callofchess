@@ -9,6 +9,9 @@ import { supabase } from "@/lib/supabase";
 import { PUBLIC_LESSON_ID_BY_KEY, toLessonKey } from "@/lib/lessonIds";
 import { getLessonCompletionDestination, LESSON_SUCCESS_ANIMATION_MS } from "@/lib/lessonTransition";
 import { lessonCatalog, reconstructPosition, type LessonDefinition } from "@/lib/levelZeroLessons";
+import TheoryLesson from "@/pages/TheoryLesson";
+import DrawsLesson from "@/pages/DrawsLesson";
+import ComputerLesson from "@/pages/ComputerLesson";
 import { lessonWorkspaceLayout } from "@/lib/lessonLayout";
 
 function BrandMark() {
@@ -24,7 +27,7 @@ function lessonTitle(lesson: LessonDefinition, language: "fr" | "en") {
   return lesson.title[language];
 }
 
-export default function Lesson() {
+function GuidedLesson() {
   const { id } = useParams<{ id: string }>();
   const [, setLocation] = useLocation();
   const lessonKey = toLessonKey(id) ?? "1";
@@ -32,7 +35,7 @@ export default function Lesson() {
   const publicLessonId = PUBLIC_LESSON_ID_BY_KEY[lessonKey];
   const { t, language } = useLanguage();
   const copy = language === "fr" ? "fr" : "en";
-  const [position, setPosition] = useState(lesson.startingFen);
+  const [position, setPosition] = useState(lesson.steps[0]?.positionFen ?? lesson.startingFen);
   const [currentStep, setCurrentStep] = useState(0);
   const [showHint, setShowHint] = useState(false);
   const [feedback, setFeedback] = useState<"idle" | "wrong" | "correct" | "complete">("idle");
@@ -56,7 +59,7 @@ export default function Lesson() {
     clearReplyTimer();
     completionTransitionStartedRef.current = false;
     setIsCelebrating(false);
-    setPosition(lesson.startingFen);
+    setPosition(lesson.steps[0]?.positionFen ?? lesson.startingFen);
     setCurrentStep(0);
     setShowHint(false);
     setFeedback("idle");
@@ -120,7 +123,7 @@ export default function Lesson() {
     clearReplyTimer();
     completionTransitionStartedRef.current = false;
     setIsCelebrating(false);
-    setPosition(lesson.startingFen);
+    setPosition(lesson.steps[0]?.positionFen ?? lesson.startingFen);
     setCurrentStep(0);
     setShowHint(false);
     setFeedback("idle");
@@ -148,7 +151,7 @@ export default function Lesson() {
       try {
         const afterReply = new Chess(afterUserMove.fen());
         afterReply.move(reply);
-        setPosition(afterReply.fen());
+        setPosition(lesson.steps[nextStep]?.positionFen ?? afterReply.fen());
         setCurrentStep(nextStep);
         setFeedback(isFinalStep ? "complete" : "correct");
         startCompletionTransition();
@@ -238,4 +241,15 @@ export default function Lesson() {
       </main>
     </div>
   );
+}
+
+
+export default function Lesson() {
+  const { id } = useParams<{ id: string }>();
+  const lessonKey = toLessonKey(id) ?? "1";
+  const lesson = lessonCatalog[lessonKey] ?? lessonCatalog["1"];
+  if (lesson.mode === "theory") return <TheoryLesson lesson={lesson} />;
+  if (lesson.mode === "draws") return <DrawsLesson lesson={lesson} />;
+  if (lesson.mode === "computer") return <ComputerLesson lesson={lesson} />;
+  return <GuidedLesson />;
 }

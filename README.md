@@ -50,7 +50,7 @@ Les tests Vitest couvrent notamment le parsing Stockfish, le feedback pédagogiq
 
 ## Déploiement Vercel
 
-Le projet Vercel attendu est `lionchess`, connecté au dépôt GitHub `vnuswilliams/echequier` et à la branche `main`. `vercel.json` configure l’installation pnpm, `pnpm build`, le dossier `dist/public` et la réécriture SPA nécessaire aux routes comme `/lesson/1`, `/profile`, `/path` et `/ranking`. Les anciens chemins français redirigent vers leurs équivalents anglais.
+Le projet Vercel de production est servi sur `https://www.callofchess.online`, avec le dépôt GitHub privé `vnuswilliams/callofchess` et la branche `main`. `vercel.json` configure l’installation pnpm, `pnpm build`, le dossier `dist/public` et la réécriture SPA nécessaire aux routes comme `/lesson/:id`, `/profile`, `/path` et `/ranking`. Les anciens chemins français redirigent vers leurs équivalents anglais.
 
 Pour publier une version :
 
@@ -59,18 +59,18 @@ git status
 git remote -v
 git add -A
 git commit -m "Describe the change"
-git push github main
+git push origin main
 ```
 
-Le remote `github` est la destination GitHub officielle. Le remote `origin` peut pointer vers un artefact interne du projet et ne doit pas être utilisé pour publier sur GitHub.
+Le remote `origin` pointe vers le dépôt GitHub officiel `vnuswilliams/callofchess`. Avant un push, l’identité Git doit être `Payong Venus <payongvenus@gmail.com>` afin de respecter le raccordement de publication du projet.
 
 ## Dépannage d’un déploiement bloqué
 
 Si Vercel reste sur un ancien commit, vérifiez successivement les points suivants :
 
 1. `git log --oneline -5` doit montrer le commit attendu localement.
-2. `git rev-parse github/main` doit correspondre au commit poussé.
-3. Settings → Git doit afficher `vnuswilliams/echequier` et la branche `main`.
+2. `git rev-parse origin/main` doit correspondre au commit poussé.
+3. Settings → Git doit afficher `vnuswilliams/callofchess` et la branche `main`.
 4. L’historique Deployments doit afficher le SHA attendu, pas seulement un redeploy d’un ancien snapshot.
 5. Le bandeau GitHub Outage doit être contrôlé avant de conclure à une erreur de code.
 

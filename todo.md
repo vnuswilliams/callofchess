@@ -384,3 +384,18 @@ Le test a été effectué depuis une session utilisateur connectée sur `https:/
 La transition utilise une durée de 1,2 seconde. Elle ne se déclenche qu’après une nouvelle complétion, pas lors de la restauration d’une leçon déjà terminée, afin d’éviter une redirection inattendue au rechargement.
 
 Le commit `da52a268d552258d03af7b7048289ceec5b6783c` a été poussé sur `main` avec l’auteur `Payong Venus <payongvenus@gmail.com>`. Le domaine `https://callofchess.online/lesson/bc8a719d-d4e6-5d3e-90c1-58292c6fe8f4` sert le chunk dynamique `Lesson-Ch1vqSWF.js`, qui contient la durée `1200`, la destination `/path` et la surcouche `lesson-success-overlay`. L’inventaire Vercel via le connecteur retourne toutefois zéro projet et le slug direct `callofchess` renvoie 404 ; la preuve de production retenue est donc la route publique et le bundle effectivement servi.
+
+
+## Refonte approfondie du Niveau 0 — 21 août 2026
+
+- [x] Remplacer la première leçon par une lecture théorique sans échiquier : matériel, 64 cases, coordonnées, orientation, pièces, valeurs approximatives et classement Elo.
+- [x] Séparer les exercices de déplacement, prises/promotion et échec/mat dans des positions dédiées.
+- [x] Ajouter une leçon interactive des coups spéciaux avec roque court, roque long et prise en passant.
+- [x] Ajouter quatre positions interactives de nulle : pat, répétition, règle des 50 coups et matériel insuffisant.
+- [x] Remplacer la synthèse guidée par une partie complète contre un adversaire informatique débutant, avec victoire nécessaire pour valider le niveau 0.
+- [x] Maintenir les six identifiants publics existants afin de préserver les progressions Supabase déjà enregistrées.
+- [x] Ajouter les traductions françaises et anglaises des nouveaux états, feedbacks et boutons.
+- [x] Ajouter les tests Vitest du catalogue, des positions de nulle et de l’adversaire débutant.
+- [x] Vérifier localement `pnpm check`, `pnpm test -- --run` avec les variables Supabase publiques injectées et `pnpm build`.
+- [x] Vérifier avant publication que `https://callofchess.online/lesson/f3a1c235-5531-4c1c-845b-6d684808259b` sert encore l’ancienne version sans 404.
+- [ ] Pousser le commit avec `Payong Venus <payongvenus@gmail.com>` et contrôler que le nouveau contenu est effectivement servi sur `https://www.callofchess.online`.

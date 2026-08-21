@@ -1,20 +1,59 @@
 import { describe, expect, it } from "vitest";
 import { Chess } from "chess.js";
-import { lessonCatalog } from "./levelZeroLessons";
+import { createDrawPosition, lessonCatalog } from "./levelZeroLessons";
 
 describe("level zero lesson catalogue", () => {
-  it("contains six bilingual lessons with playable sequences", () => {
+  it("contains six bilingual lessons with a theory-first opening", () => {
     expect(Object.keys(lessonCatalog)).toEqual(["1", "2", "3", "4", "5", "6"]);
+    expect(lessonCatalog["1"].mode).toBe("theory");
+    expect(lessonCatalog["1"].steps).toHaveLength(0);
+    expect(lessonCatalog["5"].mode).toBe("draws");
+    expect(lessonCatalog["6"].mode).toBe("computer");
+
     for (const lesson of Object.values(lessonCatalog)) {
       expect(lesson.title.fr.length).toBeGreaterThan(0);
       expect(lesson.title.en.length).toBeGreaterThan(0);
-      expect(lesson.steps.length).toBeGreaterThan(0);
+      expect(lesson.objective.fr.length).toBeGreaterThan(0);
+      expect(lesson.objective.en.length).toBeGreaterThan(0);
+      if (lesson.mode === "guided" || lesson.mode === "draws") expect(lesson.steps.length).toBeGreaterThan(0);
+      if (lesson.mode === "theory") expect(lesson.theorySections.length).toBeGreaterThanOrEqual(4);
+      if (lesson.mode === "computer") expect(lesson.computerGoal).toBeTruthy();
+    }
+  });
+
+  it("keeps every guided sequence legal", () => {
+    for (const lesson of Object.values(lessonCatalog)) {
+      if (lesson.mode === "theory" || lesson.mode === "computer") continue;
       const game = new Chess(lesson.startingFen);
       for (const step of lesson.steps) {
+        if (step.positionFen) game.load(step.positionFen);
         game.move({ from: step.from, to: step.to, promotion: "q" });
         if (step.reply) game.move(step.reply);
       }
       expect(game.fen()).toMatch(/^[rnbqkpRNBQKP1-8/]+ [wb] /);
     }
+  });
+
+  it("explains the requested material and Elo principle in the theory lesson", () => {
+    const theory = lessonCatalog["1"];
+    const text = theory.theorySections.map((section) => `${section.title.fr} ${section.text.fr} ${(section.items ?? []).map((item) => `${item.label.fr} ${item.text.fr}`).join(" ")}`).join(" ");
+    expect(text).toContain("Elo");
+    expect(text).toContain("Roi");
+    expect(text).toContain("Dame");
+    expect(text).toContain("Pion");
+  });
+
+  it("keeps the draw lesson explicit and interactive", () => {
+    const draws = lessonCatalog["5"];
+    const text = draws.drawPositions.map((position) => `${position.title.fr} ${position.explanation.fr}`).join(" ").toLocaleLowerCase("fr");
+    expect(draws.mode).toBe("draws");
+    expect(draws.drawPositions).toHaveLength(4);
+    expect(text).toContain("répétition");
+    expect(text).toContain("50 coups");
+    expect(text).toContain("matériel insuffisant");
+    expect(createDrawPosition(draws.drawPositions[0]).isStalemate()).toBe(true);
+    expect(createDrawPosition(draws.drawPositions[1]).isThreefoldRepetition()).toBe(true);
+    expect(createDrawPosition(draws.drawPositions[2]).isDraw()).toBe(true);
+    expect(createDrawPosition(draws.drawPositions[3]).isInsufficientMaterial()).toBe(true);
   });
 });
