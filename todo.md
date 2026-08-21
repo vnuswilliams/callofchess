@@ -422,3 +422,13 @@ Le commit `cc966a6780426c1ee438c4a92fff0d2d29a9bd2a` a été poussé sur `main` 
 Le commit `1a556372134a36562a43598b3f940f4f770cd21f` est publié avec l’identité `Payong Venus <payongvenus@gmail.com>`. La production sert `Lesson-bJwSMAMF.js`, qui contient la temporisation de 2,4 secondes, les confettis, la lecture de `lesson_progress` et le fallback `/path`.
 
 Le chapitre 0 refondu est publié par le commit `60b1a6b9acd1ac508a4ced1d5e71e1bd9bf2d194` après correction du build Vercel. Le déploiement Ready `7UpZSiTj29WJTFwDRJ9kXrYQ2bjR` sert la leçon théorique sur `https://callofchess.online` ; la route a été recontrôlée avec un paramètre de cache après propagation CDN.
+
+
+## Correctif transition roi → dame — 21 août 2026
+
+- [x] Reproduire le maintien de l’échiquier du roi après la validation de la première mission de la leçon 2.
+- [x] Ajouter `getNextStepPosition` pour sélectionner la FEN dédiée de l’exercice suivant.
+- [x] Synchroniser `position` avec `currentStep` lorsque l’étape validée n’a pas de réponse informatique.
+- [x] Ajouter un test de régression couvrant la transition roi → dame et le repli de dernière étape.
+- [x] Vérifier `pnpm check`, les 43 tests Vitest et `pnpm build`.
+- [ ] Pousser et vérifier le correctif sur `https://callofchess.online`.

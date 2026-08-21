@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { Chess } from "chess.js";
-import { createDrawPosition, lessonCatalog } from "./levelZeroLessons";
+import { createDrawPosition, getNextStepPosition, lessonCatalog } from "./levelZeroLessons";
 
 describe("level zero lesson catalogue", () => {
   it("contains six bilingual lessons with a theory-first opening", () => {
@@ -19,6 +19,16 @@ describe("level zero lesson catalogue", () => {
       if (lesson.mode === "theory") expect(lesson.theorySections.length).toBeGreaterThanOrEqual(4);
       if (lesson.mode === "computer") expect(lesson.computerGoal).toBeTruthy();
     }
+  });
+
+  it("switches the board to the next piece position after a completed exercise", () => {
+    const lesson = lessonCatalog["2"];
+    const afterKingGame = new Chess(lesson.steps[0].positionFen);
+    afterKingGame.move({ from: lesson.steps[0].from, to: lesson.steps[0].to });
+    const afterKingMove = afterKingGame.fen();
+
+    expect(getNextStepPosition(lesson.steps, 1, afterKingMove)).toBe(lesson.steps[1].positionFen);
+    expect(getNextStepPosition(lesson.steps, lesson.steps.length, afterKingMove)).toBe(afterKingMove);
   });
 
   it("keeps every guided sequence legal", () => {

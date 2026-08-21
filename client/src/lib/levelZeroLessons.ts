@@ -227,6 +227,10 @@ export const lessonCatalog: Record<string, LessonDefinition> = {
   },
 };
 
+export function getNextStepPosition(steps: LessonStep[], nextStepIndex: number, afterUserMoveFen: string) {
+  return steps[nextStepIndex]?.positionFen ?? afterUserMoveFen;
+}
+
 export function reconstructPosition(steps: LessonStep[], completedStep: number, startingFen: string) {
   let game = new Chess(startingFen);
   steps.slice(0, completedStep).forEach((step) => {

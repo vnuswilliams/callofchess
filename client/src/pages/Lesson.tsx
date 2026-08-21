@@ -8,7 +8,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/lib/supabase";
 import { PUBLIC_LESSON_ID_BY_KEY, toLessonKey } from "@/lib/lessonIds";
 import { getFirstIncompleteLessonDestination, LESSON_SUCCESS_ANIMATION_MS } from "@/lib/lessonTransition";
-import { lessonCatalog, reconstructPosition, type LessonDefinition } from "@/lib/levelZeroLessons";
+import { getNextStepPosition, lessonCatalog, reconstructPosition, type LessonDefinition } from "@/lib/levelZeroLessons";
 import TheoryLesson from "@/pages/TheoryLesson";
 import DrawsLesson from "@/pages/DrawsLesson";
 import ComputerLesson from "@/pages/ComputerLesson";
@@ -163,7 +163,7 @@ function GuidedLesson() {
       setIsCelebrating(true);
     };
     if (!reply) {
-      setPosition(afterUserMove.fen());
+      setPosition(getNextStepPosition(lesson.steps, nextStep, afterUserMove.fen()));
       setCurrentStep(nextStep);
       setFeedback("complete");
       startCompletionTransition();
