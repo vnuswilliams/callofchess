@@ -46,3 +46,30 @@ La route production avec `?v=d1872b1` ne révèle pas le nouveau bundle : le pre
 ## Identification du projet Vercel
 
 L’URL de projet supposée `https://vercel.com/vnuswilliams/callofchess` renvoie 404 car l’équipe utilise le slug `vnuswilliams1`. Le tableau d’équipe `https://vercel.com/vnuswilliams1` affiche bien le projet `callofchess`, le domaine `callofchess.online`, le dépôt `vnuswilliams/callofchess` et le dernier déploiement visible `Document smart lesson redirect production`, daté d’environ une heure. Le connecteur Vercel utilisé en lecture avait donc interrogé le mauvais périmètre ou ne remontait pas ce projet malgré son existence dans l’interface web.
+
+
+## Correction du build Vercel
+
+Le premier déploiement du merge `d1872b1` a été créé en Production mais a échoué avec une erreur Rollup : `TheoryLesson.tsx` importait `getLessonCompletionDestination`, supprimé par la redirection intelligente distante. Le module de transition exporte désormais `getFirstIncompleteLessonDestination` ; la vue théorique a été adaptée pour interroger les progressions authentifiées, mémoriser la leçon 01 complétée et rediriger vers la première leçon incomplète.
+
+Le correctif local passe `pnpm check`, `pnpm build` et les 42 tests Vitest. Le commit `60b1a6b9acd1ac508a4ced1d5e71e1bd9bf2d194` a été poussé sur `origin/main` avec `Payong Venus <payongvenus@gmail.com>`. Le déploiement Vercel de ce commit reste à vérifier.
+
+
+## Déploiement correctif détecté
+
+Le tableau de bord Vercel du vrai projet `https://vercel.com/vnuswilliams1/callofchess` affiche maintenant le commit `60b1a6b Corriger la transition de la leçon théorique`, créé « Just now » sur `main`, avec les domaines `callofchess.online` et `callofchess.vercel.app`. Le contrôle suivant a été ouvert sur `about:blank` par le navigateur et ne permet pas encore de lire le statut final ; la route canonique doit être rechargée directement après la fin de la construction.
+
+
+## État de production après le second déploiement
+
+Après détection du commit `60b1a6b`, la route `https://callofchess.online/lesson/f3a1c235-5531-4c1c-845b-6d684808259b` affiche une page blanche sans éléments détectés. La console navigateur ne renvoie aucun message exploitable. Le build local est vert, mais la production n’est donc pas encore validée comme fonctionnelle ; il faut inspecter l’aperçu Vercel et son état final avant de conclure.
+
+
+## Déploiement Ready et comparaison de domaine
+
+Le projet Vercel affiche le déploiement `7UpZSiTj29WJTFwDRJ9kXrYQ2bjR` en statut **Ready**, créé à partir du commit `60b1a6b` sur `main`, avec `callofchess.online` comme domaine associé. L’URL de déploiement `https://callofchess-opbvh81ic-vnuswilliams1.vercel.app/lesson/f3a1c235-5531-4c1c-845b-6d684808259b` sert bien la nouvelle page théorique complète, sans échiquier, avec matériel, six pièces, valeurs et Elo. Le domaine custom `callofchess.online` affichait encore une page blanche au même moment ; la publication du bundle est donc validée sur le déploiement Ready mais le rattachement/propagation du domaine custom reste à confirmer.
+
+
+## Validation finale du domaine custom
+
+Après propagation, `https://callofchess.online/lesson/f3a1c235-5531-4c1c-845b-6d684808259b?deploy=60b1a6b` sert correctement le nouveau chapitre 0. La page affiche « Le matériel et le classement Elo », cinq cartes théoriques, les 64 cases, coordonnées, colonnes/rangées/diagonales, les six pièces, valeurs `1 · 3 · 5 · 9`, sécurité du roi et principe Elo, sans échiquier d’exercice. Le bouton « J’ai compris, continuer » est présent. La version est donc visible sur le domaine custom demandé ; le paramètre de requête a servi à forcer la vérification après propagation CDN.

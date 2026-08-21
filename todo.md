@@ -397,7 +397,7 @@ Le commit `da52a268d552258d03af7b7048289ceec5b6783c` a été poussé sur `main` 
 - [x] Ajouter les tests Vitest du catalogue, des positions de nulle et de l’adversaire débutant.
 - [x] Vérifier localement `pnpm check`, `pnpm test -- --run` avec les variables Supabase publiques injectées et `pnpm build`.
 - [x] Vérifier avant publication que `https://callofchess.online/lesson/f3a1c235-5531-4c1c-845b-6d684808259b` sert encore l’ancienne version sans 404.
-- [ ] Pousser le commit avec `Payong Venus <payongvenus@gmail.com>` et contrôler que le nouveau contenu est effectivement servi sur `https://www.callofchess.online`.
+- [x] Pousser le commit avec `Payong Venus <payongvenus@gmail.com>` et contrôler que le nouveau contenu est effectivement servi sur `https://www.callofchess.online`.
 
 ## Ajustement de la célébration de victoire — 21 août 2026
 
@@ -420,3 +420,5 @@ Le commit `cc966a6780426c1ee438c4a92fff0d2d29a9bd2a` a été poussé sur `main` 
 - [x] Pousser le comportement sur `main` avec `payongvenus@gmail.com` et vérifier le chunk public de `callofchess.online` après propagation Vercel.
 
 Le commit `1a556372134a36562a43598b3f940f4f770cd21f` est publié avec l’identité `Payong Venus <payongvenus@gmail.com>`. La production sert `Lesson-bJwSMAMF.js`, qui contient la temporisation de 2,4 secondes, les confettis, la lecture de `lesson_progress` et le fallback `/path`.
+
+Le chapitre 0 refondu est publié par le commit `60b1a6b9acd1ac508a4ced1d5e71e1bd9bf2d194` après correction du build Vercel. Le déploiement Ready `7UpZSiTj29WJTFwDRJ9kXrYQ2bjR` sert la leçon théorique sur `https://callofchess.online` ; la route a été recontrôlée avec un paramètre de cache après propagation CDN.
