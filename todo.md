@@ -439,4 +439,4 @@ Le chapitre 0 refondu est publié par le commit `60b1a6b9acd1ac508a4ced1d5e71e1b
 - [x] Attendre 950 ms avant de charger la position dédiée de l’exercice suivant.
 - [x] Couvrir les constantes de cadence par un test Vitest.
 - [x] Vérifier `pnpm check`, les 46 tests Vitest et `pnpm build`.
-- [ ] Pousser et vérifier le nouveau rythme sur `https://callofchess.online`.
+- [x] Pousser et vérifier le nouveau rythme sur `https://callofchess.online`.
