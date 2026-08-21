@@ -472,4 +472,4 @@ La sauvegarde des leçons guidées fusionne maintenant l’état courant avec l�
 - [x] Afficher un badge de niveau terminé lorsque toutes ses leçons publiées sont validées.
 - [x] Couvrir la dérivation de l’état de liste par un test Vitest.
 - [x] Vérifier le typecheck, les 54 tests Vitest et le build de production.
-- [ ] Pousser et vérifier cette interface sur `https://callofchess.online`.
+- [x] Pousser et vérifier cette interface sur `https://callofchess.online`.
