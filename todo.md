@@ -541,5 +541,6 @@ Aucune migration Supabase ni modification de données utilisateur n’est néces
 - [x] Ajouter l’indicateur bilingue et accessible de synchronisation.
 - [x] Activer `lesson_progress` dans la publication `supabase_realtime` avec une migration idempotente appliquée en production.
 - [x] Vérifier le smoke test réseau (`SUBSCRIBED`), le typecheck, les 70 tests Vitest et le build de production.
-- [ ] Pousser et vérifier la version servie sur `https://callofchess.online`.
+- [x] Pousser et vérifier la version servie sur `https://callofchess.online`.
+Le commit `6912a5d` est poussé avec `payongvenus@gmail.com`. Le domaine canonique répond en HTTP 200 à `/path`, et le bundle réellement servi contient le module `learningPathRealtime` ainsi que les libellés de synchronisation. La CI GitHub reste en échec sur le dépôt, mais les validations locales et le smoke test Supabase Realtime sont passants.
 La synchronisation ne lit ni ne publie de données d’un autre utilisateur : Supabase applique RLS et le canal client ajoute le filtre `user_id=eq.<utilisateur authentifié>`. Le repli par lecture reste disponible pour les connexions interrompues.
