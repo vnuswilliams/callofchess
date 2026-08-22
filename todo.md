@@ -492,6 +492,6 @@ La suite Vitest passe pour les 16 fichiers applicatifs sauf `supabaseHealth.test
 - [x] Prévoir un repli sûr vers la dernière leçon jouable si toutes les leçons publiées du niveau sont terminées, sans inventer d’UUID.
 - [x] Ajouter les tests Vitest des cas non terminé, niveau terminé et niveau sans leçon publiée.
 - [x] Vérifier le typecheck, la suite Vitest, le build et le rendu de `/path`.
-- [ ] Pousser le correctif avec l’identité Git `Payong Venus <payongvenus@gmail.com>` et confirmer la version servie sur `https://callofchess.online/path`.
+- [x] Pousser le correctif avec l’identité Git `Payong Venus <payongvenus@gmail.com>` et confirmer la version servie sur `https://callofchess.online/path`.
 
 Le niveau 1 affiche encore un exercice « Le roi à l’abri » sans leçon publique associée dans le catalogue actuel. Le bouton ne génère jamais de route pour cet exercice non publié ; il reprend uniquement les leçons jouables existantes et conserve un repli sans 404. Aucune migration Supabase n’est nécessaire.
