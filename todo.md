@@ -483,3 +483,15 @@ La sauvegarde des leçons guidées fusionne maintenant l’état courant avec l�
 - [ ] Pousser le correctif avec l’identité Git `payongvenus@gmail.com` et confirmer le déploiement sur `https://callofchess.online`.
 
 La suite Vitest passe pour les 16 fichiers applicatifs sauf `supabaseHealth.test.ts`, qui nécessite les variables publiques `VITE_SUPABASE_URL` et `VITE_SUPABASE_ANON_KEY` absentes de l’environnement local courant. Le correctif ne nécessite aucune migration Supabase ni modification des données utilisateur.
+
+
+## Reprise de la dernière leçon non jouée par niveau — 22 août 2026
+
+- [x] Remplacer le lien fixe du bouton global par une destination calculée depuis les leçons jouables et la progression terminée.
+- [x] Ouvrir la première leçon jouable non terminée dans l’ordre pédagogique du niveau.
+- [x] Prévoir un repli sûr vers la dernière leçon jouable si toutes les leçons publiées du niveau sont terminées, sans inventer d’UUID.
+- [x] Ajouter les tests Vitest des cas non terminé, niveau terminé et niveau sans leçon publiée.
+- [x] Vérifier le typecheck, la suite Vitest, le build et le rendu de `/path`.
+- [ ] Pousser le correctif avec l’identité Git `Payong Venus <payongvenus@gmail.com>` et confirmer la version servie sur `https://callofchess.online/path`.
+
+Le niveau 1 affiche encore un exercice « Le roi à l’abri » sans leçon publique associée dans le catalogue actuel. Le bouton ne génère jamais de route pour cet exercice non publié ; il reprend uniquement les leçons jouables existantes et conserve un repli sans 404. Aucune migration Supabase n’est nécessaire.
