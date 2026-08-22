@@ -47,6 +47,10 @@ describe("lesson completion destination", () => {
       "bc8a719d-d4e6-5d3e-90c1-58292c6fe8f4",
       "a116805b-1c51-4578-b66c-5c1d437c0cd6",
       "fbdc9b42-1e39-44fc-8f3c-d4910ec99fc6",
+      "d7b4c6a1-0cb9-4e92-8d7a-7e2f1b1b8e01",
+      "e10f3b2a-6d35-4f9d-a5f8-62f69f7d9c12",
+      "f24a9d63-4c1e-4bf9-9a2e-3a2f6c8d5b40",
+      "a5c7e2f1-8b39-4d64-9e10-5f6a7b2c3d48",
     ]))).toBe("/path");
   });
 });

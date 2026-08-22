@@ -116,3 +116,30 @@ Toutes les leçons doivent gérer le chargement de progression, l’absence de s
 
 ### Critique de conception
 La recherche UX générique suggère une esthétique éducative plus colorée et ludique, mais elle serait moins cohérente avec la marque déjà validée et risquerait de réduire la gravité utile des règles. Le plan conserve donc l’Atelier de l’Ouverture et n’emprunte que les exigences structurelles pertinentes : cible tactile d’au moins 44 px, contraste, focus clavier, absence de débordement à 375 px et réduction des animations. La signature reste spécifique aux échecs : coordonnées, feuille de coups, pièces et validation par position légale.
+
+
+## Plan de conception — Niveau 1 approfondi
+
+### Travail d’apprentissage
+Le Niveau 1 s’adresse au joueur qui connaît déjà les règles mais joue encore les coups sans lire la position. La tâche principale est de faire passer chaque principe d’une phrase à une décision observable : identifier l’objectif de la position, comparer un coup naturel à un coup utile, puis vérifier la menace adverse avant d’agir. Chaque leçon alterne une courte fiche théorique et des positions dédiées, avec une seule question pratique à la fois.
+
+### Parcours retenu
+Les leçons 07 et 08 conservent leurs identifiants publics afin de préserver les progressions existantes, mais deviennent des chapitres approfondis. Le Niveau 1 comprend six étapes : 07 « Les objectifs d’une position » (mat, sécurité du roi, matériel, menaces, activité et tempo), 08 « Les principes d’ouverture » (centre, développement, pièces mineures, roque, dame, répétition et tours connectées), 09 « Roi en sécurité et roquer », 10 « Gagner du matériel sans le donner », 11 « Créer des menaces et améliorer ses pièces », et 12 « Que veut faire l’adversaire ? ».
+
+### Apprentissage par position
+Les positions sont légales, courtes et orientées décision. Les exercices demandent soit un coup forcing, soit une amélioration concrète, soit une réponse prophylactique à une menace. Les feedbacks expliquent le principe derrière le coup et la conséquence immédiate, au lieu de seulement dire si le coup est correct. La question « Que veut faire mon adversaire ? » apparaît comme un rituel visible avant chaque mission et dans la leçon finale.
+
+### Direction visuelle
+La direction existante « L’Atelier de l’Ouverture » est conservée. Le plateau reste l’artefact principal ; les fiches théoriques prennent la forme d’annotations de carnet, avec la notation du coup, la question à se poser et le retour dans la feuille de partie. Aucun visuel externe n’est nécessaire : les positions et la notation portent le contenu pédagogique.
+
+### Palette, typographie et mise en page
+La palette reste ivoire de jeu `#F7F0DF`, surface papier `#FFFAF0`, encre vert profond `#173E37`, safran `#D69024`, succès `#467A5D` et erreur `#C96442`. DM Serif Display porte les principes ; Manrope porte les explications ; la notation utilise le monospace. Desktop : plateau à gauche et mission à droite, puis théorie en bandeau pleine largeur. Mobile : mission sticky, plateau dimensionné à la largeur disponible, fiches empilées sans débordement.
+
+### Signature d’interaction
+Chaque étape affiche une « question de réflexion » distincte : « Quel est l’objectif ici ? », « Que veut faire l’adversaire ? » ou « Qu’est-ce que mon coup permet ? ». Après le coup, la réponse relie la case jouée à une conséquence positionnelle. Les indices montrent les cases, mais ne remplacent pas la réflexion.
+
+### États à traiter
+Les états existants sont conservés : chargement/restauration de progression, absence de session, coup incorrect, indice, réussite d’étape, réussite complète, réinitialisation et navigation bilingue. La nouvelle présentation ajoute une théorie vide non affichée, une mission bloquée pendant la réponse informatique, des focus visibles, des cibles tactiles d’au moins 44 px et une réduction des animations via les styles existants.
+
+### Critique
+Un simple allongement des textes ne rendrait pas le niveau plus profond. La profondeur vient ici de la diversité des positions, du contraste entre coups candidats et de la répétition du même rituel de réflexion. Les six leçons ajoutées restent locales et testables ; aucune statistique ou donnée utilisateur fictive n’est introduite.

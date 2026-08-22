@@ -22,7 +22,7 @@ const lessonIdsByLevel: Record<number, string[]> = {
     PUBLIC_LESSON_ID_BY_KEY["5"],
     PUBLIC_LESSON_ID_BY_KEY["6"],
   ],
-  1: [PUBLIC_LESSON_ID_BY_KEY["7"], PUBLIC_LESSON_ID_BY_KEY["8"]],
+  1: [PUBLIC_LESSON_ID_BY_KEY["7"], PUBLIC_LESSON_ID_BY_KEY["8"], PUBLIC_LESSON_ID_BY_KEY["9"], PUBLIC_LESSON_ID_BY_KEY["10"], PUBLIC_LESSON_ID_BY_KEY["11"], PUBLIC_LESSON_ID_BY_KEY["12"]],
 };
 
 function levelCompletion(level: PathLevel, completedLessons: Set<string>) {
@@ -38,7 +38,11 @@ const playableLessonIdForExercise: Record<string, string> = {
   "0-special": PUBLIC_LESSON_ID_BY_KEY["5"],
   "0-complete": PUBLIC_LESSON_ID_BY_KEY["6"],
   "1-center": PUBLIC_LESSON_ID_BY_KEY["7"],
-  "1-development": PUBLIC_LESSON_ID_BY_KEY["8"],
+  "1-opening": PUBLIC_LESSON_ID_BY_KEY["8"],
+  "1-safety": PUBLIC_LESSON_ID_BY_KEY["9"],
+  "1-material": PUBLIC_LESSON_ID_BY_KEY["10"],
+  "1-threats": PUBLIC_LESSON_ID_BY_KEY["11"],
+  "1-opponent": PUBLIC_LESSON_ID_BY_KEY["12"],
 };
 
 function pathLessonTitle(lessonId: string, language: "fr" | "en", fallback: string) {

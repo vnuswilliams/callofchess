@@ -3,13 +3,14 @@ import { Chess } from "chess.js";
 import { createDrawPosition, getNextStepPosition, lessonCatalog } from "./levelZeroLessons";
 
 describe("lesson catalogue", () => {
-  it("contains the six level-zero and two published level-one lessons", () => {
-    expect(Object.keys(lessonCatalog)).toEqual(["1", "2", "3", "4", "5", "6", "7", "8"]);
+  it("contains the six level-zero and six published level-one lessons", () => {
+    expect(Object.keys(lessonCatalog)).toEqual(["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]);
     expect(lessonCatalog["1"].mode).toBe("theory");
     expect(lessonCatalog["5"].mode).toBe("draws");
     expect(lessonCatalog["6"].mode).toBe("computer");
-    expect(lessonCatalog["7"].title.fr).toBe("Prendre le centre");
-    expect(lessonCatalog["8"].title.fr).toBe("Développer avec intention");
+    expect(lessonCatalog["7"].title.fr).toBe("Les objectifs d’une position");
+    expect(lessonCatalog["8"].title.fr).toBe("Les principes d’ouverture");
+    expect(lessonCatalog["12"].title.fr).toBe("Que veut faire l’adversaire ?");
 
     for (const lesson of Object.values(lessonCatalog)) {
       expect(lesson.title.fr.length).toBeGreaterThan(0);

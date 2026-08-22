@@ -507,3 +507,16 @@ Le niveau 1 affiche encore un exercice « Le roi à l’abri » sans leçon publ
 - [x] Pousser et vérifier cette amélioration sur `https://callofchess.online`.
 
 Aucune statistique n’est inventée pour un utilisateur déconnecté. L’animation existante respecte `prefers-reduced-motion`, et aucune migration Supabase n’est nécessaire : le signal temporaire reste local au navigateur tandis que la progression officielle demeure dans `lesson_progress`.
+
+
+## Niveau 1 — Approfondissement par positions — 22 août 2026
+
+- [x] Réécrire les leçons 07 et 08 avec théorie courte, questions de réflexion et positions progressives.
+- [x] Ajouter les leçons 09 à 12 sur la sécurité du roi, le matériel, les menaces, l’activité, le tempo et l’observation du plan adverse.
+- [x] Étendre le parcours et les identifiants publics sans perdre les progressions existantes.
+- [x] Ajouter et appliquer la migration Supabase idempotente pour les nouvelles leçons et leurs exercices publiés.
+- [x] Ajouter les tests Vitest de légalité des positions, de structure du catalogue et de navigation du Niveau 1.
+- [x] Vérifier bilinguisme, clavier, desktop, typecheck, tests et build ; la vérification mobile reste à confirmer sur un viewport dédié.
+- [ ] Pousser avec l’identité Git Payong Venus <payongvenus@gmail.com> et vérifier la version réellement servie sur https://www.callofchess.online.
+
+La migration `seed_level_one_deep_curriculum` est enregistrée dans Supabase. Elle n’efface ni ne modifie `lesson_progress`; le contrôle public confirme six leçons publiées et au moins un exercice associé à chacune.
