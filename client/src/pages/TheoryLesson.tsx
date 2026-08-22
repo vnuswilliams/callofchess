@@ -5,6 +5,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/lib/supabase";
 import { PUBLIC_LESSON_ID_BY_KEY } from "@/lib/lessonIds";
 import { getFirstIncompleteLessonDestination, LESSON_SUCCESS_ANIMATION_MS } from "@/lib/lessonTransition";
+import { shouldAnnounceFirstCompletion, storeFirstCompletionNotice } from "@/lib/learningPathProgress";
 import type { LessonDefinition } from "@/lib/levelZeroLessons";
 
 function BrandMark() {
@@ -59,6 +60,7 @@ export default function TheoryLesson({ lesson }: { lesson: LessonDefinition }) {
     setCelebrating(true);
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
+    if (shouldAnnounceFirstCompletion(completed, true)) storeFirstCompletionNotice(localStorage, user.id, PUBLIC_LESSON_ID_BY_KEY["1"]);
     await supabase.from("lesson_progress").upsert({
       user_id: user.id,
       lesson_id: PUBLIC_LESSON_ID_BY_KEY["1"],

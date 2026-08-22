@@ -9,7 +9,7 @@ import { supabase } from "@/lib/supabase";
 import { PUBLIC_LESSON_ID_BY_KEY, toLessonKey } from "@/lib/lessonIds";
 import { getNextLessonHref } from "@/lib/lessonNavigation";
 import { getFirstIncompleteLessonDestination, LESSON_MOVE_ANIMATION_MS, LESSON_STEP_TRANSITION_DELAY_MS, LESSON_SUCCESS_ANIMATION_MS } from "@/lib/lessonTransition";
-import { mergeLessonProgress, normalizeProgressLessonIds, type LearningPathProgressRow } from "@/lib/learningPathProgress";
+import { mergeLessonProgress, normalizeProgressLessonIds, shouldAnnounceFirstCompletion, storeFirstCompletionNotice, type LearningPathProgressRow } from "@/lib/learningPathProgress";
 import { getNextStepPosition, lessonCatalog, reconstructPosition, type LessonDefinition } from "@/lib/levelZeroLessons";
 import TheoryLesson from "@/pages/TheoryLesson";
 import DrawsLesson from "@/pages/DrawsLesson";
@@ -98,12 +98,14 @@ function GuidedLesson() {
     if (currentStep === 0) return;
     supabase.auth.getUser().then(async ({ data: { user } }) => {
       if (!user) return;
+      const previouslyCompleted = Boolean(completedProgressRef.current?.completed);
       const progress = mergeLessonProgress(completedProgressRef.current, {
         lesson_id: publicLessonId,
         completed_steps: currentStep,
         completed,
       });
       completedProgressRef.current = progress;
+      if (shouldAnnounceFirstCompletion(previouslyCompleted, progress.completed)) storeFirstCompletionNotice(localStorage, user.id, publicLessonId);
       if (progress.completed) completedLessonIdsRef.current = new Set(completedLessonIdsRef.current).add(publicLessonId);
       await supabase.from("lesson_progress").upsert({
         user_id: user.id,

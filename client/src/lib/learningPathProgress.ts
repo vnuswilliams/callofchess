@@ -7,6 +7,37 @@ export type LearningPathProgressRow = {
 };
 
 export type LessonListState = "completed" | "available";
+export type CompletionNoticeStorage = Pick<Storage, "getItem" | "setItem" | "removeItem">;
+
+type FirstCompletionNotice = { lessonId: string };
+
+function firstCompletionStorageKey(userId: string) {
+  return `callofchess:first-completion-notice:${userId}`;
+}
+
+export function storeFirstCompletionNotice(storage: CompletionNoticeStorage, userId: string, lessonId: string): void {
+  try {
+    storage.setItem(firstCompletionStorageKey(userId), JSON.stringify({ lessonId } satisfies FirstCompletionNotice));
+  } catch {
+    // The path remains usable when browser storage is unavailable.
+  }
+}
+
+export function consumeFirstCompletionNotice(storage: CompletionNoticeStorage, userId: string): string | null {
+  try {
+    const raw = storage.getItem(firstCompletionStorageKey(userId));
+    if (!raw) return null;
+    storage.removeItem(firstCompletionStorageKey(userId));
+    const notice = JSON.parse(raw) as Partial<FirstCompletionNotice>;
+    return typeof notice.lessonId === "string" ? notice.lessonId : null;
+  } catch {
+    return null;
+  }
+}
+
+export function shouldAnnounceFirstCompletion(previouslyCompleted: boolean, currentlyCompleted: boolean): boolean {
+  return !previouslyCompleted && currentlyCompleted;
+}
 
 export function getLessonListState(completedLessons: ReadonlySet<string>, lessonId: string): LessonListState {
   return completedLessons.has(lessonId) ? "completed" : "available";

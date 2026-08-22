@@ -6,6 +6,7 @@ import { Chess, type Square } from "chess.js";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/lib/supabase";
 import { PUBLIC_LESSON_ID_BY_KEY } from "@/lib/lessonIds";
+import { shouldAnnounceFirstCompletion, storeFirstCompletionNotice } from "@/lib/learningPathProgress";
 import { BEGINNER_COMPUTER_ELO, chooseBeginnerMove, createHumanMove, describeGameResult, type GameResult } from "@/lib/beginnerComputer";
 import type { LessonDefinition } from "@/lib/levelZeroLessons";
 
@@ -39,6 +40,8 @@ export default function ComputerLesson({ lesson }: { lesson: LessonDefinition })
     let active = true;
     supabase.auth.getUser().then(async ({ data: { user } }) => {
       if (!user || !active) return;
+      const { data: previous } = await supabase.from("lesson_progress").select("completed").eq("user_id", user.id).eq("lesson_id", PUBLIC_LESSON_ID_BY_KEY["6"]).maybeSingle();
+      if (shouldAnnounceFirstCompletion(Boolean(previous?.completed), true)) storeFirstCompletionNotice(localStorage, user.id, PUBLIC_LESSON_ID_BY_KEY["6"]);
       await supabase.from("lesson_progress").upsert({
         user_id: user.id,
         lesson_id: PUBLIC_LESSON_ID_BY_KEY["6"],

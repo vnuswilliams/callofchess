@@ -8,6 +8,7 @@ import { supabase } from "@/lib/supabase";
 import { PUBLIC_LESSON_ID_BY_KEY } from "@/lib/lessonIds";
 import { createDrawPosition, type LessonDefinition } from "@/lib/levelZeroLessons";
 import { describeGameResult } from "@/lib/beginnerComputer";
+import { shouldAnnounceFirstCompletion, storeFirstCompletionNotice } from "@/lib/learningPathProgress";
 
 export default function DrawsLesson({ lesson }: { lesson: LessonDefinition }) {
   const { language, toggleLanguage, t } = useLanguage();
@@ -48,6 +49,7 @@ export default function DrawsLesson({ lesson }: { lesson: LessonDefinition }) {
     setCompleted(true);
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
+    if (shouldAnnounceFirstCompletion(completed, true)) storeFirstCompletionNotice(localStorage, user.id, PUBLIC_LESSON_ID_BY_KEY["5"]);
     await supabase.from("lesson_progress").upsert({
       user_id: user.id,
       lesson_id: PUBLIC_LESSON_ID_BY_KEY["5"],

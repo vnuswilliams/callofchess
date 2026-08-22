@@ -495,3 +495,15 @@ La suite Vitest passe pour les 16 fichiers applicatifs sauf `supabaseHealth.test
 - [x] Pousser le correctif avec l’identité Git `Payong Venus <payongvenus@gmail.com>` et confirmer la version servie sur `https://callofchess.online/path`.
 
 Le niveau 1 affiche encore un exercice « Le roi à l’abri » sans leçon publique associée dans le catalogue actuel. Le bouton ne génère jamais de route pour cet exercice non publié ; il reprend uniquement les leçons jouables existantes et conserve un repli sans 404. Aucune migration Supabase n’est nécessaire.
+
+
+## Motivation de progression — 22 août 2026
+
+- [x] Signaler la transition vers la première validation d’une leçon avec un événement local consommé une seule fois.
+- [x] Afficher une notification animée, accessible et bilingue sur `/path` après le retour depuis une nouvelle leçon terminée.
+- [x] Afficher en haut de `/path` les leçons terminées, les leçons commencées, les étapes validées et le taux de complétion réels de l’utilisateur connecté.
+- [x] Couvrir la transition et la consommation unique du signal par Vitest.
+- [x] Vérifier le typecheck, les 61 tests Vitest et le build de production.
+- [ ] Pousser et vérifier cette amélioration sur `https://callofchess.online`.
+
+Aucune statistique n’est inventée pour un utilisateur déconnecté. L’animation existante respecte `prefers-reduced-motion`, et aucune migration Supabase n’est nécessaire : le signal temporaire reste local au navigateur tandis que la progression officielle demeure dans `lesson_progress`.

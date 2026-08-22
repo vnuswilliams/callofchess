@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { PUBLIC_LESSON_IDS } from "./lessonIds";
-import { getLessonListState, mergeLessonProgress, normalizeProgressLessonIds } from "./learningPathProgress";
+import { consumeFirstCompletionNotice, getLessonListState, mergeLessonProgress, normalizeProgressLessonIds, shouldAnnounceFirstCompletion, storeFirstCompletionNotice } from "./learningPathProgress";
 
 describe("learning path progress identifiers", () => {
   it("normalizes legacy lesson identifiers to the public UUID used by the path", () => {
@@ -15,6 +15,26 @@ describe("learning path progress identifiers", () => {
       PUBLIC_LESSON_IDS.board,
       PUBLIC_LESSON_IDS.board,
     ]);
+  });
+});
+
+describe("first completion notification", () => {
+  it("announces only a transition from incomplete to complete", () => {
+    expect(shouldAnnounceFirstCompletion(false, true)).toBe(true);
+    expect(shouldAnnounceFirstCompletion(true, true)).toBe(false);
+    expect(shouldAnnounceFirstCompletion(false, false)).toBe(false);
+  });
+
+  it("consumes a stored notice once for the matching user", () => {
+    const values = new Map<string, string>();
+    const storage = {
+      getItem: (key: string) => values.get(key) ?? null,
+      setItem: (key: string, value: string) => values.set(key, value),
+      removeItem: (key: string) => values.delete(key),
+    };
+    storeFirstCompletionNotice(storage, "user-1", PUBLIC_LESSON_IDS.board);
+    expect(consumeFirstCompletionNotice(storage, "user-1")).toBe(PUBLIC_LESSON_IDS.board);
+    expect(consumeFirstCompletionNotice(storage, "user-1")).toBeNull();
   });
 });
 
