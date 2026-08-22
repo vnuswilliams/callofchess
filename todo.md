@@ -531,3 +531,15 @@ La migration `seed_level_one_deep_curriculum` est enregistrée dans Supabase. El
 - [x] Pousser le correctif avec l’identité Git `payongvenus@gmail.com` et confirmer la version servie sur `https://callofchess.online/path`.
 Le commit `9b0a3eb` est poussé sur `main`. Le domaine canonique répond en HTTP 200 et son chunk `/path` contient les marqueurs `1-goals` et `learning-path-progress-updated`. L’API Vercel de l’équipe autorisée ne liste pas le projet existant ; la vérification de production est donc faite par le domaine public et le bundle réellement servi.
 Aucune migration Supabase ni modification de données utilisateur n’est nécessaire : la correction utilise les lignes `lesson_progress` déjà sauvegardées et normalise leur identifiant côté frontend.
+
+## Synchronisation temps réel de la progression — 22 août 2026
+- [x] Ajouter la fusion monotone des événements Realtime INSERT, UPDATE et DELETE, avec normalisation des identifiants publics.
+- [x] Filtrer les événements par `user_id` et respecter les politiques RLS existantes de `lesson_progress`.
+- [x] Abonner `/path` et `/profile` aux changements Supabase Realtime.
+- [x] Gérer les états connecté, reconnexion, timeout, fermeture de canal et déconnexion utilisateur.
+- [x] Conserver le repli par relecture Supabase lorsque Realtime est indisponible.
+- [x] Ajouter l’indicateur bilingue et accessible de synchronisation.
+- [x] Activer `lesson_progress` dans la publication `supabase_realtime` avec une migration idempotente appliquée en production.
+- [x] Vérifier le smoke test réseau (`SUBSCRIBED`), le typecheck, les 70 tests Vitest et le build de production.
+- [ ] Pousser et vérifier la version servie sur `https://callofchess.online`.
+La synchronisation ne lit ni ne publie de données d’un autre utilisateur : Supabase applique RLS et le canal client ajoute le filtre `user_id=eq.<utilisateur authentifié>`. Le repli par lecture reste disponible pour les connexions interrompues.

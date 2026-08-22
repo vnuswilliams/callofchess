@@ -4,6 +4,7 @@ export type LearningPathProgressRow = {
   lesson_id: string;
   completed: boolean;
   completed_steps: number;
+  updated_at?: string;
 };
 
 export type LessonListState = "completed" | "available";
@@ -55,8 +56,10 @@ export function mergeLessonProgress(
   previous: LearningPathProgressRow | null | undefined,
   next: LearningPathProgressRow,
 ): LearningPathProgressRow {
+  const updatedAt = [previous?.updated_at, next.updated_at].filter((value): value is string => Boolean(value)).sort().at(-1);
   return {
     ...next,
+    ...(updatedAt ? { updated_at: updatedAt } : {}),
     completed: Boolean(previous?.completed || next.completed),
     completed_steps: Math.max(previous?.completed_steps ?? 0, next.completed_steps),
   };

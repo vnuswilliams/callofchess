@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeft, ArrowUpRight, BarChart3, BookOpen, CheckCircle2, ChevronRight, LockKeyhole, Target, Trophy } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, BarChart3, BookOpen, CheckCircle2, ChevronRight, LockKeyhole, RefreshCw, Target, Trophy } from "lucide-react";
 import { Link } from "wouter";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -9,9 +9,11 @@ import { isLevelUnlocked, learningPath, type PathLevel } from "@/lib/learningPat
 import { computeProfileStats } from "@/lib/profileStats";
 import { consumeFirstCompletionNotice, getLessonListState, LEARNING_PATH_PROGRESS_UPDATED_EVENT, normalizeProgressLessonIds } from "@/lib/learningPathProgress";
 import { getCompletedLevelIds, getLevelCompletion, playableLessonIdForExercise } from "@/lib/learningPathCompletion";
+import { mergeRealtimeProgressRows, type RealtimeProgressPayload } from "@/lib/learningPathRealtime";
 import { getLevelLessonDestination } from "@/lib/learningPathNavigation";
 
 type ProgressRow = { lesson_id: string; completed: boolean; completed_steps: number };
+type RealtimeStatus = "connecting" | "connected" | "fallback";
 
 function pathLessonTitle(lessonId: string, language: "fr" | "en", fallback: string) {
   const href = `/lesson/${lessonId}`;
@@ -68,30 +70,90 @@ export default function Path() {
   const [loading, setLoading] = useState(true);
   const [signedIn, setSignedIn] = useState(false);
   const [completionNotice, setCompletionNotice] = useState<string | null>(null);
+  const [realtimeStatus, setRealtimeStatus] = useState<RealtimeStatus>("connecting");
 
   useEffect(() => {
     let active = true;
     let requestId = 0;
+    let progressChannel: ReturnType<typeof supabase.channel> | null = null;
+    let channelUserId: string | null = null;
+    let reconnectTimer: number | null = null;
+
     async function load() {
       const currentRequestId = ++requestId;
       if (currentRequestId > 1) setLoading(true);
       const { data: auth } = await supabase.auth.getUser();
       if (!active || currentRequestId !== requestId) return;
       setSignedIn(Boolean(auth.user));
-      if (!auth.user) { setRows([]); setLoading(false); return; }
+      if (!auth.user) {
+        setRows([]);
+        setRealtimeStatus("fallback");
+        if (progressChannel) {
+          void supabase.removeChannel(progressChannel);
+          progressChannel = null;
+          channelUserId = null;
+        }
+        setLoading(false);
+        return;
+      }
       const { data } = await supabase.from("lesson_progress").select("lesson_id, completed, completed_steps").eq("user_id", auth.user.id).limit(100);
       if (!active || currentRequestId !== requestId) return;
       setRows(normalizeProgressLessonIds((data ?? []) as ProgressRow[]));
       const notice = consumeFirstCompletionNotice(localStorage, auth.user.id);
       if (notice) setCompletionNotice(notice);
       setLoading(false);
+
+      if (!progressChannel || channelUserId !== auth.user.id) {
+        if (progressChannel) void supabase.removeChannel(progressChannel);
+        channelUserId = auth.user.id;
+        setRealtimeStatus("connecting");
+        progressChannel = supabase
+          .channel(`lesson-progress:${auth.user.id}`)
+          .on("postgres_changes", {
+            event: "*",
+            schema: "public",
+            table: "lesson_progress",
+            filter: `user_id=eq.${auth.user.id}`,
+          }, (payload) => {
+            if (!active) return;
+            const eventType = payload.eventType as RealtimeProgressPayload["eventType"];
+            if (eventType !== "INSERT" && eventType !== "UPDATE" && eventType !== "DELETE") return;
+            setRows((currentRows) => mergeRealtimeProgressRows(currentRows, {
+              eventType,
+              new: payload.new,
+              old: payload.old,
+            }, auth.user.id));
+          })
+          .subscribe((status) => {
+            if (!active) return;
+            if (status === "SUBSCRIBED") setRealtimeStatus("connected");
+            if (status === "CHANNEL_ERROR" || status === "TIMED_OUT" || status === "CLOSED") {
+              setRealtimeStatus("fallback");
+              if (progressChannel) {
+                void supabase.removeChannel(progressChannel);
+                progressChannel = null;
+              }
+              if (reconnectTimer === null) {
+                reconnectTimer = window.setTimeout(() => {
+                  reconnectTimer = null;
+                  void load().catch(() => undefined);
+                }, 1500);
+              }
+            }
+          });
+      }
     }
+
     const refreshProgress = () => { void load().catch(() => { if (active) setLoading(false); }); };
-    void load().catch(() => { if (active) setLoading(false); });
+    const { data: authListener } = supabase.auth.onAuthStateChange(() => { refreshProgress(); });
+    void load().catch(() => { if (active) { setRealtimeStatus("fallback"); setLoading(false); } });
     window.addEventListener(LEARNING_PATH_PROGRESS_UPDATED_EVENT, refreshProgress);
     return () => {
       active = false;
       window.removeEventListener(LEARNING_PATH_PROGRESS_UPDATED_EVENT, refreshProgress);
+      authListener.subscription.unsubscribe();
+      if (reconnectTimer !== null) window.clearTimeout(reconnectTimer);
+      if (progressChannel) void supabase.removeChannel(progressChannel);
     };
   }, []);
 
@@ -110,5 +172,5 @@ export default function Path() {
     return () => { document.title = "Call of Chess — Apprendre les échecs simplement"; previous.forEach(({ element, content }) => { if (element && content !== undefined) element.content = content; }); };
   }, [fr]);
 
-  return <main className="page-shell path-shell min-h-screen bg-[#f7f0df] px-5 py-10 text-[#173e37] sm:px-8 lg:px-12"><div className="mx-auto max-w-6xl"><div className="flex items-center justify-between"><Link href="/" className="inline-flex items-center gap-2 text-[.7rem] font-extrabold uppercase tracking-[.14em] text-[#987019]"><ArrowLeft size={15} />{t("inline_fa503a5668")}</Link><button type="button" onClick={toggleLanguage} className="border border-[#cbbd99] px-3 py-2 text-[.68rem] font-extrabold uppercase tracking-[.12em] hover:border-[#a87416]" aria-label={t("inline_e0aa42db72")}>{t("inline_43d5c6585d")}</button></div><header className="mt-14 max-w-4xl"><p className="eyebrow">{t("inline_0209d32c54")}</p><h1 className="display-font mt-4 text-6xl leading-[.88] sm:text-8xl">{t("inline_c466d21aa6")}</h1><p className="mt-6 max-w-2xl text-base leading-8 text-[#625d50]">{t("inline_5990220220")}</p></header><section className="mt-10 grid gap-px border border-[#cbbd99] bg-[#cbbd99] sm:grid-cols-3"><div className="bg-[#fffaf0] p-5"><Trophy className="text-[#a87416]" size={18} /><p className="mt-4 font-mono text-3xl font-bold">18</p><p className="mt-2 text-[.65rem] font-extrabold uppercase tracking-[.12em] text-[#756c58]">{t("inline_3f50f56a9d")}</p></div><div className="bg-[#fffaf0] p-5"><BookOpen className="text-[#a87416]" size={18} /><p className="mt-4 font-mono text-3xl font-bold">{learningPath.reduce((total, level) => total + level.exercises.length, 0)}</p><p className="mt-2 text-[.65rem] font-extrabold uppercase tracking-[.12em] text-[#756c58]">{t("inline_5df6582ce4")}</p></div><div className="bg-[#fffaf0] p-5"><CheckCircle2 className="text-[#a87416]" size={18} /><p className="mt-4 font-mono text-3xl font-bold">{loading ? "—" : `${unlockedCount}/18`}</p><p className="mt-2 text-[.65rem] font-extrabold uppercase tracking-[.12em] text-[#756c58]">{t("inline_b00728a93d")}</p></div></section>{completionNotice && <div className="badge-pop-in fixed inset-x-4 top-5 z-50 mx-auto flex max-w-xl items-center gap-4 border border-[#d69024] bg-[#173e37] p-4 text-[#fffaf0] shadow-2xl" role="status" aria-live="polite"><span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-[#d69024] text-[#173e37]" aria-hidden="true"><Trophy size={24} /></span><div className="min-w-0 flex-1"><p className="text-[.62rem] font-extrabold uppercase tracking-[.16em] text-[#e6b95e]">{t("inline_fa980b8520")}</p><p className="display-font mt-1 truncate text-2xl">{pathLessonTitle(completionNotice, language, t("inline_81f35c251c"))}</p><p className="mt-1 text-sm text-[#d9e0d6]">{t("inline_81f35c251c")}</p></div><button type="button" onClick={() => setCompletionNotice(null)} className="grid h-9 w-9 shrink-0 place-items-center border border-[#66857c] text-xl hover:bg-[#285448]" aria-label={t("inline_394171e9c7")}>×</button></div>}{signedIn && !loading && <section className="rise-in mt-8" aria-labelledby="path-progress-summary"><div className="flex items-end justify-between gap-4"><div><p className="eyebrow">{t("inline_34fcc3d690")}</p><h2 id="path-progress-summary" className="display-font mt-3 text-4xl">{t("inline_1655158e41")}</h2></div><BarChart3 className="mb-1 text-[#a87416]" size={22} aria-hidden="true" /></div><div className="mt-5 grid gap-px border border-[#cbbd99] bg-[#cbbd99] sm:grid-cols-2 lg:grid-cols-4"><ProgressStatCard icon={<Trophy size={17} />} label={t("inline_f1f9dcdf85")} value={stats.completed} /><ProgressStatCard icon={<BookOpen size={17} />} label={t("inline_6eb0fd671a")} value={stats.activeLessons} /><ProgressStatCard icon={<CheckCircle2 size={17} />} label={t("inline_cc03e7fb11")} value={stats.totalSteps} /><ProgressStatCard icon={<Target size={17} />} label={t("inline_056354528c")} value={`${stats.completionRate}%`} /></div></section>}{!signedIn && !loading && <p className="mt-5 text-sm text-[#756c58]">{t("inline_96ad6ff41d")} <Link href="/account" className="font-bold text-[#987019] underline">{t("inline_b1b675116c")}</Link></p>}<section className="mt-12 space-y-5" aria-label={t("inline_ba27f65ddd")}>{learningPath.map((level) => <LevelCard key={level.id} level={level} language={language} completedLessons={completedLessons} completedLevels={completedLevels} t={t} />)}</section></div></main>;
+  return <main className="page-shell path-shell min-h-screen bg-[#f7f0df] px-5 py-10 text-[#173e37] sm:px-8 lg:px-12"><div className="mx-auto max-w-6xl"><div className="flex items-center justify-between"><Link href="/" className="inline-flex items-center gap-2 text-[.7rem] font-extrabold uppercase tracking-[.14em] text-[#987019]"><ArrowLeft size={15} />{t("inline_fa503a5668")}</Link><button type="button" onClick={toggleLanguage} className="border border-[#cbbd99] px-3 py-2 text-[.68rem] font-extrabold uppercase tracking-[.12em] hover:border-[#a87416]" aria-label={t("inline_e0aa42db72")}>{t("inline_43d5c6585d")}</button></div><header className="mt-14 max-w-4xl"><p className="eyebrow">{t("inline_0209d32c54")}</p><h1 className="display-font mt-4 text-6xl leading-[.88] sm:text-8xl">{t("inline_c466d21aa6")}</h1><p className="mt-6 max-w-2xl text-base leading-8 text-[#625d50]">{t("inline_5990220220")}</p></header><section className="mt-10 grid gap-px border border-[#cbbd99] bg-[#cbbd99] sm:grid-cols-3"><div className="bg-[#fffaf0] p-5"><Trophy className="text-[#a87416]" size={18} /><p className="mt-4 font-mono text-3xl font-bold">18</p><p className="mt-2 text-[.65rem] font-extrabold uppercase tracking-[.12em] text-[#756c58]">{t("inline_3f50f56a9d")}</p></div><div className="bg-[#fffaf0] p-5"><BookOpen className="text-[#a87416]" size={18} /><p className="mt-4 font-mono text-3xl font-bold">{learningPath.reduce((total, level) => total + level.exercises.length, 0)}</p><p className="mt-2 text-[.65rem] font-extrabold uppercase tracking-[.12em] text-[#756c58]">{t("inline_5df6582ce4")}</p></div><div className="bg-[#fffaf0] p-5"><CheckCircle2 className="text-[#a87416]" size={18} /><p className="mt-4 font-mono text-3xl font-bold">{loading ? "—" : `${unlockedCount}/18`}</p><p className="mt-2 text-[.65rem] font-extrabold uppercase tracking-[.12em] text-[#756c58]">{t("inline_b00728a93d")}</p></div></section>{signedIn && !loading && <p className="mt-4 flex items-center gap-2 text-xs font-semibold text-[#756c58]" role="status" aria-live="polite"><RefreshCw size={14} className={realtimeStatus === "connecting" ? "animate-spin" : undefined} aria-hidden="true" />{t(realtimeStatus === "connected" ? "pathRealtimeConnected" : realtimeStatus === "connecting" ? "pathRealtimeConnecting" : "pathRealtimeFallback")}</p>}{completionNotice && <div className="badge-pop-in fixed inset-x-4 top-5 z-50 mx-auto flex max-w-xl items-center gap-4 border border-[#d69024] bg-[#173e37] p-4 text-[#fffaf0] shadow-2xl" role="status" aria-live="polite"><span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-[#d69024] text-[#173e37]" aria-hidden="true"><Trophy size={24} /></span><div className="min-w-0 flex-1"><p className="text-[.62rem] font-extrabold uppercase tracking-[.16em] text-[#e6b95e]">{t("inline_fa980b8520")}</p><p className="display-font mt-1 truncate text-2xl">{pathLessonTitle(completionNotice, language, t("inline_81f35c251c"))}</p><p className="mt-1 text-sm text-[#d9e0d6]">{t("inline_81f35c251c")}</p></div><button type="button" onClick={() => setCompletionNotice(null)} className="grid h-9 w-9 shrink-0 place-items-center border border-[#66857c] text-xl hover:bg-[#285448]" aria-label={t("inline_394171e9c7")}>×</button></div>}{signedIn && !loading && <section className="rise-in mt-8" aria-labelledby="path-progress-summary"><div className="flex items-end justify-between gap-4"><div><p className="eyebrow">{t("inline_34fcc3d690")}</p><h2 id="path-progress-summary" className="display-font mt-3 text-4xl">{t("inline_1655158e41")}</h2></div><BarChart3 className="mb-1 text-[#a87416]" size={22} aria-hidden="true" /></div><div className="mt-5 grid gap-px border border-[#cbbd99] bg-[#cbbd99] sm:grid-cols-2 lg:grid-cols-4"><ProgressStatCard icon={<Trophy size={17} />} label={t("inline_f1f9dcdf85")} value={stats.completed} /><ProgressStatCard icon={<BookOpen size={17} />} label={t("inline_6eb0fd671a")} value={stats.activeLessons} /><ProgressStatCard icon={<CheckCircle2 size={17} />} label={t("inline_cc03e7fb11")} value={stats.totalSteps} /><ProgressStatCard icon={<Target size={17} />} label={t("inline_056354528c")} value={`${stats.completionRate}%`} /></div></section>}{!signedIn && !loading && <p className="mt-5 text-sm text-[#756c58]">{t("inline_96ad6ff41d")} <Link href="/account" className="font-bold text-[#987019] underline">{t("inline_b1b675116c")}</Link></p>}<section className="mt-12 space-y-5" aria-label={t("inline_ba27f65ddd")}>{learningPath.map((level) => <LevelCard key={level.id} level={level} language={language} completedLessons={completedLessons} completedLevels={completedLevels} t={t} />)}</section></div></main>;
 }
