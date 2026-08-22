@@ -504,6 +504,6 @@ Le niveau 1 affiche encore un exercice « Le roi à l’abri » sans leçon publ
 - [x] Afficher en haut de `/path` les leçons terminées, les leçons commencées, les étapes validées et le taux de complétion réels de l’utilisateur connecté.
 - [x] Couvrir la transition et la consommation unique du signal par Vitest.
 - [x] Vérifier le typecheck, les 61 tests Vitest et le build de production.
-- [ ] Pousser et vérifier cette amélioration sur `https://callofchess.online`.
+- [x] Pousser et vérifier cette amélioration sur `https://callofchess.online`.
 
 Aucune statistique n’est inventée pour un utilisateur déconnecté. L’animation existante respecte `prefers-reduced-motion`, et aucune migration Supabase n’est nécessaire : le signal temporaire reste local au navigateur tandis que la progression officielle demeure dans `lesson_progress`.
