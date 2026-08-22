@@ -517,6 +517,6 @@ Aucune statistique n’est inventée pour un utilisateur déconnecté. L’anima
 - [x] Ajouter et appliquer la migration Supabase idempotente pour les nouvelles leçons et leurs exercices publiés.
 - [x] Ajouter les tests Vitest de légalité des positions, de structure du catalogue et de navigation du Niveau 1.
 - [x] Vérifier bilinguisme, clavier, desktop, typecheck, tests et build ; la vérification mobile reste à confirmer sur un viewport dédié.
-- [ ] Pousser avec l’identité Git Payong Venus <payongvenus@gmail.com> et vérifier la version réellement servie sur https://www.callofchess.online.
+- [x] Pousser avec l’identité Git Payong Venus <payongvenus@gmail.com> et vérifier la version réellement servie sur https://www.callofchess.online.
 
 La migration `seed_level_one_deep_curriculum` est enregistrée dans Supabase. Elle n’efface ni ne modifie `lesson_progress`; le contrôle public confirme six leçons publiées et au moins un exercice associé à chacune.

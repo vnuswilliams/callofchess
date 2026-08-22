@@ -11,3 +11,10 @@ La route locale `/lesson/a116805b-1c51-4578-b66c-5c1d437c0cd6` affiche `LEÇON 0
 
 
 La route directe de la leçon 12 `/lesson/a5c7e2f1-8b39-4d64-9e10-5f6a7b2c3d48` charge correctement `LEÇON 12 / 12`. En anglais, le titre, l’objectif, la mission, la carte d’aide et le bandeau théorique sont traduits : « What does my opponent want? What does my move allow them to do? ». Cette bascule confirme la parité FR/EN des nouveaux contenus visibles.
+
+
+## Vérification de production
+
+Le domaine canonique `https://callofchess.online` répond en HTTP 200 pour la route de la leçon 12. La variante `https://www.callofchess.online` redirige en HTTP 308 vers l’apex, servi par Vercel. Les en-têtes indiquent `server: Vercel`, une ressource HTML modifiée le 22 août 2026 à 06:10:56 UTC et un cache Vercel HIT. Les bundles JavaScript récupérés depuis le domaine contiennent les marqueurs bilingues `À lire avant de jouer` et `Read before playing`, ce qui confirme que la nouvelle interface est compilée et effectivement servie en production.
+
+Le connecteur de diagnostic Vercel n’a pas exposé le projet existant dans l’équipe autorisée : l’inventaire renvoie zéro projet, la création signale toutefois que `callofchess` existe déjà, et la récupération par slug renvoie 404. Le déploiement a néanmoins été vérifié par le domaine public et les marqueurs du bundle ; aucune modification de configuration Vercel n’a été effectuée.
