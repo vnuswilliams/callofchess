@@ -9,6 +9,14 @@ export type LearningPathProgressRow = {
 export type LessonListState = "completed" | "available";
 export type CompletionNoticeStorage = Pick<Storage, "getItem" | "setItem" | "removeItem">;
 
+export const LEARNING_PATH_PROGRESS_UPDATED_EVENT = "callofchess:learning-path-progress-updated";
+
+export function announceLearningPathProgressUpdated(): void {
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event(LEARNING_PATH_PROGRESS_UPDATED_EVENT));
+  }
+}
+
 type FirstCompletionNotice = { lessonId: string };
 
 function firstCompletionStorageKey(userId: string) {

@@ -6,44 +6,12 @@ import { Progress } from "@/components/ui/progress";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/lib/supabase";
 import { isLevelUnlocked, learningPath, type PathLevel } from "@/lib/learningPath";
-import { PUBLIC_LESSON_ID_BY_KEY } from "@/lib/lessonIds";
 import { computeProfileStats } from "@/lib/profileStats";
-import { consumeFirstCompletionNotice, getLessonListState, normalizeProgressLessonIds } from "@/lib/learningPathProgress";
+import { consumeFirstCompletionNotice, getLessonListState, LEARNING_PATH_PROGRESS_UPDATED_EVENT, normalizeProgressLessonIds } from "@/lib/learningPathProgress";
+import { getCompletedLevelIds, getLevelCompletion, playableLessonIdForExercise } from "@/lib/learningPathCompletion";
 import { getLevelLessonDestination } from "@/lib/learningPathNavigation";
 
 type ProgressRow = { lesson_id: string; completed: boolean; completed_steps: number };
-
-const lessonIdsByLevel: Record<number, string[]> = {
-  0: [
-    PUBLIC_LESSON_ID_BY_KEY["1"],
-    PUBLIC_LESSON_ID_BY_KEY["2"],
-    PUBLIC_LESSON_ID_BY_KEY["3"],
-    PUBLIC_LESSON_ID_BY_KEY["4"],
-    PUBLIC_LESSON_ID_BY_KEY["5"],
-    PUBLIC_LESSON_ID_BY_KEY["6"],
-  ],
-  1: [PUBLIC_LESSON_ID_BY_KEY["7"], PUBLIC_LESSON_ID_BY_KEY["8"], PUBLIC_LESSON_ID_BY_KEY["9"], PUBLIC_LESSON_ID_BY_KEY["10"], PUBLIC_LESSON_ID_BY_KEY["11"], PUBLIC_LESSON_ID_BY_KEY["12"]],
-};
-
-function levelCompletion(level: PathLevel, completedLessons: Set<string>) {
-  const lessonIds = lessonIdsByLevel[level.id] ?? [];
-  return Math.min(level.exercises.length, lessonIds.filter((id) => completedLessons.has(id)).length);
-}
-
-const playableLessonIdForExercise: Record<string, string> = {
-  "0-board": PUBLIC_LESSON_ID_BY_KEY["1"],
-  "0-pieces": PUBLIC_LESSON_ID_BY_KEY["2"],
-  "0-capture": PUBLIC_LESSON_ID_BY_KEY["3"],
-  "0-checkmate": PUBLIC_LESSON_ID_BY_KEY["4"],
-  "0-special": PUBLIC_LESSON_ID_BY_KEY["5"],
-  "0-complete": PUBLIC_LESSON_ID_BY_KEY["6"],
-  "1-center": PUBLIC_LESSON_ID_BY_KEY["7"],
-  "1-opening": PUBLIC_LESSON_ID_BY_KEY["8"],
-  "1-safety": PUBLIC_LESSON_ID_BY_KEY["9"],
-  "1-material": PUBLIC_LESSON_ID_BY_KEY["10"],
-  "1-threats": PUBLIC_LESSON_ID_BY_KEY["11"],
-  "1-opponent": PUBLIC_LESSON_ID_BY_KEY["12"],
-};
 
 function pathLessonTitle(lessonId: string, language: "fr" | "en", fallback: string) {
   const href = `/lesson/${lessonId}`;
@@ -61,7 +29,7 @@ function ProgressStatCard({ icon, label, value }: { icon: React.ReactNode; label
 function LevelCard({ level, language, completedLessons, completedLevels, t }: { level: PathLevel; language: "fr" | "en"; completedLessons: Set<string>; completedLevels: Set<string>; t: (key: string) => string }) {
   const copy = level[language];
   const unlocked = isLevelUnlocked(level, completedLevels);
-  const completed = levelCompletion(level, completedLessons);
+  const completed = getLevelCompletion(level, completedLessons);
   const progress = Math.round((completed / level.exercises.length) * 100);
   const lessonLink = getLevelLessonDestination(
     level.exercises.map((item) => playableLessonIdForExercise[item.id]),
@@ -103,26 +71,33 @@ export default function Path() {
 
   useEffect(() => {
     let active = true;
+    let requestId = 0;
     async function load() {
+      const currentRequestId = ++requestId;
+      if (currentRequestId > 1) setLoading(true);
       const { data: auth } = await supabase.auth.getUser();
-      if (!active) return;
+      if (!active || currentRequestId !== requestId) return;
       setSignedIn(Boolean(auth.user));
-      if (!auth.user) { setLoading(false); return; }
+      if (!auth.user) { setRows([]); setLoading(false); return; }
       const { data } = await supabase.from("lesson_progress").select("lesson_id, completed, completed_steps").eq("user_id", auth.user.id).limit(100);
-      if (active) {
-        setRows(normalizeProgressLessonIds((data ?? []) as ProgressRow[]));
-        const notice = consumeFirstCompletionNotice(localStorage, auth.user.id);
-        if (notice) setCompletionNotice(notice);
-        setLoading(false);
-      }
+      if (!active || currentRequestId !== requestId) return;
+      setRows(normalizeProgressLessonIds((data ?? []) as ProgressRow[]));
+      const notice = consumeFirstCompletionNotice(localStorage, auth.user.id);
+      if (notice) setCompletionNotice(notice);
+      setLoading(false);
     }
-    load().catch(() => { if (active) setLoading(false); });
-    return () => { active = false; };
+    const refreshProgress = () => { void load().catch(() => { if (active) setLoading(false); }); };
+    void load().catch(() => { if (active) setLoading(false); });
+    window.addEventListener(LEARNING_PATH_PROGRESS_UPDATED_EVENT, refreshProgress);
+    return () => {
+      active = false;
+      window.removeEventListener(LEARNING_PATH_PROGRESS_UPDATED_EVENT, refreshProgress);
+    };
   }, []);
 
   const stats = useMemo(() => computeProfileStats(rows), [rows]);
   const completedLessons = useMemo(() => new Set(rows.filter((row) => row.completed).map((row) => row.lesson_id)), [rows]);
-  const completedLevels = useMemo(() => new Set(learningPath.filter((level) => levelCompletion(level, completedLessons) === level.exercises.length).map((level) => `level-${level.id}`)), [completedLessons]);
+  const completedLevels = useMemo(() => getCompletedLevelIds(learningPath, completedLessons), [completedLessons]);
   const unlockedCount = useMemo(() => learningPath.filter((level) => isLevelUnlocked(level, completedLevels)).length, [completedLevels]);
 
   useEffect(() => {

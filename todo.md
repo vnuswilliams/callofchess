@@ -520,3 +520,13 @@ Aucune statistique n’est inventée pour un utilisateur déconnecté. L’anima
 - [x] Pousser avec l’identité Git Payong Venus <payongvenus@gmail.com> et vérifier la version réellement servie sur https://www.callofchess.online.
 
 La migration `seed_level_one_deep_curriculum` est enregistrée dans Supabase. Elle n’efface ni ne modifie `lesson_progress`; le contrôle public confirme six leçons publiées et au moins un exercice associé à chacune.
+
+## Déblocage dynamique des niveaux — 22 août 2026
+- [x] Centraliser la correspondance entre exercices de roadmap et leçons publiques.
+- [x] Corriger la dérive `1-center` / `1-goals` qui excluait la première leçon du niveau 1 du calcul de complétion.
+- [x] Déduire la complétion de tous les niveaux à partir de leurs exercices publiés, au lieu d’un mapping limité aux niveaux 0 et 1.
+- [x] Rafraîchir `/path` après chaque sauvegarde de progression réussie, y compris pour les leçons guidées, théoriques, spéciales et la partie complète.
+- [x] Ajouter les tests de régression du niveau 1 et du déblocage du niveau 2.
+- [x] Vérifier le typecheck, les 67 tests Vitest et le build de production.
+- [ ] Pousser le correctif avec l’identité Git `payongvenus@gmail.com` et confirmer la version servie sur `https://callofchess.online/path`.
+Aucune migration Supabase ni modification de données utilisateur n’est nécessaire : la correction utilise les lignes `lesson_progress` déjà sauvegardées et normalise leur identifiant côté frontend.
