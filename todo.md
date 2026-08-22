@@ -528,5 +528,6 @@ La migration `seed_level_one_deep_curriculum` est enregistrée dans Supabase. El
 - [x] Rafraîchir `/path` après chaque sauvegarde de progression réussie, y compris pour les leçons guidées, théoriques, spéciales et la partie complète.
 - [x] Ajouter les tests de régression du niveau 1 et du déblocage du niveau 2.
 - [x] Vérifier le typecheck, les 67 tests Vitest et le build de production.
-- [ ] Pousser le correctif avec l’identité Git `payongvenus@gmail.com` et confirmer la version servie sur `https://callofchess.online/path`.
+- [x] Pousser le correctif avec l’identité Git `payongvenus@gmail.com` et confirmer la version servie sur `https://callofchess.online/path`.
+Le commit `9b0a3eb` est poussé sur `main`. Le domaine canonique répond en HTTP 200 et son chunk `/path` contient les marqueurs `1-goals` et `learning-path-progress-updated`. L’API Vercel de l’équipe autorisée ne liste pas le projet existant ; la vérification de production est donc faite par le domaine public et le bundle réellement servi.
 Aucune migration Supabase ni modification de données utilisateur n’est nécessaire : la correction utilise les lignes `lesson_progress` déjà sauvegardées et normalise leur identifiant côté frontend.
