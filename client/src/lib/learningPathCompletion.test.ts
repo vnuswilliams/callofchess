@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { isLevelUnlocked, learningPath } from "./learningPath";
-import { getCompletedLevelIds, getLevelCompletion, playableLessonIdForExercise } from "./learningPathCompletion";
+import { getCompletedLevelIds, getLevelCompletion, getLevelsWithPartialLessonMapping, playableLessonIdForExercise } from "./learningPathCompletion";
 
 function completedLessonsForLevel(levelIndex: number) {
   return new Set(
@@ -32,5 +32,13 @@ describe("learning path completion", () => {
 
     expect(completedLevels).toContain("level-1");
     expect(isLevelUnlocked(learningPath[2], completedLevels)).toBe(true);
+  });
+
+  it("never leaves a level with only some of its exercises mapped to a lesson", () => {
+    // A partially mapped level can never reach 100% completion, so it (and
+    // every level after it) would stay locked forever no matter what the
+    // learner does. This is the exact class of bug that once blocked level 2:
+    // catch it here instead of in production.
+    expect(getLevelsWithPartialLessonMapping(learningPath)).toEqual([]);
   });
 });
