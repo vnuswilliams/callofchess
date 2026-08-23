@@ -27,7 +27,8 @@ Le serveur de développement est lancé par le script du projet et choisit le po
 | --- | --- |
 | `client/src/App.tsx` | Providers globaux, analytics et routes SPA. |
 | `client/src/pages/Lesson.tsx` | Leçons jouables, validation chess.js, feedback et progression. |
-| `client/src/lib/levelZeroLessons.ts` | Contenu bilingue, positions FEN et séquences de coups du Niveau 0. |
+| `client/src/lib/levelZeroLessons.ts` | Catalogue partagé des leçons bilingues, positions FEN et séquences de coups des niveaux 0 et 1, enrichi avec le niveau 2. |
+| `client/src/lib/levelTwoLessons.ts` | Catalogue bilingue approfondi des 22 leçons tactiques du Niveau 2, avec théorie et 66 positions d’exercice légales. |
 | `client/src/pages/Account.tsx` | Inscription, connexion, récupération et gestion de session. |
 | `client/src/pages/Profile.tsx` | Progression privée, statistiques, badges et partage. |
 | `client/src/lib/supabase.ts` | Instance unique du client Supabase côté navigateur. |
@@ -46,7 +47,7 @@ Les écrans de profil ne doivent jamais publier l’adresse email, les identifia
 
 ## Tests
 
-Les tests Vitest couvrent notamment le parsing Stockfish, le feedback pédagogique, la santé Supabase, les statistiques du profil, les seuils de badges et la légalité des séquences du Niveau 0. Le seed curriculum correspondant est `supabase/migrations/20260818010000_seed_level_zero_curriculum.sql`. Avant chaque commit fonctionnel, exécutez `pnpm check && pnpm test && pnpm build`.
+Les tests Vitest couvrent notamment le parsing Stockfish, le feedback pédagogique, la santé Supabase, les statistiques du profil, les seuils de badges et la légalité des séquences du Niveau 0. Les seeds curriculum sont `supabase/migrations/20260818010000_seed_level_zero_curriculum.sql`, `supabase/migrations/20260822010000_seed_level_one_deep_curriculum.sql` et `supabase/migrations/20260823010000_seed_level_two_tactical_curriculum.sql`. Avant chaque commit fonctionnel, exécutez `pnpm check && pnpm test && pnpm build`.
 
 ## Déploiement Vercel
 

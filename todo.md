@@ -544,3 +544,18 @@ Aucune migration Supabase ni modification de données utilisateur n’est néces
 - [x] Pousser et vérifier la version servie sur `https://callofchess.online`.
 Le commit `6912a5d` est poussé avec `payongvenus@gmail.com`. Le domaine canonique répond en HTTP 200 à `/path`, et le bundle réellement servi contient le module `learningPathRealtime` ainsi que les libellés de synchronisation. La CI GitHub reste en échec sur le dépôt, mais les validations locales et le smoke test Supabase Realtime sont passants.
 La synchronisation ne lit ni ne publie de données d’un autre utilisateur : Supabase applique RLS et le canal client ajoute le filtre `user_id=eq.<utilisateur authentifié>`. Le repli par lecture reste disponible pour les connexions interrompues.
+
+
+## Niveau 2 — Vision tactique approfondie — 23 août 2026
+
+- [x] Structurer 16 leçons de motifs tactiques dans l’ordre demandé : attaque double, fourchette, clouage, enfilade, attaque à la découverte, échec à la découverte, échec double, déviation, attraction, surcharge, élimination du défenseur, interférence, rayon X, sacrifice, zwischenzug et défense par contre-attaque.
+- [x] Structurer 6 leçons sur les menaces : directe, double, de mat, positionnelle, tactique et latente.
+- [x] Ajouter quatre sections pédagogiques bilingues par leçon : définition, mécanisme, méthode de détection et erreur fréquente/transfert.
+- [x] Ajouter trois positions interactives légales par leçon, avec question, coup attendu, idée tactique et progression sauvegardable.
+- [x] Relier les 22 exercices à des UUID publics stables et étendre le calcul de complétion du parcours.
+- [x] Ajouter la migration idempotente `20260823010000_seed_level_two_tactical_curriculum.sql` pour publier les 22 leçons et 22 exercices dans Supabase.
+- [x] Ajouter les tests Vitest de profondeur, bilinguité, légalité des 66 coups et couverture du parcours.
+- [ ] Appliquer la migration Supabase après confirmation explicite si la publication des lignes de curriculum en production est souhaitée.
+- [ ] Vérifier le commit servi sur `https://www.callofchess.online` après publication GitHub/Vercel.
+
+Le plan de conception est conservé dans `docs/niveau-2-design-plan.md`. Le front-end utilise le composant de leçon guidée existant : plateau principal, mission, indice, feedback, feuille de coups et fiches théoriques. Aucune nouvelle bibliothèque n’est nécessaire.

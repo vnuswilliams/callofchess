@@ -3,8 +3,8 @@ import { Chess } from "chess.js";
 import { createDrawPosition, getNextStepPosition, lessonCatalog } from "./levelZeroLessons";
 
 describe("lesson catalogue", () => {
-  it("contains the six level-zero and six published level-one lessons", () => {
-    expect(Object.keys(lessonCatalog)).toEqual(["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]);
+  it("contains the six level-zero, six level-one and 22 level-two lessons", () => {
+    expect(Object.keys(lessonCatalog)).toEqual(Array.from({ length: 34 }, (_, index) => String(index + 1)));
     expect(lessonCatalog["1"].mode).toBe("theory");
     expect(lessonCatalog["5"].mode).toBe("draws");
     expect(lessonCatalog["6"].mode).toBe("computer");

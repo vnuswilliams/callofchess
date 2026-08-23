@@ -37,7 +37,7 @@ describe("lesson completion destination", () => {
     ]))).toBe("/lesson/f3a1c235-5531-4c1c-845b-6d684808259b");
   });
 
-  it("returns to the learning path when every published lesson is complete", () => {
+  it("opens the first tactical lesson when every earlier published lesson is complete", () => {
     expect(getFirstIncompleteLessonDestination(new Set([
       "f3a1c235-5531-4c1c-845b-6d684808259b",
       "0ce3ec0e-348e-4300-b88a-c4a939cd8960",
@@ -51,6 +51,6 @@ describe("lesson completion destination", () => {
       "e10f3b2a-6d35-4f9d-a5f8-62f69f7d9c12",
       "f24a9d63-4c1e-4bf9-9a2e-3a2f6c8d5b40",
       "a5c7e2f1-8b39-4d64-9e10-5f6a7b2c3d48",
-    ]))).toBe("/path");
+    ]))).toBe("/lesson/c2130001-2b00-4e00-9000-000000000001");
   });
 });

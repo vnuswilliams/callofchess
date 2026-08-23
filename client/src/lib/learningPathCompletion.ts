@@ -13,7 +13,6 @@ export const playableLessonIdForExercise: Readonly<Record<string, string>> = Obj
     .filter((exercise): exercise is typeof exercise & { lessonId: string } => Boolean(exercise.lessonId))
     .map((exercise) => [exercise.id, exercise.lessonId]),
 );
-
 export function getLevelCompletion(
   level: PathLevel,
   completedLessons: ReadonlySet<string>,

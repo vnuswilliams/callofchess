@@ -1,4 +1,5 @@
 import { Chess, type Square } from "chess.js";
+import { levelTwoLessons } from "./levelTwoLessons";
 
 export type BilingualText = { fr: string; en: string };
 export type LessonMode = "theory" | "guided" | "draws" | "computer";
@@ -389,6 +390,8 @@ export const lessonCatalog: Record<string, LessonDefinition> = {
     ],
   },
 };
+
+Object.assign(lessonCatalog, levelTwoLessons);
 
 export function getNextStepPosition(steps: LessonStep[], nextStepIndex: number, afterUserMoveFen: string) {
   return steps[nextStepIndex]?.positionFen ?? afterUserMoveFen;
