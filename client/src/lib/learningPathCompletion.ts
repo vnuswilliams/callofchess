@@ -1,20 +1,18 @@
 import type { PathLevel } from "./learningPath";
-import { PUBLIC_LESSON_ID_BY_KEY } from "./lessonIds";
+import { learningPath } from "./learningPath";
 
-export const playableLessonIdForExercise: Readonly<Record<string, string>> = {
-  "0-board": PUBLIC_LESSON_ID_BY_KEY["1"],
-  "0-pieces": PUBLIC_LESSON_ID_BY_KEY["2"],
-  "0-capture": PUBLIC_LESSON_ID_BY_KEY["3"],
-  "0-checkmate": PUBLIC_LESSON_ID_BY_KEY["4"],
-  "0-special": PUBLIC_LESSON_ID_BY_KEY["5"],
-  "0-complete": PUBLIC_LESSON_ID_BY_KEY["6"],
-  "1-goals": PUBLIC_LESSON_ID_BY_KEY["7"],
-  "1-opening": PUBLIC_LESSON_ID_BY_KEY["8"],
-  "1-safety": PUBLIC_LESSON_ID_BY_KEY["9"],
-  "1-material": PUBLIC_LESSON_ID_BY_KEY["10"],
-  "1-threats": PUBLIC_LESSON_ID_BY_KEY["11"],
-  "1-opponent": PUBLIC_LESSON_ID_BY_KEY["12"],
-};
+/**
+ * Derived directly from each exercise's own `lessonId` in `learningPath`.
+ * There is nothing to keep in sync here anymore: add a level, rename an
+ * exercise id, or wire up a new lesson by editing `learningPath.ts` only,
+ * and this map (and every unlock computed from it) updates automatically.
+ */
+export const playableLessonIdForExercise: Readonly<Record<string, string>> = Object.fromEntries(
+  learningPath
+    .flatMap((level) => level.exercises)
+    .filter((exercise): exercise is typeof exercise & { lessonId: string } => Boolean(exercise.lessonId))
+    .map((exercise) => [exercise.id, exercise.lessonId]),
+);
 
 export function getLevelCompletion(
   level: PathLevel,
@@ -22,7 +20,7 @@ export function getLevelCompletion(
   lessonIdByExercise: Readonly<Record<string, string>> = playableLessonIdForExercise,
 ): number {
   const playableLessonIds = level.exercises
-    .map((exercise) => lessonIdByExercise[exercise.id])
+    .map((exercise) => exercise.lessonId ?? lessonIdByExercise[exercise.id])
     .filter((lessonId): lessonId is string => Boolean(lessonId));
 
   return Math.min(
@@ -41,4 +39,21 @@ export function getCompletedLevelIds(
       .filter((level) => getLevelCompletion(level, completedLessons, lessonIdByExercise) === level.exercises.length)
       .map((level) => `level-${level.id}`),
   );
+}
+
+/**
+ * Guards against the exact failure mode that once blocked level 2 forever:
+ * a level where only SOME exercises have a published lesson. That state is
+ * silent poison — the level can never reach 100% completion, so it (and
+ * every level after it) can never unlock, no matter what the learner does.
+ * A level should have either zero playable lessons (not published yet) or
+ * all of them (fully published). Covered by a regression test so a future
+ * partial roadmap edit fails `pnpm test` instead of failing silently in
+ * production.
+ */
+export function getLevelsWithPartialLessonMapping(levels: readonly PathLevel[]): PathLevel[] {
+  return levels.filter((level) => {
+    const publishedCount = level.exercises.filter((exercise) => Boolean(exercise.lessonId)).length;
+    return publishedCount > 0 && publishedCount < level.exercises.length;
+  });
 }
