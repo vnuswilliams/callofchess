@@ -1,4 +1,5 @@
 import type { BilingualText, LessonDefinition, LessonStep, TheorySection } from "./levelZeroLessons";
+import { correctedTacticalSteps } from "./correctedTacticalSteps";
 
 type StepSpec = [string, string, string, string, string, string, string, string];
 type TopicSpec = {
@@ -415,3 +416,14 @@ export const levelTwoLessons: Record<string, LessonDefinition> = {
     ],
   )),
 };
+
+
+// Les positions interactives sont maintenues dans un module dédié afin de pouvoir
+// les auditer indépendamment de la théorie longue de chaque leçon.
+for (const [lessonKey, specs] of Object.entries(correctedTacticalSteps)) {
+  const lesson = levelTwoLessons[lessonKey];
+  if (!lesson) continue;
+  const steps = specs.map(step);
+  lesson.startingFen = steps[0]?.positionFen ?? lesson.startingFen;
+  lesson.steps = steps;
+}
