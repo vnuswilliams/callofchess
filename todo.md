@@ -559,3 +559,16 @@ La synchronisation ne lit ni ne publie de données d’un autre utilisateur : Su
 - [ ] Vérifier le commit servi sur `https://www.callofchess.online` après publication GitHub/Vercel.
 
 Le plan de conception est conservé dans `docs/niveau-2-design-plan.md`. Le front-end utilise le composant de leçon guidée existant : plateau principal, mission, indice, feedback, feuille de coups et fiches théoriques. Aucune nouvelle bibliothèque n’est nécessaire.
+
+
+## Correction des positions tactiques fournies par l’utilisateur — 23 août 2026
+
+- [x] Auditer les 16 FEN et coups initiaux : distinguer coups illégaux, SAN incorrects et positions sans motif réel.
+- [x] Reconstruire 48 positions interactives, soit trois étapes par motif tactique, dans `client/src/lib/correctedTacticalSteps.ts`.
+- [x] Brancher ces étapes sur les leçons publiques 13 à 28 sans modifier la théorie, les UUID ou l’ordre du parcours.
+- [x] Ajouter un test dédié de synchronisation des 16 positions de départ et de légalité des séquences.
+- [x] Appliquer la migration `20260823030000_correct_level_two_tactical_positions.sql` dans Supabase.
+- [x] Vérifier Supabase : 16 leçons tactiques, 3 étapes chacune, FEN de départ et premier SAN synchronisés.
+- [x] Vérifier localement : 48/48 positions légales, 83 tests Vitest, typecheck et build réussis.
+- [x] Vérifier la production sur `https://callofchess.online/path` et sur la leçon Attaque double.
+- [x] Pousser sur `main` avec `payongvenus@gmail.com` et déclencher un déploiement Vercel `READY` en production.
