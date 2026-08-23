@@ -3,7 +3,7 @@ import { getNextLessonHref } from "./lessonNavigation";
 
 describe("getNextLessonHref", () => {
   it("returns the path overview after the final public lesson", () => {
-    expect(getNextLessonHref("34")).toBe("/path");
+    expect(getNextLessonHref("41")).toBe("/path");
   });
 
   it("returns the next lesson URL for a non-final lesson", () => {

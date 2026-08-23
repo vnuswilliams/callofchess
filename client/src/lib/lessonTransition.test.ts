@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { getFirstIncompleteLessonDestination, LESSON_MOVE_ANIMATION_MS, LESSON_STEP_TRANSITION_DELAY_MS, LESSON_SUCCESS_ANIMATION_MS } from "./lessonTransition";
+import { PUBLIC_LESSON_ID_BY_KEY } from "./lessonIds";
 
 describe("lesson completion destination", () => {
   it("keeps the success animation visible before redirecting", () => {
@@ -35,6 +36,10 @@ describe("lesson completion destination", () => {
     expect(getFirstIncompleteLessonDestination(new Set([
       "bc8a719d-d4e6-5d3e-90c1-58292c6fe8f4",
     ]))).toBe("/lesson/f3a1c235-5531-4c1c-845b-6d684808259b");
+  });
+
+  it("returns to the learning path when every public lesson is complete", () => {
+    expect(getFirstIncompleteLessonDestination(new Set(Object.values(PUBLIC_LESSON_ID_BY_KEY)))).toBe("/path");
   });
 
   it("opens the first tactical lesson when every earlier published lesson is complete", () => {

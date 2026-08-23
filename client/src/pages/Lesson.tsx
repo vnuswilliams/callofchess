@@ -15,6 +15,8 @@ import TheoryLesson from "@/pages/TheoryLesson";
 import DrawsLesson from "@/pages/DrawsLesson";
 import ComputerLesson from "@/pages/ComputerLesson";
 import { lessonWorkspaceLayout } from "@/lib/lessonLayout";
+import CalculationLesson from "@/pages/CalculationLesson";
+import { calculationLessonCatalog } from "@/lib/calculationLessons";
 
 function BrandMark() {
   return <div className="grid h-10 w-10 place-items-center rounded-full border border-[#d69024] bg-[#173e37] text-xl text-[#e7ba61]" aria-hidden="true">♞</div>;
@@ -296,6 +298,7 @@ function GuidedLesson() {
 export default function Lesson() {
   const { id } = useParams<{ id: string }>();
   const lessonKey = toLessonKey(id) ?? "1";
+  if (calculationLessonCatalog[lessonKey]) return <CalculationLesson />;
   const lesson = lessonCatalog[lessonKey] ?? lessonCatalog["1"];
   if (lesson.mode === "theory") return <TheoryLesson lesson={lesson} />;
   if (lesson.mode === "draws") return <DrawsLesson lesson={lesson} />;

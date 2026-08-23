@@ -33,6 +33,13 @@ export const PUBLIC_LESSON_IDS = {
   positionalThreat: "c2130020-2b00-4e00-9000-000000000020",
   tacticalThreat: "c2130021-2b00-4e00-9000-000000000021",
   latentThreat: "c2130022-2b00-4e00-9000-000000000022",
+  calculationMethod: "c0130001-3b6d-4a1f-8c22-5d4e9f7a1001",
+  candidates: "c0130002-3b6d-4a1f-8c22-5d4e9f7a1002",
+  cct: "c0130003-3b6d-4a1f-8c22-5d4e9f7a1003",
+  continuation: "c0130004-3b6d-4a1f-8c22-5d4e9f7a1004",
+  compare: "c0130005-3b6d-4a1f-8c22-5d4e9f7a1005",
+  visualize: "c0130006-3b6d-4a1f-8c22-5d4e9f7a1006",
+  deepVisualize: "c0130007-3b6d-4a1f-8c22-5d4e9f7a1007",
 } as const;
 
 export const PUBLIC_LESSON_ID_BY_KEY = {
@@ -70,6 +77,13 @@ export const PUBLIC_LESSON_ID_BY_KEY = {
   "32": PUBLIC_LESSON_IDS.positionalThreat,
   "33": PUBLIC_LESSON_IDS.tacticalThreat,
   "34": PUBLIC_LESSON_IDS.latentThreat,
+  "35": PUBLIC_LESSON_IDS.calculationMethod,
+  "36": PUBLIC_LESSON_IDS.candidates,
+  "37": PUBLIC_LESSON_IDS.cct,
+  "38": PUBLIC_LESSON_IDS.continuation,
+  "39": PUBLIC_LESSON_IDS.compare,
+  "40": PUBLIC_LESSON_IDS.visualize,
+  "41": PUBLIC_LESSON_IDS.deepVisualize,
 } as const;
 
 export type PublicLessonKey = keyof typeof PUBLIC_LESSON_ID_BY_KEY;
